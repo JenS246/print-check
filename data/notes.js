@@ -1,4 +1,4 @@
-export const NOTES = [
+const HERITAGE_RECORDS = [
   {
     id: '1985-20-inverted-back',
     denomination: '$20',
@@ -387,8 +387,140 @@ export const NOTES = [
   },
 ];
 
-export const IMAGE_PERMISSION = {
-  label: 'Credited noncommercial article use',
-  detail: 'Heritage Auctions permits one credited image to accompany a noncommercial article without separate written consent. Each collection entry is a specimen-specific educational article. The site has no ads, sales, or accounts.',
-  url: 'https://domains.ha.com/c/ref/website-use-agreement.zx?ic=footer-website-use-agreement-121117',
+const FLICKR_SOURCE = 'https://www.flickr.com/photos/shankbone/3200806102';
+const ANA_SUPPORT = 'https://www.sc-na.org/documents/Scanner48v2.pdf';
+const ANA_IMAGE = 'assets/notes/ana-error-display.jpg';
+
+const ANA_RIGHTS = {
+  label: 'Creative Commons Attribution 4.0',
+  url: 'https://creativecommons.org/licenses/by/4.0/',
+  detail: 'David Shankbone published the museum photograph with a Creative Commons attribution license. The game presents labeled crops from that photograph and credits the photographer.',
 };
+
+function anaRecord({ id, denomination, noteType, crop, errorName, errorCategory, notice, explanation, cause, hint, regions, numberedRegions }) {
+  return {
+    id,
+    denomination,
+    noteType,
+    series: 'Series not legible in the source photograph',
+    catalog: 'Not documented in the cited photograph',
+    district: 'Not used to infer a printing location',
+    printingDate: null,
+    errorName,
+    errorCategory,
+    notice,
+    explanation,
+    cause,
+    hint,
+    production: 'The photographed note appears in the American Numismatic Association Money Museum error-note display. The available photograph does not document a production facility or printing date.',
+    sides: [{ label: 'Exhibit photograph', image: ANA_IMAGE, width: 1600, height: 1118, crop }],
+    answerSide: 0,
+    regions,
+    numberedRegions,
+    sourceUrl: FLICKR_SOURCE,
+    documentationUrl: ANA_SUPPORT,
+    documentationLabel: 'View the museum display reference',
+    imageCredit: 'David Shankbone, ANA Money Museum photograph',
+    rights: ANA_RIGHTS,
+    playable: true,
+    reviewNote: 'The denomination and visible error are clear in the museum photograph. The series line is not legible, so it is not guessed.',
+  };
+}
+
+export const PLAYABLE_NOTES = [
+  {
+    id: 'fractional-5-cent-inverted-reverse',
+    denomination: '5 cents',
+    noteType: 'First Issue U.S. Postage Currency',
+    series: 'First Issue, issued 1862 to 1863',
+    catalog: 'Fr. 1230',
+    district: 'Not applicable',
+    printingDate: null,
+    errorName: 'Inverted reverse',
+    errorCategory: 'Inverted back',
+    notice: 'The reverse is upside down relative to Jefferson on the face.',
+    explanation: 'Jefferson is upright in the upper image, but the reverse below is rotated 180 degrees. The Smithsonian scan preserves both sides of this exact specimen in their relative orientation.',
+    cause: 'The source identifies the note as a printing error with an inverted reverse. It does not document the sheet-handling step that caused this specimen.',
+    hint: 'Compare the direction of Jefferson with the words on the reverse below.',
+    production: 'Fractional currency circulated from 1862 to 1876. The source identifies this First Issue Fr. 1230 specimen and its inverted reverse, but gives no exact printing date.',
+    sides: [{ label: 'Face and reverse', image: 'assets/notes/fr1230-inverted-reverse.jpg', width: 1500, height: 2103, crop: { x: 0, y: 0, width: 1500, height: 2103 } }],
+    answerSide: 0,
+    regions: [{ x: 9, y: 54, width: 82, height: 43 }],
+    numberedRegions: [7, 8, 9],
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:US-Fractional_(1st_Issue)-$0.05-Fr.1230.jpg',
+    documentationUrl: 'https://americanhistory.si.edu/collections/object-groups/national-numismatic-collection',
+    documentationLabel: 'About the National Numismatic Collection',
+    imageCredit: 'National Numismatic Collection, Smithsonian Institution; scanned by Godot13',
+    rights: {
+      label: 'Public domain; Wikimedia VRT permission confirmed',
+      url: 'https://commons.wikimedia.org/wiki/File:US-Fractional_(1st_Issue)-$0.05-Fr.1230.jpg#Licensing',
+      detail: 'The Commons record marks the scan public domain and includes a reviewed VRT permission ticket. Credit to the National Numismatic Collection is requested.',
+    },
+    playable: true,
+    reviewNote: 'Both sides of the same specimen appear in one scan, with their relative orientation preserved.',
+  },
+  anaRecord({
+    id: 'ana-20-shifted-overprint', denomination: '$20', noteType: 'Federal Reserve Note', crop: { x: 850, y: 0, width: 700, height: 315 },
+    errorName: 'Shifted seal and serial numbers', errorCategory: 'Shifted overprint',
+    notice: 'The green overprint is crowded against the right side instead of occupying its normal positions.',
+    explanation: 'The Treasury seal and serial-number printing are displaced toward the right edge. The engraved portrait and border remain in their normal positions, making the shift visible.',
+    cause: 'The museum display identifies shifted seals and serial numbers. The photograph does not document the mechanical cause for this specimen.',
+    hint: 'Compare the green printing with Jackson and the right border.',
+    regions: [{ x: 68, y: 8, width: 30, height: 84 }], numberedRegions: [3, 6, 9],
+  }),
+  anaRecord({
+    id: 'ana-5-foldover', denomination: '$5', noteType: 'Federal Reserve Note', crop: { x: 35, y: 385, width: 705, height: 320 },
+    errorName: 'Foldover printing error', errorCategory: 'Foldover',
+    notice: 'A folded section left a large diagonal blank area across the reverse.',
+    explanation: 'The reverse design stops at a sharp diagonal edge. A section of the sheet was folded out of the printing area when this side was printed.',
+    cause: 'The museum display identifies a foldover error. The photograph supports the visible result but does not document the press sequence.',
+    hint: 'Trace the diagonal boundary between the printed green design and the blank paper.',
+    regions: [{ x: 48, y: 2, width: 50, height: 94 }], numberedRegions: [2, 3, 5, 6, 8, 9],
+  }),
+  anaRecord({
+    id: 'ana-10-shifted-overprint', denomination: '$10', noteType: 'Federal Reserve Note', crop: { x: 860, y: 380, width: 710, height: 330 },
+    errorName: 'Shifted seal and serial numbers', errorCategory: 'Shifted overprint',
+    notice: 'The green serial numbers and Treasury seal sit too far to the right.',
+    explanation: 'The overprint is displaced across Hamilton and toward the right border instead of aligning with the engraved face design.',
+    cause: 'The museum display identifies shifted seals and serial numbers. No printing facility or exact press cause is documented in the photograph.',
+    hint: 'Look at where the green elements sit in relation to Hamilton.',
+    regions: [{ x: 43, y: 12, width: 54, height: 78 }], numberedRegions: [2, 3, 5, 6, 8, 9],
+  }),
+  anaRecord({
+    id: 'ana-1-offset-transfer', denomination: '$1', noteType: 'Federal Reserve Note', crop: { x: 10, y: 770, width: 735, height: 348 },
+    errorName: 'Offset transfer on the back', errorCategory: 'Offset transfer',
+    notice: 'A reversed face design is visible across the normally green back.',
+    explanation: 'Portrait-side design elements appear as a transferred mirror image on the back. This is printing transferred from another wet sheet, not circulation damage.',
+    cause: 'The museum display identifies an offset transfer printing error. It does not document the press or printing date for this specimen.',
+    hint: 'This is the back of a one-dollar note. Look for face-side elements that do not belong there.',
+    regions: [{ x: 5, y: 5, width: 90, height: 90 }], numberedRegions: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  }),
+  anaRecord({
+    id: 'ana-5-mismatched-serials', denomination: '$5', noteType: 'Federal Reserve Note', crop: { x: 865, y: 760, width: 725, height: 358 },
+    errorName: 'Mismatched serial numbers', errorCategory: 'Mismatched serials',
+    notice: 'The two serial-number strings on the same note do not match.',
+    explanation: 'The upper-right and lower-left serial numbers end with different digits. On a normal note, the two printed serial numbers are identical.',
+    cause: 'The photograph documents the mismatched numbers on this museum specimen. It does not establish which numbering wheel failed to advance correctly.',
+    hint: 'Read the digits in both green serial numbers and compare them.',
+    regions: [{ x: 53, y: 13, width: 42, height: 35 }, { x: 6, y: 48, width: 43, height: 38 }], numberedRegions: [1, 3, 4, 6],
+  }),
+];
+
+export const REFERENCE_NOTES = HERITAGE_RECORDS.map((note) => ({
+  ...note,
+  playable: false,
+  reviewNote: 'The exact auction specimen and error are documented, but Heritage\'s one-image noncommercial article allowance does not clearly authorize cropped interactive gameplay.',
+  rights: {
+    label: 'Limited noncommercial article allowance',
+    url: 'https://domains.ha.com/c/ref/website-use-agreement.zx?ic=footer-website-use-agreement-121117',
+    detail: 'Heritage permits one credited image with a noncommercial article. This record is retained as a reference article and is excluded from rounds because the terms do not clearly authorize interactive cropping.',
+  },
+}));
+
+export const NOTES = [...PLAYABLE_NOTES, ...REFERENCE_NOTES];
+
+export const SOURCE_POLICIES = [
+  ANA_RIGHTS,
+  PLAYABLE_NOTES[0].rights,
+  REFERENCE_NOTES[0].rights,
+];

@@ -3,32 +3,39 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#e9ece4" />
-    <meta name="description" content="The verified notes, sources, and image permissions used in Print Check." />
+    <meta name="theme-color" content="#faf8f2" />
+    <meta name="description" content="The notes, sources, and image permissions reviewed for Print Check." />
     <title>Notes in this game - Print Check</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=3" />
   </head>
   <body>
-    <div class="app-shell">
-      <header class="topbar">
-        <a class="wordmark" href="index.html" aria-label="Return to Print Check">
-          <span class="wordmark-print" aria-hidden="true">PRINT</span><span>CHECK</span>
-        </a>
-        <div class="topbar-actions"><a href="index.html">Play</a></div>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="site-name" href="index.html">Print Check</a>
+        <nav aria-label="Primary navigation">
+          <a href="index.html">Play</a>
+          <a href="notes.html" aria-current="page">Notes</a>
+          <a href="index.html#how-to-play">How to play</a>
+        </nav>
       </header>
+
       <main class="collection-main">
-        <section class="collection-intro">
-          <p class="eyebrow">Verified collection</p>
+        <header class="collection-intro">
           <h1>Notes in this game</h1>
-          <p>Fifteen genuine U.S. paper notes, each tied to specimen-specific Heritage documentation. Series labels are kept separate from printing dates, and unknown production details stay unknown.</p>
-        </section>
-        <section class="method-note" aria-labelledby="method-title">
-          <h2 id="method-title">Image and review method</h2>
-          <p id="permission-summary"></p>
-          <p>Gameplay crops out grading labels before the answer. Each full scan below preserves the original holder and certification label.</p>
-          <p>Last specimen review: October 11, 2026. This noncommercial educational site has no advertising, sales, tracking, or accounts.</p>
-        </section>
+          <p>Explore the notes used in Print Check and the printing errors they show.</p>
+          <p>Series names identify a design and signature combination, not the day a note came off the press. When a source does not document a printing date or a legible series, the record says so.</p>
+          <p id="review-context" hidden></p>
+        </header>
+
         <div id="collection-list" class="collection-list"></div>
+
+        <section class="sourcing-section" aria-labelledby="sourcing-title">
+          <h2 id="sourcing-title">Sourcing and image use</h2>
+          <p>Playable notes use a public-domain Smithsonian scan or credited crops from a Creative Commons photograph of the ANA Money Museum error-note display. The complete source image remains available from each entry.</p>
+          <p>Heritage specimens are retained below as reference records only. Its one-image noncommercial article allowance supports an individual collection entry, but does not clearly authorize cropped interactive gameplay.</p>
+          <p>Currency reproductions remain subject to U.S. law and the Bureau of Engraving and Printing's <a href="https://www.bep.gov/currency/currency-image-use" target="_blank" rel="noreferrer">currency image use guidance</a>.</p>
+          <p>Last specimen and rights review: October 11, 2026.</p>
+        </section>
       </main>
     </div>
     <script type="module" src="src/collection.js"></script>

@@ -3,27 +3,30 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#303431" />
+    <meta name="theme-color" content="#faf7ef" />
     <meta name="description" content="The notes, sources, and image permissions reviewed for Print Check." />
     <title>Notes in this game - Print Check</title>
-    <link rel="stylesheet" href="styles.css?v=4" />
+    <link rel="stylesheet" href="styles.css?v=5" />
   </head>
   <body>
-    <div class="vault-shell">
+    <div class="page-shell">
       <header class="site-header">
-        <a class="site-name" href="index.html">Print Check</a>
+        <a class="site-name" href="index.html">
+          <span>Print Check</span>
+          <svg viewBox="0 0 150 9" aria-hidden="true" preserveAspectRatio="none">
+            <path d="M2 5 C28 3.7 52 6.2 78 4.6 C103 3.1 126 5.8 148 4.1" />
+          </svg>
+        </a>
         <nav aria-label="Primary navigation">
-          <a href="index.html">Play</a>
           <a href="notes.html" aria-current="page">Notes</a>
           <a href="index.html#how-to-play">How to play</a>
         </nav>
       </header>
 
       <main class="collection-main">
-        <div class="register-page">
         <header class="collection-intro">
-          <h1>Collection register</h1>
-          <p>Notes in this game, their visible errors, and their sources.</p>
+          <h1>Notes in this game</h1>
+          <p>Genuine specimens, visible errors, and source records.</p>
           <p>Series names identify a design and signature combination, not the day a note came off the press. When a source does not document a printing date or a legible series, the record says so.</p>
           <p id="review-context" hidden></p>
         </header>
@@ -43,7 +46,6 @@
           <p>Currency reproductions remain subject to U.S. law and the Bureau of Engraving and Printing's <a href="https://www.bep.gov/currency/currency-image-use" target="_blank" rel="noreferrer">currency image use guidance</a>.</p>
           <p>Last specimen and rights review: October 11, 2026.</p>
         </section>
-        </div>
       </main>
     </div>
     <script type="module" src="src/collection.js"></script>

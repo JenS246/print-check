@@ -38,7 +38,7 @@ function imageFigure(note) {
   image.style.top = `${-(crop.y / crop.height) * 100}%`;
   viewport.append(image);
   const caption = document.createElement('figcaption');
-  caption.textContent = note.playable ? 'Gameplay view. Open for the complete source image.' : 'Full reference scan.';
+  caption.textContent = note.imageCredit;
   figure.append(viewport, caption);
   return figure;
 }
@@ -62,12 +62,13 @@ function noteArticle(note) {
   const copy = document.createElement('div');
   copy.className = 'collection-copy';
   const stateClass = note.playable ? 'record-state' : 'record-state reference-state';
-  const stateText = note.playable ? 'Used in randomized rounds.' : 'Reference only. Not used in rounds.';
+  const stateText = note.playable ? 'Playable in randomized rounds.' : 'Reference only. Not used in rounds.';
   copy.innerHTML = `
     <h3>${note.errorName}</h3>
     <p class="collection-meta">${note.denomination} ${note.noteType}</p>
     <p>${note.explanation}</p>
-    <p class="${stateClass}">${stateText} ${note.reviewNote}</p>
+    <p class="${stateClass}">${stateText}</p>
+    <p class="visible-source"><a href="${note.sourceUrl}" target="_blank" rel="noreferrer">${sourceLabel(note)}</a></p>
     <details>
       <summary>More details</summary>
       <p>${note.cause}</p>
@@ -81,7 +82,6 @@ function noteArticle(note) {
         <dt>Reuse basis</dt><dd>${note.rights.label}. ${note.rights.detail}</dd>
       </dl>
       <div class="collection-links">
-        <a href="${note.sourceUrl}" target="_blank" rel="noreferrer">${sourceLabel(note)}</a>
         ${note.documentationUrl ? `<a href="${note.documentationUrl}" target="_blank" rel="noreferrer">${note.documentationLabel}</a>` : ''}
         ${note.supportingUrl ? `<a href="${note.supportingUrl}" target="_blank" rel="noreferrer">${note.supportingLabel}</a>` : ''}
         <a href="${note.rights.url}" target="_blank" rel="noreferrer">View reuse terms</a>

@@ -1,6 +1,6 @@
 # Print Check
 
-Print Check is a five-round browser game about documented production errors on genuine U.S. paper currency. Its interface is a compact bank-vault inspection desk: five stateful steel drawers sit beside a felt examination surface where players place a marker on the visible error.
+Print Check is a five-round browser game about documented production errors on genuine U.S. paper currency. Its interface is a currency examiner's sketchbook: genuine note images sit on a warm paper canvas with restrained pen-line controls and illustrations.
 
 The project is deliberately small and rights-aware. Six records are eligible for randomized rounds. Fifteen previously researched Heritage specimens remain in the collection as reference-only records because Heritage's limited noncommercial article allowance does not clearly authorize cropped interactive gameplay.
 
@@ -59,6 +59,7 @@ The tests cover the playable/reference split, local image availability, reuse me
 - Number-key shortcuts in alternate mode
 - Text feedback in addition to color
 - Reduced visual ornament and no required animation
+- Self-hosted Patrick Hand display type with a readable sans-serif body face
 - Phone and desktop layouts
 
 ## Important URLs and services

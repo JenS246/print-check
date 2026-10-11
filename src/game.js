@@ -60,16 +60,21 @@ function renderDrawers() {
   list.replaceChildren();
   state.outcomes.forEach((outcome, index) => {
     const item = document.createElement('li');
-    item.className = 'drawer';
-    if (index === state.round && !state.solved) item.classList.add('is-open');
+    item.className = 'progress-step';
+    if (index === state.round && !state.solved) item.classList.add('is-current');
     if (outcome) item.classList.add('is-complete');
-    const label = document.createElement('span');
-    label.textContent = `Note ${index + 1}`;
-    const status = document.createElement('i');
-    status.textContent = outcome === 'revealed' ? 'Revealed' : outcome === 'found' ? '✓' : '';
-    status.setAttribute('aria-label', outcome === 'revealed' ? 'Revealed' : outcome === 'found' ? 'Found' : index === state.round ? 'Current note' : 'Not yet opened');
+    const drawing = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    drawing.setAttribute('viewBox', '0 0 44 44');
+    drawing.setAttribute('aria-hidden', 'true');
+    drawing.innerHTML = '<path class="progress-ring" d="M22 3 C33 2.5 41 11 41 22 C41.5 33 33 41.5 22 41 C11 41.5 2.5 33 3 22 C2.5 11 11 3.5 22 3 Z"/><path class="progress-check" d="M12 22.5 C16 25 18 29 20 31 C25 24 29 18 34 13"/>';
+    const number = document.createElement('span');
+    number.className = 'progress-number';
+    number.textContent = String(index + 1);
+    const status = document.createElement('span');
+    status.className = 'sr-only';
+    status.textContent = outcome === 'revealed' ? `Note ${index + 1}, revealed` : outcome === 'found' ? `Note ${index + 1}, found` : index === state.round ? `Note ${index + 1}, current` : `Note ${index + 1}, not yet opened`;
     item.setAttribute('aria-current', index === state.round ? 'step' : 'false');
-    item.append(label, status);
+    item.append(drawing, number, status);
     list.append(item);
   });
 }
@@ -247,11 +252,9 @@ function showAnswer(revealed) {
   setAnsweringEnabled(false);
   const note = currentNote();
   $('#answer-title').textContent = note.errorName;
-  $('#answer-notice').textContent = note.notice;
   $('#answer-explanation').textContent = note.explanation;
-  $('#answer-cause').textContent = note.cause;
   $('#answer-note').textContent = `${note.denomination} ${note.noteType}`;
-  $('#answer-series').textContent = note.series;
+  $('#answer-series').textContent = `, ${note.series}`;
   $('#answer-credit').textContent = note.imageCredit;
   $('#source-link').href = note.sourceUrl;
   answerPanel.hidden = false;

@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { IMAGE_PERMISSION, NOTES } from '../data/notes.js';
 
-test('the game has exactly ten unique verified specimens', () => {
-  assert.equal(NOTES.length, 10);
-  assert.equal(new Set(NOTES.map((note) => note.id)).size, 10);
+test('the game has exactly fifteen unique verified specimens', () => {
+  assert.equal(NOTES.length, 15);
+  assert.equal(new Set(NOTES.map((note) => note.id)).size, 15);
 });
 
 test('every note includes one error-bearing scan and specimen-specific evidence', async () => {
@@ -14,6 +14,10 @@ test('every note includes one error-bearing scan and specimen-specific evidence'
     assert.equal(note.sides.length, 1, note.id);
     assert.match(note.sourceUrl, /^https:\/\/(currency\.ha\.com\/itm\/|www\.minterrornews\.com\/news-)/, note.id);
     assert.match(note.imageArticleUrl, /^https:\/\/www\.minterrornews\.com\//, note.id);
+    if (note.supportingUrl) {
+      assert.match(note.supportingUrl, /^https:\/\/www\.pmgnotes\.com\//, note.id);
+      assert.ok(note.supportingLabel, note.id);
+    }
     assert.ok(note.imageCredit.includes('Heritage Auctions'), note.id);
     assert.equal(note.printingDate, null, note.id);
     assert.ok(note.series.startsWith('Series '), note.id);

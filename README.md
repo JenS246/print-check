@@ -19,7 +19,7 @@ The interface is a visual companion to [ORIGINS](https://jens246.github.io/origi
 
 ## Verified corpus
 
-The corpus is deliberately limited to ten notes from two Heritage Auctions articles mirrored by Mint Error News. Each error-bearing scan shows the same certified specimen identified by Heritage and its grading holder. Six entries also link directly to a specimen-specific Heritage auction lot; the remaining four link to the Heritage article because an exact lot URL was not available without inference:
+The corpus is deliberately limited to fifteen notes from four Heritage Auctions articles mirrored by Mint Error News. Each error-bearing scan shows the same certified specimen identified by Heritage and its grading holder. Seven entries also link directly to a specimen-specific Heritage auction lot; the remaining eight link to the Heritage article because an exact lot URL was not available without inference. PMG independently documents the certification and production sequence of the Del Monte Note:
 
 1. Series 1985 $20 Federal Reserve Note, Type II inverted back.
 2. Series 2006 $1 Federal Reserve Note, Type II inverted back.
@@ -31,6 +31,11 @@ The corpus is deliberately limited to ten notes from two Heritage Auctions artic
 8. Series 1922 $10 Gold Certificate, inverted back.
 9. Series 1928 $20 Gold Certificate, missing third printing.
 10. Series 1934 $1 Silver Certificate, inverted back.
+11. Series 1996 $20 Federal Reserve Note, obstructed printing with retained Del Monte sticker.
+12. Series 1981A $10 Federal Reserve Note, shifted third printing.
+13. Series 1985 $20 Federal Reserve Note, doubled serial-number printing.
+14. Series 1976 $2 Federal Reserve Note, inverted third printing.
+15. Series 1977 $100 Federal Reserve Note, missing back printing.
 
 The records do not convert a Federal Reserve district into a printing facility. An actual printing date is not supplied when the source only provides a series designation. Specimens without paired usable images and exact documentation were excluded.
 
@@ -81,6 +86,9 @@ The tests cover unique rounds, evidence fields, answer-region bounds, grading-la
 - Specimen documentation: https://currency.ha.com/
 - Image article host, Conway collection: https://www.minterrornews.com/news-12-15-20-the-conway-collection-of-error-notes-part-1.html
 - Image article host, October 2025 Heritage auction: https://www.minterrornews.com/news-10-30-25-prices-realized-in-the-october-2025-us-currency-signature-heritage-auction.html
+- Image article host, April 2020 Heritage auction: https://www.minterrornews.com/news-5-26-20-prices-realized-in-the-april-2020-central-states-heritage-currency-auction.html
+- Image article host, Del Monte Note: https://www.minterrornews.com/news-12-9-20-the-del-monte-note-obstructed-printing-error-with-retained-obstruction.html
+- PMG documentation, Del Monte Note: https://www.pmgnotes.com/news/article/8844/del-monte-note-record-auction/
 - Image reuse terms: https://domains.ha.com/c/ref/website-use-agreement.zx?ic=footer-website-use-agreement-121117
 - Currency image guidance: https://www.bep.gov/currency/currency-image-use
 - Hosting: GitHub Pages

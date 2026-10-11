@@ -26,6 +26,9 @@ NOTES.forEach((note) => {
   const imageArticleLink = note.imageArticleUrl === note.sourceUrl
     ? ''
     : `<a href="${note.imageArticleUrl}" target="_blank" rel="noreferrer">View image article</a>`;
+  const supportingLink = note.supportingUrl
+    ? `<a href="${note.supportingUrl}" target="_blank" rel="noreferrer">${note.supportingLabel}</a>`
+    : '';
 
   article.innerHTML = `
     <div class="collection-images">${figures}</div>
@@ -46,6 +49,7 @@ NOTES.forEach((note) => {
       <div class="collection-links">
         <a href="${note.sourceUrl}" target="_blank" rel="noreferrer">${sourceLabel}</a>
         ${imageArticleLink}
+        ${supportingLink}
         <a href="${IMAGE_PERMISSION.url}" target="_blank" rel="noreferrer">View reuse terms</a>
       </div>
     </div>`;

@@ -220,7 +220,7 @@ function nextRound() {
     $('#final-score').textContent = String(state.score);
     $('#result-message').textContent = state.score === 5
       ? 'A clean inspection. You found every documented error without Reveal.'
-      : 'Each note is documented in the collection, with its full scans and auction record.';
+      : 'Each note is documented in the collection, with its full scan and source record.';
     showScreen(resultScreen);
     return;
   }

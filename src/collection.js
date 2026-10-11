@@ -22,6 +22,11 @@ NOTES.forEach((note) => {
       <figcaption>${side.label}. Full uncropped source image.</figcaption>
     </figure>`).join('');
 
+  const sourceLabel = note.sourceUrl.includes('currency.ha.com') ? 'View auction record' : 'View specimen article';
+  const imageArticleLink = note.imageArticleUrl === note.sourceUrl
+    ? ''
+    : `<a href="${note.imageArticleUrl}" target="_blank" rel="noreferrer">View image article</a>`;
+
   article.innerHTML = `
     <div class="collection-images">${figures}</div>
     <div class="collection-copy">
@@ -39,11 +44,10 @@ NOTES.forEach((note) => {
         <dt>Reuse</dt><dd>${IMAGE_PERMISSION.label}</dd>
       </dl>
       <div class="collection-links">
-        <a href="${note.sourceUrl}" target="_blank" rel="noreferrer">View auction record</a>
-        <a href="${note.imageArticleUrl}" target="_blank" rel="noreferrer">View image article</a>
+        <a href="${note.sourceUrl}" target="_blank" rel="noreferrer">${sourceLabel}</a>
+        ${imageArticleLink}
         <a href="${IMAGE_PERMISSION.url}" target="_blank" rel="noreferrer">View reuse terms</a>
       </div>
     </div>`;
   list.append(article);
 });
-

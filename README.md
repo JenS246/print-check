@@ -6,7 +6,7 @@ The interface is a visual companion to [ORIGINS](https://jens246.github.io/origi
 
 ## How it works
 
-- Every session shuffles all five verified notes and presents each note exactly once.
+- Every session shuffles the verified collection and presents five notes without repeats.
 - Each record lives in `data/notes.js`, separate from the game logic.
 - Gameplay crops the grading label so it cannot reveal the error category before the player answers.
 - One error-bearing scan is used per specimen so each entry stays within Heritage's stated one-image noncommercial article allowance.
@@ -14,18 +14,23 @@ The interface is a visual companion to [ORIGINS](https://jens246.github.io/origi
 - An alternate 3 by 3 numbered-region mode supports keyboard play with the number keys.
 - Incorrect answers can be moved and checked again. Reveal forfeits the point for that round.
 - After a round, the player sees the plain-language error name, a source-limited explanation, series designation, image credit, original scan, and auction record.
-- `notes.html` is the collection page with both uncropped scans, specimen metadata, evidence links, and reuse terms.
+- `notes.html` is the collection page with uncropped scans, specimen metadata, evidence links, and reuse terms.
 - There are no accounts, cookies, analytics, ads, paid services, or backend.
 
 ## Verified corpus
 
-The launch corpus is deliberately limited to five notes from *The Conway Collection of Error Notes, Part I*, an article credited to Heritage Auctions and mirrored by Mint Error News. Each error-bearing scan shows the same certified specimen described by a specimen-specific Heritage auction lot:
+The corpus is deliberately limited to ten notes from two Heritage Auctions articles mirrored by Mint Error News. Each error-bearing scan shows the same certified specimen identified by Heritage and its grading holder. Six entries also link directly to a specimen-specific Heritage auction lot; the remaining four link to the Heritage article because an exact lot URL was not available without inference:
 
 1. Series 1985 $20 Federal Reserve Note, Type II inverted back.
 2. Series 2006 $1 Federal Reserve Note, Type II inverted back.
 3. Series 1988A $1 Federal Reserve Note, foldover error.
 4. Series 2003 $1 Federal Reserve Note, printed fold error.
 5. Series 2009 $10 Federal Reserve Note, foldover with retained selvage.
+6. Series 1976 $2 Federal Reserve Note, doubled third printing with mismatched serial numbers.
+7. Series 1891 $20 Silver Certificate, inverted back.
+8. Series 1922 $10 Gold Certificate, inverted back.
+9. Series 1928 $20 Gold Certificate, missing third printing.
+10. Series 1934 $1 Silver Certificate, inverted back.
 
 The records do not convert a Federal Reserve district into a printing facility. An actual printing date is not supplied when the source only provides a series designation. Specimens without paired usable images and exact documentation were excluded.
 
@@ -74,7 +79,8 @@ The tests cover unique rounds, evidence fields, answer-region bounds, grading-la
 - Source repository: https://github.com/JenS246/print-check
 - Visual reference: https://jens246.github.io/origin-money-game/
 - Specimen documentation: https://currency.ha.com/
-- Image article host: https://www.minterrornews.com/news-12-15-20-the-conway-collection-of-error-notes-part-1.html
+- Image article host, Conway collection: https://www.minterrornews.com/news-12-15-20-the-conway-collection-of-error-notes-part-1.html
+- Image article host, October 2025 Heritage auction: https://www.minterrornews.com/news-10-30-25-prices-realized-in-the-october-2025-us-currency-signature-heritage-auction.html
 - Image reuse terms: https://domains.ha.com/c/ref/website-use-agreement.zx?ic=footer-website-use-agreement-121117
 - Currency image guidance: https://www.bep.gov/currency/currency-image-use
 - Hosting: GitHub Pages

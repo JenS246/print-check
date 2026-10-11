@@ -2,21 +2,26 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { IMAGE_PERMISSION, NOTES } from '../data/notes.js';
 
-test('the game has exactly five unique verified specimens', () => {
-  assert.equal(NOTES.length, 5);
-  assert.equal(new Set(NOTES.map((note) => note.id)).size, 5);
+test('the game has exactly ten unique verified specimens', () => {
+  assert.equal(NOTES.length, 10);
+  assert.equal(new Set(NOTES.map((note) => note.id)).size, 10);
 });
 
-test('every note includes one error-bearing scan and specimen-specific evidence', () => {
+test('every note includes one error-bearing scan and specimen-specific evidence', async () => {
+  const { access } = await import('node:fs/promises');
+  const imagePaths = [];
   for (const note of NOTES) {
     assert.equal(note.sides.length, 1, note.id);
-    assert.match(note.sourceUrl, /^https:\/\/currency\.ha\.com\/itm\//, note.id);
+    assert.match(note.sourceUrl, /^https:\/\/(currency\.ha\.com\/itm\/|www\.minterrornews\.com\/news-)/, note.id);
     assert.match(note.imageArticleUrl, /^https:\/\/www\.minterrornews\.com\//, note.id);
     assert.ok(note.imageCredit.includes('Heritage Auctions'), note.id);
     assert.equal(note.printingDate, null, note.id);
     assert.ok(note.series.startsWith('Series '), note.id);
     assert.ok(note.production.includes('Heritage'), note.id);
+    imagePaths.push(note.sides[0].image);
+    await access(new URL(`../${note.sides[0].image}`, import.meta.url));
   }
+  assert.equal(new Set(imagePaths).size, NOTES.length);
   assert.match(IMAGE_PERMISSION.url, /ha\.com\/c\/ref\/website-use-agreement/);
 });
 

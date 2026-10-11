@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#e9ece4" />
+    <meta name="description" content="The verified notes, sources, and image permissions used in Print Check." />
+    <title>Notes in this game - Print Check</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="wordmark" href="index.html" aria-label="Return to Print Check">
+          <span class="wordmark-print" aria-hidden="true">PRINT</span><span>CHECK</span>
+        </a>
+        <div class="topbar-actions"><a href="index.html">Play</a></div>
+      </header>
+      <main class="collection-main">
+        <section class="collection-intro">
+          <p class="eyebrow">Verified collection</p>
+          <h1>Notes in this game</h1>
+          <p>Five genuine U.S. paper notes, each tied to a specimen-specific Heritage auction record. Series labels are kept separate from printing dates, and unknown production details stay unknown.</p>
+        </section>
+        <section class="method-note" aria-labelledby="method-title">
+          <h2 id="method-title">Image and review method</h2>
+          <p id="permission-summary"></p>
+          <p>Gameplay crops out grading labels before the answer. Each full scan below preserves the original holder and certification label.</p>
+          <p>Last specimen review: October 11, 2026. This noncommercial educational site has no advertising, sales, tracking, or accounts.</p>
+        </section>
+        <div id="collection-list" class="collection-list"></div>
+      </main>
+    </div>
+    <script type="module" src="src/collection.js"></script>
+  </body>
+</html>

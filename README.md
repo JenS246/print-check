@@ -1,6 +1,6 @@
 # Print Check
 
-Print Check is a five-round browser game about documented production errors on genuine U.S. paper currency. Players inspect one specimen at a time, place a marker on the visible error, and check it against manually reviewed image-relative regions.
+Print Check is a five-round browser game about documented production errors on genuine U.S. paper currency. Its interface is a compact bank-vault inspection desk: five stateful steel drawers sit beside a felt examination surface where players place a marker on the visible error.
 
 The project is deliberately small and rights-aware. Six records are eligible for randomized rounds. Fifteen previously researched Heritage specimens remain in the collection as reference-only records because Heritage's limited noncommercial article allowance does not clearly authorize cropped interactive gameplay.
 
@@ -8,6 +8,7 @@ The project is deliberately small and rights-aware. Six records are eligible for
 
 - Five randomized notes per session, without repeats
 - Category-diverse selection before duplicate categories are considered
+- Local recent-note memory that prefers the unseen specimen when the small corpus permits it
 - Pointer marker plus a keyboard-friendly numbered-region mode
 - Zoom to 300 percent, drag-to-pan, and Reset view
 - Incorrect guesses can be moved and checked again
@@ -26,6 +27,8 @@ The playable corpus uses two image sources:
 The museum photograph does not make every series line legible. Those records say "Series not legible in the source photograph" instead of guessing. The site also does not infer a printing facility from a Federal Reserve district.
 
 The fifteen Heritage records retain their original specimen links and scans on the collection page. They are excluded from gameplay and labeled reference-only. They can be reconsidered if broader written permission is obtained.
+
+The collection register also tracks three PMG research leads: a Series 1977 $50 gutter fold, a Series 1974 $1 offset print, and a Series 1988A $10 doubled first printing. These are not playable because written display permission, exact original specimen records, and suitable high-resolution images are still required.
 
 Currency reproductions remain subject to U.S. law. Review the Bureau of Engraving and Printing's [currency image use guidance](https://www.bep.gov/currency/currency-image-use) before republishing.
 

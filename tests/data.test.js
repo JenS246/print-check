@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { NOTES, PLAYABLE_NOTES, REFERENCE_NOTES } from '../data/notes.js';
+import { CANDIDATES, NOTES, PLAYABLE_NOTES, REFERENCE_NOTES } from '../data/notes.js';
 import { chooseCategoryDiverseRounds, markerHitsRegions } from '../src/rounds.js';
 
 test('the reviewed collection separates playable and reference-only records', () => {
@@ -10,6 +10,15 @@ test('the reviewed collection separates playable and reference-only records', ()
   assert.equal(new Set(NOTES.map((note) => note.id)).size, NOTES.length);
   assert.ok(PLAYABLE_NOTES.every((note) => note.playable));
   assert.ok(REFERENCE_NOTES.every((note) => !note.playable));
+});
+
+test('research candidates remain non-playable and state what is missing', () => {
+  assert.equal(CANDIDATES.length, 3);
+  for (const candidate of CANDIDATES) {
+    assert.match(candidate.sourceUrl, /^https:\/\//);
+    assert.match(candidate.missing, /permission/i);
+    assert.equal('playable' in candidate, false);
+  }
 });
 
 test('every record has specimen evidence, a local image, and a documented reuse basis', async () => {
@@ -50,6 +59,12 @@ test('five-round selection avoids repeats and maximizes category diversity', () 
   assert.equal(rounds.length, 5);
   assert.equal(new Set(rounds.map((note) => note.id)).size, 5);
   assert.equal(new Set(rounds.map((note) => note.errorCategory)).size, 5);
+});
+
+test('five-round selection prefers an unseen note within a repeated category', () => {
+  const recentIds = PLAYABLE_NOTES.filter((note) => note.id !== 'ana-10-shifted-overprint').map((note) => note.id);
+  const rounds = chooseCategoryDiverseRounds(PLAYABLE_NOTES, 5, () => 0.42, recentIds);
+  assert.ok(rounds.some((note) => note.id === 'ana-10-shifted-overprint'));
 });
 
 test('marker hit testing respects both regions and note side', () => {

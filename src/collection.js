@@ -1,10 +1,11 @@
-import { NOTES } from '../data/notes.js';
+import { CANDIDATES, NOTES } from '../data/notes.js';
 
 const params = new URLSearchParams(window.location.search);
 const requestedIds = (params.get('ids') ?? '').split(',').filter(Boolean);
 const requestedSet = new Set(requestedIds);
 const reviewContext = document.querySelector('#review-context');
 const list = document.querySelector('#collection-list');
+const candidateList = document.querySelector('#candidate-list');
 
 let visibleNotes = NOTES;
 if (requestedSet.size) {
@@ -117,3 +118,20 @@ if (requestedSet.size) {
   list.append(referenceHeading);
   renderGroups(visibleNotes.filter((note) => !note.playable), list);
 }
+
+CANDIDATES.forEach((candidate) => {
+  const item = document.createElement('li');
+  const name = document.createElement('strong');
+  name.textContent = candidate.errorName;
+  const identification = document.createElement('p');
+  identification.textContent = candidate.identification;
+  const missing = document.createElement('p');
+  missing.textContent = `Still needed: ${candidate.missing}`;
+  const link = document.createElement('a');
+  link.href = candidate.sourceUrl;
+  link.target = '_blank';
+  link.rel = 'noreferrer';
+  link.textContent = 'View research lead';
+  item.append(name, identification, missing, link);
+  candidateList.append(item);
+});

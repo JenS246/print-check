@@ -13,6 +13,7 @@ const answerRegions = $('#answer-regions');
 const numberGrid = $('#number-grid');
 const feedback = $('#feedback');
 const answerPanel = $('#answer-panel');
+const RECENT_NOTES_KEY = 'print-check-recent-notes';
 
 const state = {
   order: [],
@@ -27,6 +28,7 @@ const state = {
   solved: false,
   imageReady: false,
   drag: null,
+  outcomes: [],
 };
 
 function currentNote() { return state.order[state.round]; }
@@ -39,13 +41,37 @@ function showScreen(screen) {
 }
 
 function startGame() {
-  state.order = chooseCategoryDiverseRounds(PLAYABLE_NOTES, 5);
+  let recentIds = [];
+  try { recentIds = JSON.parse(localStorage.getItem(RECENT_NOTES_KEY) ?? '[]'); } catch { recentIds = []; }
+  if (!Array.isArray(recentIds)) recentIds = [];
+  state.order = chooseCategoryDiverseRounds(PLAYABLE_NOTES, 5, Math.random, recentIds);
   const selectedIds = new Set(state.order.map((note) => note.id));
   state.reserve = shuffle(PLAYABLE_NOTES.filter((note) => !selectedIds.has(note.id)));
   state.round = 0;
   state.score = 0;
+  state.outcomes = Array(5).fill(null);
+  try { localStorage.setItem(RECENT_NOTES_KEY, JSON.stringify(state.order.map((note) => note.id))); } catch { /* Storage can be unavailable. */ }
   showScreen(gameScreen);
   loadRound();
+}
+
+function renderDrawers() {
+  const list = $('#round-drawers');
+  list.replaceChildren();
+  state.outcomes.forEach((outcome, index) => {
+    const item = document.createElement('li');
+    item.className = 'drawer';
+    if (index === state.round && !state.solved) item.classList.add('is-open');
+    if (outcome) item.classList.add('is-complete');
+    const label = document.createElement('span');
+    label.textContent = `Note ${index + 1}`;
+    const status = document.createElement('i');
+    status.textContent = outcome === 'revealed' ? 'Revealed' : outcome === 'found' ? '✓' : '';
+    status.setAttribute('aria-label', outcome === 'revealed' ? 'Revealed' : outcome === 'found' ? 'Found' : index === state.round ? 'Current note' : 'Not yet opened');
+    item.setAttribute('aria-current', index === state.round ? 'step' : 'false');
+    item.append(label, status);
+    list.append(item);
+  });
 }
 
 function setAnsweringEnabled(enabled) {
@@ -79,8 +105,9 @@ function resetRoundState() {
 
 function loadRound() {
   resetRoundState();
-  $('#round-count').textContent = `Round ${state.round + 1} of 5`;
+  $('#round-count').textContent = `Note ${state.round + 1} of 5`;
   updateScore();
+  renderDrawers();
   renderSideControls();
   renderNumberGrid();
   loadImage();
@@ -214,11 +241,13 @@ function checkAnswer() {
 function showAnswer(revealed) {
   state.solved = true;
   if (revealed) state.usedReveal = true;
+  state.outcomes[state.round] = revealed ? 'revealed' : 'found';
   state.side = currentNote().answerSide;
   drawAnswerRegions();
   setAnsweringEnabled(false);
   const note = currentNote();
   $('#answer-title').textContent = note.errorName;
+  $('#answer-notice').textContent = note.notice;
   $('#answer-explanation').textContent = note.explanation;
   $('#answer-cause').textContent = note.cause;
   $('#answer-note').textContent = `${note.denomination} ${note.noteType}`;
@@ -227,6 +256,7 @@ function showAnswer(revealed) {
   $('#source-link').href = note.sourceUrl;
   answerPanel.hidden = false;
   updateScore();
+  renderDrawers();
 }
 
 function drawAnswerRegions() {
@@ -294,8 +324,8 @@ imageCanvas.addEventListener('pointermove', (event) => {
   if (!state.drag) return;
   const dx = event.clientX - state.drag.x;
   const dy = event.clientY - state.drag.y;
-  if (state.zoom > 1 && Math.hypot(dx, dy) > 6) {
-    state.drag.moved = true;
+  if (Math.hypot(dx, dy) > 10) state.drag.moved = true;
+  if (state.zoom > 1 && state.drag.moved) {
     imageCanvas.classList.add('is-dragging');
     imageScroll.scrollLeft = state.drag.left - dx;
     imageScroll.scrollTop = state.drag.top - dy;
@@ -319,7 +349,6 @@ imageCanvas.addEventListener('pointercancel', () => {
 });
 
 $('#start-button').addEventListener('click', startGame);
-$('#nav-play').addEventListener('click', startGame);
 $('#play-again').addEventListener('click', startGame);
 $('#home-button').addEventListener('click', () => showScreen(homeScreen));
 $('#check-button').addEventListener('click', checkAnswer);

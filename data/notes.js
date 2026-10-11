@@ -466,7 +466,10 @@ export const PLAYABLE_NOTES = [
     explanation: 'The Treasury seal and serial-number printing are displaced toward the right edge. The engraved portrait and border remain in their normal positions, making the shift visible.',
     cause: 'The museum display identifies shifted seals and serial numbers. The photograph does not document the mechanical cause for this specimen.',
     hint: 'Compare the green printing with Jackson and the right border.',
-    regions: [{ x: 68, y: 8, width: 30, height: 84 }], numberedRegions: [3, 6, 9],
+    regions: [
+      { x: 58, y: 18, width: 34, height: 24 },
+      { x: 63, y: 38, width: 25, height: 32 },
+    ], numberedRegions: [3, 6],
   }),
   anaRecord({
     id: 'ana-5-foldover', denomination: '$5', noteType: 'Federal Reserve Note', crop: { x: 35, y: 385, width: 705, height: 320 },
@@ -484,7 +487,11 @@ export const PLAYABLE_NOTES = [
     explanation: 'The overprint is displaced across Hamilton and toward the right border instead of aligning with the engraved face design.',
     cause: 'The museum display identifies shifted seals and serial numbers. No printing facility or exact press cause is documented in the photograph.',
     hint: 'Look at where the green elements sit in relation to Hamilton.',
-    regions: [{ x: 43, y: 12, width: 54, height: 78 }], numberedRegions: [2, 3, 5, 6, 8, 9],
+    regions: [
+      { x: 59, y: 18, width: 36, height: 24 },
+      { x: 18, y: 52, width: 34, height: 24 },
+      { x: 67, y: 34, width: 26, height: 38 },
+    ], numberedRegions: [2, 3, 4, 6],
   }),
   anaRecord({
     id: 'ana-1-offset-transfer', denomination: '$1', noteType: 'Federal Reserve Note', crop: { x: 10, y: 770, width: 735, height: 348 },
@@ -518,6 +525,27 @@ export const REFERENCE_NOTES = HERITAGE_RECORDS.map((note) => ({
 }));
 
 export const NOTES = [...PLAYABLE_NOTES, ...REFERENCE_NOTES];
+
+export const CANDIDATES = [
+  {
+    identification: 'Series 1977 $50 Federal Reserve Note, Kansas City, PMG 65 EPQ',
+    errorName: 'Gutter fold in the overprint',
+    sourceUrl: 'https://www.pmgnotes.com/news/article/10779/gutter-fold-error/',
+    missing: 'Written image permission plus the original specimen or auction record with a sharp, uncropped scan.',
+  },
+  {
+    identification: 'Series 1974 $1 Federal Reserve Note, Philadelphia, PMG 40',
+    errorName: 'Offset printing of front to back',
+    sourceUrl: 'https://www.pmgnotes.com/news/article/9890/error-note-chronicles-offset-printing-error/',
+    missing: 'Written image permission plus the exact original auction record and a sufficiently sharp authorized image.',
+  },
+  {
+    identification: 'Series 1988A $10 Federal Reserve Note, San Francisco, PMG 45 EPQ',
+    errorName: 'Doubled first printing',
+    sourceUrl: 'https://www.pmgnotes.com/news/article/10640',
+    missing: 'Written image permission plus the exact specimen record and a high-resolution authorized view of the doubled back.',
+  },
+];
 
 export const SOURCE_POLICIES = [
   ANA_RIGHTS,

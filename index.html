@@ -3,19 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#faf8f2" />
+    <meta name="theme-color" content="#303431" />
     <meta name="description" content="Print Check is a five-round observation game using documented U.S. currency error notes." />
     <meta property="og:title" content="Print Check" />
     <meta property="og:description" content="Spot the error in real U.S. currency." />
     <title>Print Check - Spot the error in real U.S. currency</title>
-    <link rel="stylesheet" href="styles.css?v=3" />
+    <link rel="stylesheet" href="styles.css?v=4" />
   </head>
   <body>
-    <div class="site-shell">
+    <div class="vault-shell">
       <header class="site-header">
         <button id="home-button" class="site-name" type="button">Print Check</button>
         <nav aria-label="Primary navigation">
-          <button id="nav-play" class="nav-button" type="button">Play</button>
           <a href="notes.html">Notes</a>
           <button id="help-button" class="nav-button" type="button">How to play</button>
         </nav>
@@ -23,91 +22,110 @@
 
       <main>
         <section id="home-screen" class="home-screen" aria-labelledby="home-title">
-          <div class="home-copy">
-            <h1 id="home-title">Print Check</h1>
-            <p class="subtitle">Spot the error in real U.S. currency.</p>
-            <p class="home-instruction">Five notes. Find the printing error in each.</p>
-            <div class="home-actions">
-              <button id="start-button" class="primary-button" type="button">Play</button>
-              <span>No timer</span>
+          <div class="station station-home">
+            <aside class="drawer-cabinet home-drawers" aria-label="Five closed note drawers">
+              <div class="cabinet-top" aria-hidden="true"></div>
+              <ol class="drawer-list">
+                <li class="drawer"><span>Note 1</span><i aria-hidden="true"></i></li>
+                <li class="drawer"><span>Note 2</span><i aria-hidden="true"></i></li>
+                <li class="drawer"><span>Note 3</span><i aria-hidden="true"></i></li>
+                <li class="drawer"><span>Note 4</span><i aria-hidden="true"></i></li>
+                <li class="drawer"><span>Note 5</span><i aria-hidden="true"></i></li>
+              </ol>
+            </aside>
+
+            <div class="inspection-desk home-desk">
+              <div class="home-copy">
+                <p class="subtitle">Spot the error in real U.S. currency.</p>
+                <h1 id="home-title">Print Check</h1>
+                <p class="home-instruction">Inspect five real notes. Find the printing error in each.</p>
+                <button id="start-button" class="primary-button" type="button">Open the drawer</button>
+                <p class="no-timer">No timer</p>
+              </div>
             </div>
           </div>
-          <figure class="home-note">
-            <img src="assets/home/1928-one-dollar-face.jpg" alt="Face of a genuine Series 1928 one-dollar United States Note" width="1920" height="913" />
-            <figcaption>Series 1928 $1 United States Note. National Numismatic Collection, Smithsonian Institution.</figcaption>
-          </figure>
         </section>
 
         <section id="game-screen" class="game-screen" hidden aria-labelledby="round-instruction">
-          <div class="round-head">
-            <p class="round-line"><span id="round-count">Round 1 of 5</span><span aria-hidden="true">/</span><span id="score">0 points</span></p>
-            <h1 id="round-instruction">Find the printing error.</h1>
-            <p>Tap or click where you see the printing error.</p>
-          </div>
+          <div class="station">
+            <aside class="drawer-cabinet game-drawers" aria-label="Notes in this game">
+              <div class="cabinet-top" aria-hidden="true"></div>
+              <ol id="round-drawers" class="drawer-list"></ol>
+            </aside>
 
-          <section class="specimen-area" aria-label="Currency inspection area">
-            <div id="image-scroll" class="image-scroll" tabindex="0" aria-label="Zoomable currency image">
-              <p id="loading-message" class="image-message">Loading note...</p>
-              <div id="image-error" class="image-message" hidden>
-                <p>The note image did not load.</p>
-                <div>
-                  <button id="retry-image" class="secondary-button" type="button">Retry</button>
-                  <button id="skip-image" class="text-button" type="button">Skip this note</button>
+            <section class="inspection-desk" aria-label="Currency inspection desk">
+              <div class="round-head">
+                <h1 id="round-instruction">Find the printing error</h1>
+                <p class="round-line"><span id="round-count">Note 1 of 5</span><span id="score">0 points</span></p>
+                <p>Tap or click where you see the printing error.</p>
+              </div>
+
+              <div id="image-scroll" class="image-scroll" tabindex="0" aria-label="Zoomable currency image">
+                <p id="loading-message" class="image-message">Loading note...</p>
+                <div id="image-error" class="image-message" hidden>
+                  <p>The note image did not load.</p>
+                  <div>
+                    <button id="retry-image" class="secondary-button" type="button">Retry</button>
+                    <button id="skip-image" class="text-button" type="button">Skip this note</button>
+                  </div>
+                </div>
+                <div id="image-canvas" class="image-canvas" hidden>
+                  <img id="note-image" alt="" draggable="false" />
+                  <div id="number-grid" class="number-grid" hidden aria-label="Numbered image regions"></div>
+                  <span id="guess-marker" class="guess-marker" hidden aria-hidden="true"></span>
+                  <div id="answer-regions" aria-hidden="true"></div>
                 </div>
               </div>
-              <div id="image-canvas" class="image-canvas" hidden>
-                <img id="note-image" alt="" draggable="false" />
-                <div id="number-grid" class="number-grid" hidden aria-label="Numbered image regions"></div>
-                <span id="guess-marker" class="guess-marker" hidden aria-hidden="true"></span>
-                <div id="answer-regions" aria-hidden="true"></div>
-              </div>
-            </div>
-            <p id="image-status" class="sr-only" aria-live="polite"></p>
+              <p id="image-status" class="sr-only" aria-live="polite"></p>
 
-            <div class="image-toolbar">
-              <div id="side-controls" class="side-controls" role="group" aria-label="Note side"></div>
-              <div class="zoom-controls" role="group" aria-label="Image view controls">
-                <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
-                <output id="zoom-value">100%</output>
-                <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
-                <button id="reset-view" type="button">Reset view</button>
+              <div class="control-console">
+                <div id="side-controls" class="side-controls" role="group" aria-label="Note side"></div>
+                <div class="zoom-controls" role="group" aria-label="Image view controls">
+                  <button id="zoom-out" type="button" aria-label="Zoom out">Zoom out</button>
+                  <output id="zoom-value">100%</output>
+                  <button id="zoom-in" type="button" aria-label="Zoom in">Zoom in</button>
+                  <button id="reset-view" type="button">Reset view</button>
+                </div>
+                <div class="action-row" aria-label="Answer controls">
+                  <button id="check-button" class="primary-button" type="button" disabled>Check</button>
+                  <button id="hint-button" class="secondary-button" type="button" disabled>Hint</button>
+                  <button id="reveal-button" class="secondary-button" type="button" disabled>Reveal</button>
+                </div>
               </div>
-            </div>
 
-            <div class="answer-controls" aria-label="Answer controls">
-              <button id="alternate-mode" class="secondary-button" type="button" aria-pressed="false">Use numbered regions</button>
-              <div class="action-row">
-                <button id="check-button" class="primary-button" type="button" disabled>Check</button>
-                <button id="hint-button" class="secondary-button" type="button" disabled>Hint</button>
-                <button id="reveal-button" class="text-button" type="button" disabled>Reveal</button>
+              <div class="alternate-row">
+                <button id="alternate-mode" class="text-button" type="button" aria-pressed="false">Use numbered regions</button>
+                <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
               </div>
-            </div>
-            <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
-          </section>
 
-          <section id="answer-panel" class="answer-panel" hidden aria-labelledby="answer-title">
-            <h2 id="answer-title"></h2>
-            <p id="answer-explanation"></p>
-            <p id="answer-cause" class="muted"></p>
-            <dl class="answer-facts">
-              <div><dt>Note</dt><dd id="answer-note"></dd></div>
-              <div><dt>Series</dt><dd id="answer-series"></dd></div>
-              <div><dt>Image</dt><dd id="answer-credit"></dd></div>
-            </dl>
-            <div class="answer-actions">
-              <button id="full-image-button" class="secondary-button" type="button">View full original</button>
-              <a id="source-link" class="secondary-button button-link" href="#" target="_blank" rel="noreferrer">View source</a>
-              <button id="next-button" class="primary-button" type="button">Next note</button>
-            </div>
-          </section>
+              <section id="answer-panel" class="answer-panel" hidden aria-labelledby="answer-title">
+                <h2 id="answer-title"></h2>
+                <p id="answer-notice"></p>
+                <p id="answer-explanation"></p>
+                <p id="answer-cause" class="muted"></p>
+                <dl class="answer-facts">
+                  <div><dt>Note</dt><dd id="answer-note"></dd></div>
+                  <div><dt>Series</dt><dd id="answer-series"></dd></div>
+                  <div><dt>Image</dt><dd id="answer-credit"></dd></div>
+                </dl>
+                <div class="answer-actions">
+                  <button id="full-image-button" class="secondary-button" type="button">View full original</button>
+                  <a id="source-link" class="secondary-button button-link" href="#" target="_blank" rel="noreferrer">View source</a>
+                  <button id="next-button" class="primary-button" type="button">Next note</button>
+                </div>
+              </section>
+            </section>
+          </div>
         </section>
 
         <section id="result-screen" class="result-screen" hidden aria-labelledby="result-title">
-          <h1 id="result-title">You found <span id="final-score">0</span> of 5.</h1>
-          <p id="result-message"></p>
-          <div class="result-actions">
-            <button id="play-again" class="primary-button" type="button">Play again</button>
-            <a id="review-notes" class="secondary-button button-link" href="notes.html">Review these notes</a>
+          <div class="result-slip">
+            <h1 id="result-title">You found <span id="final-score">0</span> of 5.</h1>
+            <p id="result-message"></p>
+            <div class="result-actions">
+              <button id="play-again" class="primary-button" type="button">Play again</button>
+              <a id="review-notes" class="secondary-button button-link" href="notes.html">Review these notes</a>
+            </div>
           </div>
         </section>
       </main>

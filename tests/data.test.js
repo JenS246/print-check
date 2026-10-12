@@ -118,22 +118,22 @@ test('the game reserves response space and uses measured viewport height', async
   assert.equal(/overflow:\s*hidden[^;]*;\s*\/\* page/i.test(styles), false);
 });
 
-test('the two production drawings use the requested ink, remain inert, and respond to narrow screens', async () => {
+test('the four money-production drawings use the requested ink and remain inert', async () => {
   const { access, readFile } = await import('node:fs/promises');
-  await access(new URL('../assets/art/printing-press.svg', import.meta.url));
-  await access(new URL('../assets/art/coin-press.svg', import.meta.url));
-  const printingPress = await readFile(new URL('../assets/art/printing-press.svg', import.meta.url), 'utf8');
-  const coinPress = await readFile(new URL('../assets/art/coin-press.svg', import.meta.url), 'utf8');
+  const artFiles = ['coin-stack.svg', 'overlapping-coins.svg', 'rolled-bill.svg', 'bill-fan.svg'];
+  for (const file of artFiles) {
+    await access(new URL(`../assets/art/${file}`, import.meta.url));
+    const artwork = await readFile(new URL(`../assets/art/${file}`, import.meta.url), 'utf8');
+    assert.match(artwork, /stroke="#76541E"/, file);
+    assert.equal(/<text|[0-9]\s*(?:cent|dollar)/i.test(artwork), false, file);
+  }
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
-  assert.match(styles, /printing-press\.svg/);
-  assert.match(styles, /coin-press\.svg/);
-  assert.equal(/ink-roller\.svg|engraving-tools\.svg/.test(styles), false);
-  assert.match(printingPress, /stroke="#80604D"/);
-  assert.match(coinPress, /stroke="#80604D"/);
-  assert.match(styles, /opacity:\s*0\.25/);
+  const html = `${await readFile(new URL('../index.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../notes.html', import.meta.url), 'utf8')}`;
+  for (const file of artFiles) assert.match(html, new RegExp(file.replace('.', '\\.')));
+  assert.match(styles, /opacity:\s*0\.35/);
   assert.match(styles, /pointer-events:\s*none/);
-  assert.match(styles, /@media \(min-width: 1200px\)/);
-  assert.match(styles, /@media \(max-width: 1199px\)/);
+  assert.match(html, /aria-hidden="true"/);
+  assert.match(styles, /\.decoration-coins,\s*\n\s*\.decoration-fan \{ display: none; \}/);
 });
 
 test('museum crops have honest source wording and crop-aware enlargement', async () => {
@@ -155,11 +155,23 @@ test('museum crops have honest source wording and crop-aware enlargement', async
 test('the public palette uses the warm flat colors', async () => {
   const { readFile } = await import('node:fs/promises');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
-  assert.match(styles, /--paper:\s*#f3dcc8/);
-  assert.match(styles, /--ink:\s*#352c27/);
-  assert.match(styles, /--sage:\s*#e8c58f/);
-  assert.match(styles, /--button:\s*#fff7ed/);
+  assert.match(styles, /--page:\s*#d6ab45/);
+  assert.match(styles, /--paper:\s*#fff9ed/);
+  assert.match(styles, /--ink:\s*#302820/);
+  assert.match(styles, /--accent:\s*#b94726/);
+  assert.match(styles, /--decor:\s*#76541e/);
   assert.equal(/gradient|box-shadow|drop-shadow/i.test(styles), false);
+});
+
+test('the drawing-paper surface and requested large type are explicit', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  assert.match(styles, /\.page-shell\s*\{[^}]*background:\s*var\(--paper\)/s);
+  assert.match(styles, /\.site-name\s*\{[^}]*font-size:\s*58px/s);
+  assert.match(styles, /\.prompt h1\s*\{[^}]*font-size:\s*32px/s);
+  assert.match(styles, /\.primary-button\s*\{\s*background:\s*var\(--accent\);\s*color:\s*var\(--white\)/);
+  assert.match(styles, /@media \(max-width: 760px\)[\s\S]*\.site-name\s*\{[^}]*font-size:\s*42px/s);
+  assert.match(styles, /@media \(max-width: 760px\)[\s\S]*\.prompt h1\s*\{[^}]*font-size:\s*28px/s);
 });
 
 test('paired sides and clean rust SVG answer outlines are available', async () => {
@@ -169,7 +181,7 @@ test('paired sides and clean rust SVG answer outlines are available', async () =
   const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   assert.match(game, /createElementNS\('http:\/\/www\.w3\.org\/2000\/svg'/);
-  assert.match(styles, /--rust:\s*#a44732/);
+  assert.match(styles, /--rust:\s*#96331f/);
   assert.match(styles, /stroke:\s*var\(--rust\)/);
   assert.match(styles, /stroke-width:\s*2/);
 });

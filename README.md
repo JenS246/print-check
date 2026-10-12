@@ -15,7 +15,7 @@ The interface is intentionally small and rights-aware. Ten specimens are playabl
 - An accessible enlarged-image dialog with one Close control
 - Image-relative crops, markers, generous answer targets, and separate precise reveal outlines that stay aligned through resizing
 - Dynamic viewport fitting with reserved answer space, safe-area support, and natural scrolling on short or enlarged-text layouts
-- Two faint, non-interactive press illustrations kept outside the central content
+- Four non-interactive hand-drawn coin and bill illustrations arranged outside the central drawing-paper surface, with two reserved for phone footers
 - A loading state and an always-available Next fallback for image failures
 - Static HTML, CSS, and JavaScript with no accounts, tracking, backend, or dependencies
 

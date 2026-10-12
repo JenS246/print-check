@@ -7,8 +7,7 @@ function identification(piece) {
   return piece.series ? `${name}, ${piece.series}` : name;
 }
 
-function imageFigure(piece) {
-  const side = piece.sides[piece.answerSide];
+function imageFigure(piece, side) {
   const crop = side.crop ?? { x: 0, y: 0, width: side.width, height: side.height };
   const figure = document.createElement('figure');
   const viewport = document.createElement('a');
@@ -17,6 +16,7 @@ function imageFigure(piece) {
   viewport.target = '_blank';
   viewport.rel = 'noreferrer';
   viewport.style.aspectRatio = `${crop.width} / ${crop.height}`;
+  viewport.style.maxWidth = `${Math.min(crop.width, side.maxDisplayWidth ?? crop.width)}px`;
   viewport.setAttribute('aria-label', `Open the full photograph for ${identification(piece)}`);
   const image = document.createElement('img');
   image.src = side.image;
@@ -30,6 +30,13 @@ function imageFigure(piece) {
   return figure;
 }
 
+function imageGroup(piece) {
+  const group = document.createElement('div');
+  if (piece.sides.length > 1) group.className = 'collection-image-pair';
+  group.append(...piece.sides.map((side) => imageFigure(piece, side)));
+  return group;
+}
+
 function pieceArticle(piece) {
   const article = document.createElement('article');
   article.className = 'collection-item';
@@ -37,14 +44,14 @@ function pieceArticle(piece) {
 
   const imageColumn = document.createElement('div');
   imageColumn.className = 'collection-image';
-  imageColumn.append(imageFigure(piece));
+  imageColumn.append(imageGroup(piece));
 
   const copy = document.createElement('div');
   copy.className = 'collection-copy';
   copy.innerHTML = `
     <p class="collection-meta">${identification(piece)}</p>
     <h2>${piece.errorName}</h2>
-    <p>${piece.shortExplanation}</p>
+    <p>${piece.answerExplanation}</p>
     <p class="collection-credit">Image: ${piece.imageCredit}. <a href="${piece.sourceUrl}" target="_blank" rel="noreferrer">View source</a>. <a href="${piece.rights.url}" target="_blank" rel="noreferrer">${piece.rights.label}</a>.</p>`;
   article.append(imageColumn, copy);
   return article;

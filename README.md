@@ -2,17 +2,17 @@
 
 Print Check is a casual browser activity about documented production errors on genuine U.S. coins and paper currency. It opens directly to a coin or bill, asks the visitor to mark the error, and continues through a shuffled collection for as long as the visitor wants to play.
 
-The interface is intentionally small and rights-aware. Nine specimens are playable: six paper notes and three coins. The public Collection contains only these playable records.
+The interface is intentionally small and rights-aware. Eleven specimens are playable: five paper notes and six coins. The public Collection contains only these playable records.
 
 ## How it works
 
 - One coin or note at a time, with Next always available
 - A shuffled queue that shows every playable specimen before reshuffling
-- Pointer marker plus a keyboard-friendly numbered-region mode
-- Zoom to 300 percent, drag-to-pan, and Reset view
-- Unlimited guesses, an optional hint, and Show error
-- Image-relative crops, markers, and answer regions that stay aligned through resize and zoom
-- Loading, retry, and Next fallbacks for image failures
+- Direct tap-to-answer with unlimited guesses and Show error
+- Keyboard answers with the 1 through 9 keys, without a permanent region panel
+- An accessible enlarged-image dialog with one Close control
+- Image-relative crops, markers, and answer regions that stay aligned through resizing
+- A loading state and an always-available Next fallback for image failures
 - Static HTML, CSS, and JavaScript with no accounts, tracking, backend, or dependencies
 
 ## Corpus and rights review
@@ -20,18 +20,21 @@ The interface is intentionally small and rights-aware. Nine specimens are playab
 The playable note corpus uses two image sources:
 
 1. A public-domain Smithsonian National Numismatic Collection scan of a First Issue 5-cent Postage Currency note, Fr. 1230. The Wikimedia Commons record identifies the inverted reverse and includes a reviewed VRT permission ticket.
-2. Five labeled crops from David Shankbone's Creative Commons photograph of the American Numismatic Association Money Museum error-note display. The visible specimens show shifted overprints, a foldover, an offset transfer, and mismatched serial numbers.
+2. Four labeled crops from David Shankbone's Creative Commons photograph of the American Numismatic Association Money Museum error-note display. The visible specimens show shifted overprints, a foldover, and an offset transfer.
 The museum photograph does not make every series line legible, so those entries omit a series rather than guessing. The site also does not infer a printing facility from a Federal Reserve district.
 
-The playable coin corpus adds three exact, credited Creative Commons photographs from Wikimedia Commons:
+The playable coin corpus uses six credited Creative Commons photographs from Wikimedia Commons:
 
 1. A Lincoln cent with a large off-center strike, photographed by Contactsmc under CC BY-SA 3.0.
 2. A Lincoln Memorial cent with a flip-over multiple strike, photographed by Economicrealist under CC BY-SA 3.0.
 3. Matched obverse and reverse photographs of one broadstruck and indented Lincoln Memorial cent, photographed by No Fear Of Change under CC BY-SA 4.0.
+4. A 1984-P Jefferson nickel with a clipped planchet, photographed by Economicrealist under CC BY-SA 3.0.
+5. A 2000 Lincoln Memorial cent with a brockage, photographed by Economicrealist under CC BY-SA 3.0.
+6. A Jefferson nickel die cap, photographed by Economicrealist under CC BY-SA 4.0.
 
-The photographs are shown whole and without visual alteration. Each coin image is capped at its source width during normal viewing, so a small photograph is not enlarged until it blurs. Player-controlled zoom remains available for inspection.
+The photographs are shown whole and without visual alteration. Each coin image is capped at its source width during normal viewing, so a small photograph is not enlarged until it blurs. The optional enlarged view also respects that cap; ordinary browser zoom remains available.
 
-Reference records, the Del Monte detail, and candidates that are not ready for play live in `research/records.js`. That file is not imported by the game or Collection page.
+Reference records, the Del Monte detail, and candidates that are not ready for play live in `research/records.js`. The latest accepted and rejected image review is in `research/expansion-2026-10-11.md`. Neither file is imported by the game or Collection page.
 
 Currency reproductions remain subject to U.S. law. Review the Bureau of Engraving and Printing's [currency image use guidance](https://www.bep.gov/currency/currency-image-use) before republishing.
 
@@ -59,8 +62,7 @@ The tests cover the playable collection, local image availability, reuse metadat
 - Semantic headings, buttons, dialogs, figures, details, and status regions
 - 20px minimum body text on phones and 22px controls
 - Large controls and visible focus indicators
-- Pointer and numbered keyboard answer modes
-- Number-key shortcuts in alternate mode
+- Pointer answers and number-key keyboard answers
 - Text feedback in addition to color
 - No required animation
 - Self-hosted Patrick Hand display type with a readable sans-serif body face
@@ -78,6 +80,9 @@ The tests cover the playable collection, local image availability, reuse metadat
 - Flip-over multiple-strike photograph: https://commons.wikimedia.org/wiki/File:Flipover.jpg
 - Broadstrike obverse photograph: https://commons.wikimedia.org/wiki/File:Mint_Error_LMC_Obverse.jpg
 - Broadstrike reverse photograph: https://commons.wikimedia.org/wiki/File:Lincoln_Memorial_Cent_Mint_Error_Reverse.jpg
+- Clipped-planchet nickel photograph: https://commons.wikimedia.org/wiki/File:Clipped_planchet.jpg
+- Brockage cent photograph: https://commons.wikimedia.org/wiki/File:Brockage.jpg
+- Die-cap nickel photograph: https://commons.wikimedia.org/wiki/File:Die_cap.jpg
 - Hosting: GitHub Pages
 - Backend services: none
 

@@ -4,9 +4,9 @@ import { PLAYABLE_COINS, PLAYABLE_NOTES, PLAYABLE_PIECES } from '../data/notes.j
 import { markerHitsRegions, shuffle } from '../src/rounds.js';
 
 test('the public collection contains only playable records', () => {
-  assert.equal(PLAYABLE_PIECES.length, 9);
-  assert.equal(PLAYABLE_NOTES.length, 6);
-  assert.equal(PLAYABLE_COINS.length, 3);
+  assert.equal(PLAYABLE_PIECES.length, 11);
+  assert.equal(PLAYABLE_NOTES.length, 5);
+  assert.equal(PLAYABLE_COINS.length, 6);
   assert.equal(new Set(PLAYABLE_PIECES.map((piece) => piece.id)).size, PLAYABLE_PIECES.length);
   assert.ok(PLAYABLE_PIECES.every((piece) => piece.playable));
 });
@@ -18,7 +18,8 @@ test('every record has specimen evidence, a local image, and a documented reuse 
     assert.ok(piece.imageCredit, piece.id);
     assert.ok(piece.rights?.label, piece.id);
     assert.match(piece.rights?.url, /^https:\/\//, piece.id);
-    assert.ok(piece.shortExplanation, piece.id);
+    assert.ok(piece.answerExplanation, piece.id);
+    assert.ok(piece.answerExplanation.split(/[.!?](?:\s|$)/).filter(Boolean).length >= 2, piece.id);
     assert.match(piece.pieceKind, /^(coin|note)$/, piece.id);
     assert.match(piece.errorProcess, /^(Minting|Printing) error$/, piece.id);
     for (const side of piece.sides) {
@@ -59,14 +60,17 @@ test('shuffle keeps every piece exactly once', () => {
   );
 });
 
-test('play screen contains no fixed-session or scoring language', async () => {
+test('play screen is immediate and contains no fixed-session or scoring language', async () => {
   const { readFile } = await import('node:fs/promises');
   const visible = `${await readFile(new URL('../index.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../src/game.js', import.meta.url), 'utf8')}`;
   assert.equal(/\b(points?|scores?|streaks?|rankings?|timer)\b/i.test(visible), false);
   assert.equal(/note\s+\d+\s+of\s+\d+|round-count|round-progress/i.test(visible), false);
-  assert.match(visible, /Can you spot the error\?/);
+  assert.match(visible, />Tap the error\.</);
   assert.match(visible, />Next</);
   assert.equal(/Next (?:note|piece)/i.test(visible), false);
+  assert.equal(/>Check<|>Hint<|Zoom in|Zoom out|Reset view|number-grid|margin-doodle/i.test(visible), false);
+  assert.match(visible, /Try another spot/);
+  assert.match(visible, /Enlarge image/);
 });
 
 test('collection copy contains only the playable coins and bills', async () => {

@@ -22,10 +22,16 @@ const state = {
   solved: false,
   imageReady: false,
   drag: null,
+  fitWidth: 0,
 };
 
 function currentPiece() { return state.current; }
 function currentSide() { return currentPiece().sides[state.side]; }
+
+function identification(piece) {
+  const name = piece.pieceKind === 'coin' ? piece.noteType : `${piece.denomination} ${piece.noteType}`;
+  return piece.series ? `${name}, ${piece.series}` : name;
+}
 
 function refillQueue() {
   state.queue = shuffle(PLAYABLE_PIECES);
@@ -65,6 +71,7 @@ function resetPieceState() {
   $('#image-status').textContent = '';
   $('#alternate-mode').setAttribute('aria-pressed', 'false');
   $('#alternate-mode').textContent = 'Use numbered regions';
+  $('#alternate-mode').hidden = false;
 }
 
 function nextPiece() {
@@ -102,9 +109,14 @@ function renderSideControls() {
 function prepareImageFrame() {
   const side = currentSide();
   const crop = side.crop ?? { x: 0, y: 0, width: side.width, height: side.height };
+  const availableWidth = Math.min($('#game-screen').clientWidth, 980, side.maxDisplayWidth ?? Infinity);
+  const heightShare = window.matchMedia('(max-width: 760px)').matches ? 0.56 : 0.62;
+  const availableHeight = Math.max(240, Math.min(window.innerHeight * heightShare, 660));
+  state.fitWidth = Math.max(220, Math.min(availableWidth, availableHeight * (crop.width / crop.height)));
   imageCanvas.style.aspectRatio = `${crop.width} / ${crop.height}`;
-  imageScroll.style.maxWidth = side.maxDisplayWidth ? `${side.maxDisplayWidth}px` : '';
-  imageScroll.style.marginInline = side.maxDisplayWidth ? 'auto' : '';
+  imageScroll.style.width = `${state.fitWidth + 3}px`;
+  imageScroll.style.height = `${(state.fitWidth * (crop.height / crop.width)) + 3}px`;
+  imageScroll.style.marginInline = 'auto';
   noteImage.style.width = `${(side.width / crop.width) * 100}%`;
   noteImage.style.left = `${-(crop.x / crop.width) * 100}%`;
   noteImage.style.top = `${-(crop.y / crop.height) * 100}%`;
@@ -119,7 +131,7 @@ function loadImage() {
   $('#image-error').hidden = true;
   imageCanvas.hidden = true;
   noteImage.removeAttribute('src');
-  noteImage.alt = `${side.label} view of a genuine ${piece.denomination} ${piece.noteType}. Error details are hidden until the answer is shown.`;
+  noteImage.alt = `${side.label} view of a genuine ${identification(piece)}. Error details are hidden until the answer is shown.`;
   prepareImageFrame();
   noteImage.onload = () => {
     $('#loading-message').hidden = true;
@@ -139,7 +151,8 @@ function loadImage() {
 }
 
 function applyZoom() {
-  imageCanvas.style.width = `${state.zoom * 100}%`;
+  imageCanvas.style.width = `${state.fitWidth * state.zoom}px`;
+  imageCanvas.style.minWidth = '0';
   $('#zoom-value').textContent = `${Math.round(state.zoom * 100)}%`;
   $('#zoom-out').disabled = state.zoom <= 1;
   $('#zoom-in').disabled = state.zoom >= 3;
@@ -206,6 +219,8 @@ function checkAnswer() {
 function showAnswer() {
   state.solved = true;
   const piece = currentPiece();
+  numberGrid.hidden = true;
+  $('#alternate-mode').hidden = true;
   if (state.side !== piece.answerSide) {
     state.side = piece.answerSide;
     renderSideControls();
@@ -215,12 +230,12 @@ function showAnswer() {
   }
   setAnsweringEnabled(false);
   $('#answer-title').textContent = piece.errorName;
-  $('#answer-explanation').textContent = piece.explanation;
+  $('#answer-explanation').textContent = piece.shortExplanation;
   $('#answer-process').textContent = piece.errorProcess;
-  $('#answer-note').textContent = `${piece.denomination} ${piece.noteType}`;
-  $('#answer-series').textContent = piece.series;
+  $('#answer-identification').textContent = identification(piece);
   $('#answer-credit').textContent = piece.imageCredit;
   $('#source-link').href = piece.sourceUrl;
+  $('#answer-rights').href = piece.rights.url;
   answerPanel.hidden = false;
 }
 
@@ -240,9 +255,9 @@ function drawAnswerRegions() {
 function openFullImage() {
   const piece = currentPiece();
   const side = currentSide();
-  $('#full-image-title').textContent = `${piece.denomination} ${piece.noteType}`;
+  $('#full-image-title').textContent = identification(piece);
   $('#full-image').src = side.image;
-  $('#full-image').alt = `Full source image for ${piece.denomination} ${piece.noteType}.`;
+  $('#full-image').alt = `Full source photograph for ${identification(piece)}.`;
   $('#full-image').style.maxWidth = side.maxDisplayWidth ? `${side.maxDisplayWidth}px` : '';
   $('#full-image-credit').textContent = `Image: ${piece.imageCredit}`;
   $('#full-image-source').href = piece.sourceUrl;
@@ -308,6 +323,16 @@ $('#alternate-mode').addEventListener('click', () => {
 $('#zoom-in').addEventListener('click', () => { state.zoom = Math.min(3, state.zoom + 0.5); applyZoom(); });
 $('#zoom-out').addEventListener('click', () => { state.zoom = Math.max(1, state.zoom - 0.5); applyZoom(); });
 $('#reset-view').addEventListener('click', resetView);
+
+let resizeFrame;
+window.addEventListener('resize', () => {
+  cancelAnimationFrame(resizeFrame);
+  resizeFrame = requestAnimationFrame(() => {
+    if (!state.current) return;
+    prepareImageFrame();
+    imageScroll.scrollTo({ left: 0, top: 0, behavior: 'instant' });
+  });
+});
 
 document.querySelectorAll('[data-close-dialog]').forEach((button) => {
   button.addEventListener('click', () => document.getElementById(button.dataset.closeDialog).close());

@@ -1,36 +1,24 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { CANDIDATES, PIECES, PLAYABLE_COINS, PLAYABLE_PIECES, REFERENCE_NOTES } from '../data/notes.js';
+import { PLAYABLE_COINS, PLAYABLE_NOTES, PLAYABLE_PIECES } from '../data/notes.js';
 import { markerHitsRegions, shuffle } from '../src/rounds.js';
 
-test('the reviewed collection separates playable and reference-only records', () => {
-  assert.equal(PLAYABLE_PIECES.length, 10);
+test('the public collection contains only playable records', () => {
+  assert.equal(PLAYABLE_PIECES.length, 9);
+  assert.equal(PLAYABLE_NOTES.length, 6);
   assert.equal(PLAYABLE_COINS.length, 3);
-  assert.equal(REFERENCE_NOTES.length, 14);
-  assert.equal(PIECES.length, 24);
-  assert.equal(new Set(PIECES.map((piece) => piece.id)).size, PIECES.length);
+  assert.equal(new Set(PLAYABLE_PIECES.map((piece) => piece.id)).size, PLAYABLE_PIECES.length);
   assert.ok(PLAYABLE_PIECES.every((piece) => piece.playable));
-  assert.ok(REFERENCE_NOTES.every((note) => !note.playable));
-});
-
-test('research candidates remain non-playable and state what is missing', () => {
-  assert.equal(CANDIDATES.length, 11);
-  for (const candidate of CANDIDATES) {
-    assert.match(candidate.sourceUrl, /^https:\/\//);
-    assert.match(candidate.missing, /permission/i);
-    assert.equal('playable' in candidate, false);
-  }
 });
 
 test('every record has specimen evidence, a local image, and a documented reuse basis', async () => {
   const { access } = await import('node:fs/promises');
-  for (const piece of PIECES) {
+  for (const piece of PLAYABLE_PIECES) {
     assert.match(piece.sourceUrl, /^https:\/\//, piece.id);
     assert.ok(piece.imageCredit, piece.id);
     assert.ok(piece.rights?.label, piece.id);
     assert.match(piece.rights?.url, /^https:\/\//, piece.id);
-    assert.ok(piece.series, piece.id);
-    assert.equal(piece.printingDate, null, piece.id);
+    assert.ok(piece.shortExplanation, piece.id);
     assert.match(piece.pieceKind, /^(coin|note)$/, piece.id);
     assert.match(piece.errorProcess, /^(Minting|Printing) error$/, piece.id);
     for (const side of piece.sides) {
@@ -77,8 +65,15 @@ test('play screen contains no fixed-session or scoring language', async () => {
   assert.equal(/\b(points?|scores?|streaks?|rankings?|timer)\b/i.test(visible), false);
   assert.equal(/note\s+\d+\s+of\s+\d+|round-count|round-progress/i.test(visible), false);
   assert.match(visible, /Can you spot the error\?/);
-  assert.equal(/Next note/i.test(visible), false);
-  assert.match(visible, /Next piece/);
+  assert.match(visible, />Next</);
+  assert.equal(/Next (?:note|piece)/i.test(visible), false);
+});
+
+test('collection copy contains only the playable coins and bills', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const visible = `${await readFile(new URL('../notes.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../src/collection.js', import.meta.url), 'utf8')}`;
+  assert.match(visible, /Coins and bills/);
+  assert.equal(/Reference records|Candidates awaiting material|research lead|permission gap|maintenance/i.test(visible), false);
 });
 
 test('marker hit testing respects both regions and note side', () => {

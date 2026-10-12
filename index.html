@@ -7,10 +7,19 @@
     <meta name="description" content="Print Check is a casual observation game using documented U.S. currency errors on genuine coins and paper notes." />
     <meta property="og:title" content="Print Check" />
     <meta property="og:description" content="Spot the error in real U.S. currency." />
-    <title>Print Check - Spot the error in real U.S. currency</title>
-    <link rel="stylesheet" href="styles.css?v=7" />
+    <title>Can you spot the error? | Print Check</title>
+    <link rel="stylesheet" href="styles.css?v=8" />
   </head>
   <body>
+    <svg class="margin-doodle doodle-magnifier" viewBox="0 0 80 80" aria-hidden="true">
+      <circle cx="31" cy="30" r="18" />
+      <path d="M44 43 L67 67 M16 18 L20 14 M18 45 L14 49" />
+      <path class="hatch" d="M21 25 L28 18 M26 31 L35 22 M31 36 L40 27" />
+    </svg>
+    <svg class="margin-doodle doodle-pencil" viewBox="0 0 80 80" aria-hidden="true">
+      <path d="M15 61 L24 42 L57 9 L70 22 L37 55 Z M24 42 L37 55 M57 9 L70 22 M15 61 L36 55" />
+      <path class="hatch" d="M45 25 L54 34 M40 30 L49 39 M22 48 L29 55" />
+    </svg>
     <div class="page-shell">
       <header class="site-header">
         <a class="site-name" href="index.html">
@@ -32,12 +41,12 @@
         </header>
 
         <div id="image-scroll" class="image-scroll" tabindex="0" aria-label="Zoomable currency image">
-          <p id="loading-message" class="image-message">Loading piece...</p>
+          <p id="loading-message" class="image-message">Loading photograph...</p>
           <div id="image-error" class="image-message" hidden>
             <p>The currency image did not load.</p>
             <div>
               <button id="retry-image" class="secondary-button sketch-button" type="button">Retry</button>
-              <button id="skip-image" class="text-button" type="button">Next piece</button>
+              <button id="skip-image" class="text-button" type="button">Next</button>
             </div>
           </div>
           <div id="image-canvas" class="image-canvas" hidden>
@@ -61,7 +70,7 @@
             <button id="check-button" class="primary-button sketch-button" type="button" disabled>Check</button>
             <button id="hint-button" class="secondary-button sketch-button" type="button" disabled>Hint</button>
             <button id="reveal-button" class="secondary-button sketch-button" type="button" disabled>Show error</button>
-            <button id="next-button" class="primary-button sketch-button" type="button">Next piece</button>
+            <button id="next-button" class="primary-button sketch-button" type="button">Next</button>
           </div>
         </div>
 
@@ -77,9 +86,9 @@
           <h2 id="answer-title"></h2>
           <p id="answer-explanation"></p>
           <p id="answer-process" class="answer-process"></p>
-          <p class="answer-note"><span id="answer-note"></span>, <span id="answer-series"></span></p>
-          <p class="answer-credit">Image: <span id="answer-credit"></span>. <a id="source-link" href="#" target="_blank" rel="noreferrer">View source</a></p>
-          <button id="full-image-button" class="text-button" type="button">View full image</button>
+          <p id="answer-identification" class="answer-note"></p>
+          <p class="answer-credit">Image: <span id="answer-credit"></span>. <a id="source-link" href="#" target="_blank" rel="noreferrer">View source</a>. <a id="answer-rights" href="#" target="_blank" rel="noreferrer">Image terms</a>.</p>
+          <button id="full-image-button" class="text-button" type="button">View full photograph</button>
         </section>
       </main>
     </div>
@@ -89,18 +98,16 @@
         <h2 id="help-title">How to play</h2>
         <button class="close-button sketch-button" type="button" data-close-dialog="help-dialog">Close</button>
       </div>
-      <ol>
-        <li>Inspect the piece. Zoom and pan for a closer look.</li>
-        <li>Tap the image to place a marker, or choose a numbered region.</li>
-        <li>Select Check. Move the marker and try again as often as you like.</li>
-        <li>Use Hint or Show error whenever you want help.</li>
-      </ol>
-      <p>Keyboard: use Tab to reach the controls. In numbered mode, press 1 through 9 to choose a region.</p>
+      <p>Tap the error, then select Check. Try again whenever you like. Use Hint or Show error for help, or select Next to see another coin or bill.</p>
+      <details class="keyboard-controls">
+        <summary>Keyboard controls</summary>
+        <p>Use Tab to reach the controls. In numbered mode, press 1 through 9 to choose a region.</p>
+      </details>
     </dialog>
 
     <dialog id="full-image-dialog" class="image-dialog" aria-labelledby="full-image-title">
       <div class="dialog-head">
-        <h2 id="full-image-title">Full image</h2>
+        <h2 id="full-image-title">Full photograph</h2>
         <button class="close-button sketch-button" type="button" data-close-dialog="full-image-dialog">Close</button>
       </div>
       <img id="full-image" alt="" />
@@ -108,6 +115,6 @@
       <a id="full-image-source" href="#" target="_blank" rel="noreferrer">View source</a>
     </dialog>
 
-    <script type="module" src="src/game.js?v=7"></script>
+    <script type="module" src="src/game.js?v=8"></script>
   </body>
 </html>

@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { CANDIDATES, NOTES, PLAYABLE_NOTES, REFERENCE_NOTES } from '../data/notes.js';
-import { chooseCategoryDiverseRounds, markerHitsRegions } from '../src/rounds.js';
+import { markerHitsRegions, shuffle } from '../src/rounds.js';
 
 test('the reviewed collection separates playable and reference-only records', () => {
-  assert.equal(PLAYABLE_NOTES.length, 6);
-  assert.equal(REFERENCE_NOTES.length, 15);
+  assert.equal(PLAYABLE_NOTES.length, 7);
+  assert.equal(REFERENCE_NOTES.length, 14);
   assert.equal(NOTES.length, 21);
   assert.equal(new Set(NOTES.map((note) => note.id)).size, NOTES.length);
   assert.ok(PLAYABLE_NOTES.every((note) => note.playable));
@@ -13,7 +13,7 @@ test('the reviewed collection separates playable and reference-only records', ()
 });
 
 test('research candidates remain non-playable and state what is missing', () => {
-  assert.equal(CANDIDATES.length, 3);
+  assert.equal(CANDIDATES.length, 10);
   for (const candidate of CANDIDATES) {
     assert.match(candidate.sourceUrl, /^https:\/\//);
     assert.match(candidate.missing, /permission/i);
@@ -54,17 +54,21 @@ test('playable crops and image-relative answer regions are valid', () => {
   }
 });
 
-test('five-round selection avoids repeats and maximizes category diversity', () => {
-  const rounds = chooseCategoryDiverseRounds(PLAYABLE_NOTES, 5, () => 0.42);
-  assert.equal(rounds.length, 5);
-  assert.equal(new Set(rounds.map((note) => note.id)).size, 5);
-  assert.equal(new Set(rounds.map((note) => note.errorCategory)).size, 5);
+test('shuffle keeps every note exactly once', () => {
+  const shuffled = shuffle(PLAYABLE_NOTES, () => 0.42);
+  assert.equal(shuffled.length, PLAYABLE_NOTES.length);
+  assert.equal(new Set(shuffled.map((note) => note.id)).size, PLAYABLE_NOTES.length);
+  assert.deepEqual(
+    shuffled.map((note) => note.id).sort(),
+    PLAYABLE_NOTES.map((note) => note.id).sort(),
+  );
 });
 
-test('five-round selection prefers an unseen note within a repeated category', () => {
-  const recentIds = PLAYABLE_NOTES.filter((note) => note.id !== 'ana-10-shifted-overprint').map((note) => note.id);
-  const rounds = chooseCategoryDiverseRounds(PLAYABLE_NOTES, 5, () => 0.42, recentIds);
-  assert.ok(rounds.some((note) => note.id === 'ana-10-shifted-overprint'));
+test('play screen contains no fixed-session or scoring language', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const visible = `${await readFile(new URL('../index.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../src/game.js', import.meta.url), 'utf8')}`;
+  assert.equal(/\b(points?|scores?|streaks?|rankings?|timer)\b/i.test(visible), false);
+  assert.equal(/note\s+\d+\s+of\s+\d+|round-count|round-progress/i.test(visible), false);
 });
 
 test('marker hit testing respects both regions and note side', () => {

@@ -1,10 +1,7 @@
 import { PLAYABLE_NOTES } from '../data/notes.js';
-import { chooseCategoryDiverseRounds, markerHitsRegions, shuffle } from './rounds.js';
+import { markerHitsRegions, shuffle } from './rounds.js';
 
 const $ = (selector) => document.querySelector(selector);
-const homeScreen = $('#home-screen');
-const gameScreen = $('#game-screen');
-const resultScreen = $('#result-screen');
 const imageScroll = $('#image-scroll');
 const imageCanvas = $('#image-canvas');
 const noteImage = $('#note-image');
@@ -13,70 +10,35 @@ const answerRegions = $('#answer-regions');
 const numberGrid = $('#number-grid');
 const feedback = $('#feedback');
 const answerPanel = $('#answer-panel');
-const RECENT_NOTES_KEY = 'print-check-recent-notes';
 
 const state = {
-  order: [],
-  reserve: [],
-  round: 0,
-  score: 0,
+  queue: [],
+  current: null,
+  lastNoteId: null,
   side: 0,
   zoom: 1,
   marker: null,
   numberedMode: false,
-  usedReveal: false,
   solved: false,
   imageReady: false,
   drag: null,
-  outcomes: [],
 };
 
-function currentNote() { return state.order[state.round]; }
-
+function currentNote() { return state.current; }
 function currentSide() { return currentNote().sides[state.side]; }
 
-function showScreen(screen) {
-  [homeScreen, gameScreen, resultScreen].forEach((item) => { item.hidden = item !== screen; });
-  window.scrollTo({ top: 0, behavior: 'instant' });
+function refillQueue() {
+  state.queue = shuffle(PLAYABLE_NOTES);
+  if (state.queue.length > 1 && state.queue[0].id === state.lastNoteId) {
+    [state.queue[0], state.queue[1]] = [state.queue[1], state.queue[0]];
+  }
 }
 
-function startGame() {
-  let recentIds = [];
-  try { recentIds = JSON.parse(localStorage.getItem(RECENT_NOTES_KEY) ?? '[]'); } catch { recentIds = []; }
-  if (!Array.isArray(recentIds)) recentIds = [];
-  state.order = chooseCategoryDiverseRounds(PLAYABLE_NOTES, 5, Math.random, recentIds);
-  const selectedIds = new Set(state.order.map((note) => note.id));
-  state.reserve = shuffle(PLAYABLE_NOTES.filter((note) => !selectedIds.has(note.id)));
-  state.round = 0;
-  state.score = 0;
-  state.outcomes = Array(5).fill(null);
-  try { localStorage.setItem(RECENT_NOTES_KEY, JSON.stringify(state.order.map((note) => note.id))); } catch { /* Storage can be unavailable. */ }
-  showScreen(gameScreen);
-  loadRound();
-}
-
-function renderDrawers() {
-  const list = $('#round-drawers');
-  list.replaceChildren();
-  state.outcomes.forEach((outcome, index) => {
-    const item = document.createElement('li');
-    item.className = 'progress-step';
-    if (index === state.round && !state.solved) item.classList.add('is-current');
-    if (outcome) item.classList.add('is-complete');
-    const drawing = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    drawing.setAttribute('viewBox', '0 0 44 44');
-    drawing.setAttribute('aria-hidden', 'true');
-    drawing.innerHTML = '<path class="progress-ring" d="M22 3 C33 2.5 41 11 41 22 C41.5 33 33 41.5 22 41 C11 41.5 2.5 33 3 22 C2.5 11 11 3.5 22 3 Z"/><path class="progress-check" d="M12 22.5 C16 25 18 29 20 31 C25 24 29 18 34 13"/>';
-    const number = document.createElement('span');
-    number.className = 'progress-number';
-    number.textContent = String(index + 1);
-    const status = document.createElement('span');
-    status.className = 'sr-only';
-    status.textContent = outcome === 'revealed' ? `Note ${index + 1}, revealed` : outcome === 'found' ? `Note ${index + 1}, found` : index === state.round ? `Note ${index + 1}, current` : `Note ${index + 1}, not yet opened`;
-    item.setAttribute('aria-current', index === state.round ? 'step' : 'false');
-    item.append(drawing, number, status);
-    list.append(item);
-  });
+function setFeedback(message = '', tone = '') {
+  feedback.textContent = message;
+  feedback.hidden = !message;
+  if (tone) feedback.dataset.tone = tone;
+  else feedback.removeAttribute('data-tone');
 }
 
 function setAnsweringEnabled(enabled) {
@@ -87,12 +49,11 @@ function setAnsweringEnabled(enabled) {
   $('#alternate-mode').disabled = !enabled || state.solved;
 }
 
-function resetRoundState() {
+function resetNoteState() {
   state.side = currentNote().answerSide;
   state.zoom = 1;
   state.marker = null;
   state.numberedMode = false;
-  state.usedReveal = false;
   state.solved = false;
   state.imageReady = false;
   state.drag = null;
@@ -100,22 +61,21 @@ function resetRoundState() {
   answerRegions.replaceChildren();
   numberGrid.hidden = true;
   answerPanel.hidden = true;
-  feedback.textContent = '';
-  feedback.removeAttribute('data-tone');
+  setFeedback();
   $('#image-status').textContent = '';
   $('#alternate-mode').setAttribute('aria-pressed', 'false');
   $('#alternate-mode').textContent = 'Use numbered regions';
-  $('#next-button').textContent = state.round === 4 ? 'See score' : 'Next note';
 }
 
-function loadRound() {
-  resetRoundState();
-  $('#round-count').textContent = `Note ${state.round + 1} of 5`;
-  updateScore();
-  renderDrawers();
+function nextNote() {
+  if (!state.queue.length) refillQueue();
+  state.current = state.queue.shift();
+  state.lastNoteId = state.current.id;
+  resetNoteState();
   renderSideControls();
   renderNumberGrid();
   loadImage();
+  window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 function renderSideControls() {
@@ -157,7 +117,7 @@ function loadImage() {
   $('#image-error').hidden = true;
   imageCanvas.hidden = true;
   noteImage.removeAttribute('src');
-  noteImage.alt = `${side.label} view of a genuine ${note.denomination} ${note.noteType}. Error details are hidden until the answer is checked.`;
+  noteImage.alt = `${side.label} view of a genuine ${note.denomination} ${note.noteType}. Error details are hidden until the answer is shown.`;
   prepareImageFrame();
   noteImage.onload = () => {
     $('#loading-message').hidden = true;
@@ -165,6 +125,7 @@ function loadImage() {
     imageScroll.scrollTo({ left: 0, top: 0, behavior: 'instant' });
     setAnsweringEnabled(true);
     renderMarker();
+    if (state.solved) drawAnswerRegions();
   };
   noteImage.onerror = () => {
     $('#loading-message').hidden = true;
@@ -233,33 +194,31 @@ function selectNumberedRegion(number) {
 function checkAnswer() {
   if (state.solved || !state.marker || !state.imageReady) return;
   if (markerHitsRegions(state.marker, currentNote().answerSide, currentNote().regions)) {
-    if (!state.usedReveal) state.score += 1;
-    feedback.textContent = 'Found it.';
-    feedback.dataset.tone = 'correct';
-    showAnswer(false);
+    setFeedback('You found it', 'correct');
+    showAnswer();
   } else {
-    feedback.textContent = 'Try another area.';
-    feedback.dataset.tone = 'wrong';
+    setFeedback('Try another spot.', 'wrong');
   }
 }
 
-function showAnswer(revealed) {
+function showAnswer() {
   state.solved = true;
-  if (revealed) state.usedReveal = true;
-  state.outcomes[state.round] = revealed ? 'revealed' : 'found';
-  state.side = currentNote().answerSide;
-  drawAnswerRegions();
-  setAnsweringEnabled(false);
   const note = currentNote();
+  if (state.side !== note.answerSide) {
+    state.side = note.answerSide;
+    renderSideControls();
+    loadImage();
+  } else {
+    drawAnswerRegions();
+  }
+  setAnsweringEnabled(false);
   $('#answer-title').textContent = note.errorName;
   $('#answer-explanation').textContent = note.explanation;
   $('#answer-note').textContent = `${note.denomination} ${note.noteType}`;
-  $('#answer-series').textContent = `, ${note.series}`;
+  $('#answer-series').textContent = note.series;
   $('#answer-credit').textContent = note.imageCredit;
   $('#source-link').href = note.sourceUrl;
   answerPanel.hidden = false;
-  updateScore();
-  renderDrawers();
 }
 
 function drawAnswerRegions() {
@@ -273,32 +232,6 @@ function drawAnswerRegions() {
     outline.style.height = `${region.height}%`;
     answerRegions.append(outline);
   });
-}
-
-function updateScore() {
-  $('#score').textContent = `${state.score} ${state.score === 1 ? 'point' : 'points'}`;
-}
-
-function nextRound() {
-  if (state.round === 4) {
-    const ids = state.order.map((note) => note.id).join(',');
-    $('#final-score').textContent = String(state.score);
-    $('#result-message').textContent = state.score === 5
-      ? 'You found every error without using Reveal.'
-      : 'Review the specimens and their sources, then try another set.';
-    $('#review-notes').href = `notes.html?ids=${encodeURIComponent(ids)}`;
-    showScreen(resultScreen);
-    return;
-  }
-  state.round += 1;
-  loadRound();
-}
-
-function skipImage() {
-  const replacement = state.reserve.shift();
-  if (replacement) state.order[state.round] = replacement;
-  else if (state.round < 4) state.order.splice(state.round, 1);
-  loadRound();
 }
 
 function openFullImage() {
@@ -351,24 +284,17 @@ imageCanvas.addEventListener('pointercancel', () => {
   imageCanvas.classList.remove('is-dragging');
 });
 
-$('#start-button').addEventListener('click', startGame);
-$('#play-again').addEventListener('click', startGame);
-$('#home-button').addEventListener('click', () => showScreen(homeScreen));
 $('#check-button').addEventListener('click', checkAnswer);
-$('#hint-button').addEventListener('click', () => {
-  feedback.textContent = currentNote().hint;
-  feedback.removeAttribute('data-tone');
-});
+$('#hint-button').addEventListener('click', () => setFeedback(currentNote().hint));
 $('#reveal-button').addEventListener('click', () => {
-  feedback.textContent = 'The affected area is outlined.';
-  feedback.dataset.tone = 'correct';
-  showAnswer(true);
+  setFeedback();
+  showAnswer();
 });
-$('#next-button').addEventListener('click', nextRound);
+$('#next-button').addEventListener('click', nextNote);
 $('#full-image-button').addEventListener('click', openFullImage);
 $('#help-button').addEventListener('click', () => $('#help-dialog').showModal());
 $('#retry-image').addEventListener('click', loadImage);
-$('#skip-image').addEventListener('click', skipImage);
+$('#skip-image').addEventListener('click', nextNote);
 $('#alternate-mode').addEventListener('click', () => {
   state.numberedMode = !state.numberedMode;
   numberGrid.hidden = !state.numberedMode;
@@ -384,10 +310,11 @@ document.querySelectorAll('[data-close-dialog]').forEach((button) => {
 });
 
 document.addEventListener('keydown', (event) => {
-  if (!gameScreen.hidden && state.numberedMode && /^[1-9]$/.test(event.key)) {
+  if (state.numberedMode && /^[1-9]$/.test(event.key)) {
     event.preventDefault();
     selectNumberedRegion(Number(event.key));
   }
 });
 
 if (window.location.hash === '#how-to-play') $('#help-dialog').showModal();
+nextNote();

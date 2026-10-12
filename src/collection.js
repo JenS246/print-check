@@ -1,22 +1,7 @@
 import { CANDIDATES, NOTES } from '../data/notes.js';
 
-const params = new URLSearchParams(window.location.search);
-const requestedIds = (params.get('ids') ?? '').split(',').filter(Boolean);
-const requestedSet = new Set(requestedIds);
-const reviewContext = document.querySelector('#review-context');
 const list = document.querySelector('#collection-list');
 const candidateList = document.querySelector('#candidate-list');
-
-let visibleNotes = NOTES;
-if (requestedSet.size) {
-  visibleNotes = requestedIds.map((id) => NOTES.find((note) => note.id === id)).filter(Boolean);
-  reviewContext.hidden = false;
-  reviewContext.replaceChildren('Showing the five notes from your last game. ');
-  const showAll = document.createElement('a');
-  showAll.href = 'notes.html';
-  showAll.textContent = 'Show the full collection.';
-  reviewContext.append(showAll);
-}
 
 function imageFigure(note) {
   const side = note.sides[note.answerSide];
@@ -37,9 +22,7 @@ function imageFigure(note) {
   image.style.left = `${-(crop.x / crop.width) * 100}%`;
   image.style.top = `${-(crop.y / crop.height) * 100}%`;
   viewport.append(image);
-  const caption = document.createElement('figcaption');
-  caption.textContent = note.imageCredit;
-  figure.append(viewport, caption);
+  figure.append(viewport);
   return figure;
 }
 
@@ -62,7 +45,7 @@ function noteArticle(note) {
   const copy = document.createElement('div');
   copy.className = 'collection-copy';
   const stateClass = note.playable ? 'record-state' : 'record-state reference-state';
-  const stateText = note.playable ? 'Playable in randomized rounds.' : 'Reference only. Not used in rounds.';
+  const stateText = note.playable ? 'Playable in the shuffled rotation.' : 'Reference only. Not used in play.';
   copy.innerHTML = `
     <h3>${note.errorName}</h3>
     <p class="collection-meta">${note.denomination} ${note.noteType}</p>
@@ -108,16 +91,12 @@ function renderGroups(notes, parent) {
   });
 }
 
-if (requestedSet.size) {
-  renderGroups(visibleNotes, list);
-} else {
-  renderGroups(visibleNotes.filter((note) => note.playable), list);
-  const referenceHeading = document.createElement('div');
-  referenceHeading.className = 'collection-divider';
-  referenceHeading.innerHTML = '<h2>Reference records</h2><p>Documented specimens retained for research, but excluded from randomized rounds because their image terms do not clearly cover cropped gameplay.</p>';
-  list.append(referenceHeading);
-  renderGroups(visibleNotes.filter((note) => !note.playable), list);
-}
+renderGroups(NOTES.filter((note) => note.playable), list);
+const referenceHeading = document.createElement('div');
+referenceHeading.className = 'collection-divider';
+referenceHeading.innerHTML = '<h2>Reference records</h2><p>Documented specimens retained for research, but excluded from play because their image terms do not clearly cover cropped gameplay.</p>';
+list.append(referenceHeading);
+renderGroups(NOTES.filter((note) => !note.playable), list);
 
 CANDIDATES.forEach((candidate) => {
   const item = document.createElement('li');

@@ -427,7 +427,34 @@ function anaRecord({ id, denomination, noteType, crop, errorName, errorCategory,
   };
 }
 
+const DEL_MONTE_PLAYABLE = {
+  ...HERITAGE_RECORDS.find((note) => note.id === '1996-20-retained-obstruction'),
+  sides: [{
+    label: 'Affected face detail',
+    image: 'assets/notes/del-monte-note.jpg',
+    width: 999,
+    height: 726,
+    crop: { x: 0, y: 0, width: 999, height: 726 },
+  }],
+  regions: [{ x: 36, y: 16, width: 51, height: 70 }],
+  numberedRegions: [2, 3, 5, 6, 8, 9],
+  sourceUrl: 'https://www.pmgnotes.com/news/article/8844/del-monte-note-record-auction/',
+  documentationUrl: 'https://currency.ha.com/itm/error-notes/obstruction-errors/obstructed-printing-error-with-retained-obstruction-fr-2084-h-20-1996-federal-reserve-note-pmg-choice-uncirculated-64-epq/a/3581-21201.s',
+  documentationLabel: 'View the auction record',
+  supportingUrl: 'https://commons.wikimedia.org/wiki/File:Del_Monte_note.jpg',
+  supportingLabel: 'View the image record',
+  imageCredit: 'PMG, via Wikimedia Commons',
+  rights: {
+    label: 'Public-domain mechanical scan',
+    url: 'https://commons.wikimedia.org/wiki/File:Del_Monte_note.jpg#Licensing',
+    detail: 'Wikimedia Commons marks this PMG image as a mechanical scan of public-domain U.S. currency and also records the simple sticker artwork as public domain, subject to trademark and currency-image rules.',
+  },
+  playable: true,
+  reviewNote: 'PMG and Heritage document this exact retained-obstruction specimen. The public-domain closeup clearly shows official third-print elements crossing the sticker.',
+};
+
 export const PLAYABLE_NOTES = [
+  DEL_MONTE_PLAYABLE,
   {
     id: 'fractional-5-cent-inverted-reverse',
     denomination: '5 cents',
@@ -513,7 +540,9 @@ export const PLAYABLE_NOTES = [
   }),
 ];
 
-export const REFERENCE_NOTES = HERITAGE_RECORDS.map((note) => ({
+export const REFERENCE_NOTES = HERITAGE_RECORDS
+  .filter((note) => note.id !== DEL_MONTE_PLAYABLE.id)
+  .map((note) => ({
   ...note,
   playable: false,
   reviewNote: 'The exact auction specimen and error are documented, but Heritage\'s one-image noncommercial article allowance does not clearly authorize cropped interactive gameplay.',
@@ -544,6 +573,48 @@ export const CANDIDATES = [
     errorName: 'Doubled first printing',
     sourceUrl: 'https://www.pmgnotes.com/news/article/10640',
     missing: 'Written image permission plus the exact specimen record and a high-resolution authorized view of the doubled back.',
+  },
+  {
+    identification: 'Series 1950A $5 Federal Reserve Note, serial B38119268B, Smithsonian NU.79.112.CM0503',
+    errorName: 'Off-center reverse printing',
+    sourceUrl: 'https://americanhistory.si.edu/collections/object/nmah_984704',
+    missing: 'A downloadable specimen image with explicit reuse permission; the open-data record documents the error but currently exposes no online media.',
+  },
+  {
+    identification: 'Series 1923 $1 Silver Certificate, serial Y46308028B, Smithsonian NU.79.112.CM0483',
+    errorName: 'Printed wrinkle with blank area',
+    sourceUrl: 'https://americanhistory.si.edu/collections/object/nmah_983904',
+    missing: 'A downloadable specimen image with explicit reuse permission; the object record documents a wrinkle and blank lower-left area but exposes no online media.',
+  },
+  {
+    identification: 'Series 1917 $1 Legal Tender Note, serial K17866609A, Smithsonian NU.79.112.CM0224',
+    errorName: 'Printed crease with blank area',
+    sourceUrl: 'https://americanhistory.si.edu/collections/object/nmah_983846',
+    missing: 'A downloadable specimen image with explicit reuse permission; the object record documents the crease but exposes no online media.',
+  },
+  {
+    identification: 'Series 1934A $5 Silver Certificate, serial J56911974A, Smithsonian NU.79.112.CM0496',
+    errorName: 'Off-center reverse printing',
+    sourceUrl: 'https://americanhistory.si.edu/collections/object/nmah_1881256',
+    missing: 'A downloadable specimen image with explicit reuse permission; the exact museum record documents the error but exposes no online media.',
+  },
+  {
+    identification: 'Series 1918 $1 Federal Reserve Bank Note, serial F31021151A, Smithsonian NU.79.112.CM0487',
+    errorName: 'Inverted serial numbers and seal',
+    sourceUrl: 'https://americanhistory.si.edu/collections/object/nmah_984666',
+    missing: 'A downloadable specimen image with explicit reuse permission; the exact museum record documents the inverted overprint but exposes no online media.',
+  },
+  {
+    identification: 'Series 1914 $5 Federal Reserve Note, serial B46077556B, Smithsonian NU.79.112.CM0269',
+    errorName: 'Inverted serial numbers and seal',
+    sourceUrl: 'https://americanhistory.si.edu/collections/object/nmah_984676',
+    missing: 'A downloadable specimen image with explicit reuse permission; the exact museum record documents the inverted overprint but exposes no online media.',
+  },
+  {
+    identification: 'Series 1935E $1 Silver Certificate, serial Z76452806G, Smithsonian NU.73.113.480',
+    errorName: 'Printing error at the left side of the reverse',
+    sourceUrl: 'https://americanhistory.si.edu/collections/object/nmah_1878500',
+    missing: 'A downloadable image with explicit reuse permission and a more specific error description needed to set an accurate answer region.',
   },
 ];
 

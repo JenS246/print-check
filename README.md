@@ -1,34 +1,33 @@
 # Print Check
 
-Print Check is a five-round browser game about documented production errors on genuine U.S. paper currency. Its interface is a currency examiner's sketchbook: genuine note images sit on a warm paper canvas with restrained pen-line controls and illustrations.
+Print Check is a casual browser activity about documented production errors on genuine U.S. paper currency. It opens directly to a note, asks the visitor to mark the error, and continues through a shuffled collection for as long as the visitor wants to play.
 
-The project is deliberately small and rights-aware. Six records are eligible for randomized rounds. Fifteen previously researched Heritage specimens remain in the collection as reference-only records because Heritage's limited noncommercial article allowance does not clearly authorize cropped interactive gameplay.
+The interface is intentionally small and rights-aware. Seven specimens are playable. Fourteen additional authenticated auction specimens remain on the Notes page as reference records because their image terms do not clearly authorize cropped interactive use.
 
 ## How it works
 
-- Five randomized notes per session, without repeats
-- Category-diverse selection before duplicate categories are considered
-- Local recent-note memory that prefers the unseen specimen when the small corpus permits it
+- One note at a time, with Next note always available
+- A shuffled queue that shows every playable specimen before reshuffling
 - Pointer marker plus a keyboard-friendly numbered-region mode
 - Zoom to 300 percent, drag-to-pan, and Reset view
-- Incorrect guesses can be moved and checked again
-- One point for a correct answer unless Reveal was used
-- Per-round loading state, disabled controls until load, Retry, and Skip
-- Image-relative crops, markers, and answer regions that remain aligned through resize and zoom
+- Unlimited guesses, an optional hint, and Show error
+- Image-relative crops, markers, and answer regions that stay aligned through resize and zoom
+- Loading, retry, and next-note fallbacks for image failures
 - Static HTML, CSS, and JavaScript with no accounts, tracking, backend, or dependencies
 
 ## Corpus and rights review
 
-The playable corpus uses two image sources:
+The playable corpus uses three image sources:
 
-1. A public-domain Smithsonian National Numismatic Collection scan of a First Issue 5-cent Postage Currency note, Fr. 1230. The Wikimedia Commons record explicitly identifies the inverted reverse and includes a reviewed VRT permission ticket.
-2. Five labeled crops from David Shankbone's Creative Commons photograph of the American Numismatic Association Money Museum error-note display. The visible specimens show shifted overprints, a foldover, an offset transfer, and mismatched serial numbers. The complete photograph stays available from each record.
+1. A public-domain Smithsonian National Numismatic Collection scan of a First Issue 5-cent Postage Currency note, Fr. 1230. The Wikimedia Commons record identifies the inverted reverse and includes a reviewed VRT permission ticket.
+2. Five labeled crops from David Shankbone's Creative Commons photograph of the American Numismatic Association Money Museum error-note display. The visible specimens show shifted overprints, a foldover, an offset transfer, and mismatched serial numbers.
+3. A public-domain closeup of the Series 1996 Del Monte note. PMG and Heritage document this exact specimen as an obstructed printing error with the sticker retained and official third-print elements printed over it.
 
 The museum photograph does not make every series line legible. Those records say "Series not legible in the source photograph" instead of guessing. The site also does not infer a printing facility from a Federal Reserve district.
 
-The fifteen Heritage records retain their original specimen links and scans on the collection page. They are excluded from gameplay and labeled reference-only. They can be reconsidered if broader written permission is obtained.
+The fourteen remaining Heritage records retain their specimen links and images on the collection page. They are excluded from play and labeled reference-only. They can be reconsidered if broader written permission is obtained or a separately reusable scan is found.
 
-The collection register also tracks three PMG research leads: a Series 1977 $50 gutter fold, a Series 1974 $1 offset print, and a Series 1988A $10 doubled first printing. These are not playable because written display permission, exact original specimen records, and suitable high-resolution images are still required.
+The candidate register contains ten documented leads. Three are PMG Error Note Chronicles awaiting authorized images and exact records. Seven are exact Smithsonian specimens whose records document an error but do not currently provide downloadable object media suitable for play.
 
 Currency reproductions remain subject to U.S. law. Review the Bureau of Engraving and Printing's [currency image use guidance](https://www.bep.gov/currency/currency-image-use) before republishing.
 
@@ -49,18 +48,19 @@ npm test
 npm run check
 ```
 
-The tests cover the playable/reference split, local image availability, reuse metadata, crop bounds, answer-region bounds, category-diverse selection, hit testing, and visible-copy constraints.
+The tests cover the playable/reference split, local image availability, reuse metadata, crop bounds, answer-region bounds, shuffled collection integrity, hit testing, removed fixed-session language, and visible-copy constraints.
 
 ## Accessibility
 
 - Semantic headings, buttons, dialogs, figures, details, and status regions
+- 20px minimum body text on phones and 22px controls
 - Large controls and visible focus indicators
 - Pointer and numbered keyboard answer modes
 - Number-key shortcuts in alternate mode
 - Text feedback in addition to color
-- Reduced visual ornament and no required animation
+- No required animation
 - Self-hosted Patrick Hand display type with a readable sans-serif body face
-- Phone and desktop layouts
+- Phone and desktop layouts that wrap instead of shrinking text
 
 ## Important URLs and services
 
@@ -70,6 +70,8 @@ The tests cover the playable/reference split, local image availability, reuse me
 - Visual reference: https://jens246.github.io/origin-money-game/
 - Smithsonian scan: https://commons.wikimedia.org/wiki/File:US-Fractional_(1st_Issue)-$0.05-Fr.1230.jpg
 - ANA museum photograph: https://www.flickr.com/photos/shankbone/3200806102
+- Del Monte image record: https://commons.wikimedia.org/wiki/File:Del_Monte_note.jpg
+- Del Monte PMG documentation: https://www.pmgnotes.com/news/article/8844/del-monte-note-record-auction/
 - Heritage use agreement: https://domains.ha.com/c/ref/website-use-agreement.zx?ic=footer-website-use-agreement-121117
 - Hosting: GitHub Pages
 - Backend services: none

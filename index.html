@@ -4,125 +4,81 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#faf7ef" />
-    <meta name="description" content="Print Check is a five-round observation game using documented U.S. currency error notes." />
+    <meta name="description" content="Print Check is a casual observation game using documented U.S. currency error notes." />
     <meta property="og:title" content="Print Check" />
     <meta property="og:description" content="Spot the error in real U.S. currency." />
     <title>Print Check - Spot the error in real U.S. currency</title>
-    <link rel="stylesheet" href="styles.css?v=5" />
+    <link rel="stylesheet" href="styles.css?v=6" />
   </head>
   <body>
     <div class="page-shell">
       <header class="site-header">
-        <button id="home-button" class="site-name" type="button">
+        <a class="site-name" href="index.html">
           <span>Print Check</span>
           <svg viewBox="0 0 150 9" aria-hidden="true" preserveAspectRatio="none">
             <path d="M2 5 C28 3.7 52 6.2 78 4.6 C103 3.1 126 5.8 148 4.1" />
           </svg>
-        </button>
+        </a>
         <nav aria-label="Primary navigation">
           <a href="notes.html">Notes</a>
           <button id="help-button" class="nav-button" type="button">How to play</button>
         </nav>
       </header>
 
-      <main>
-        <section id="home-screen" class="home-screen" aria-labelledby="home-title">
-          <div class="home-copy">
-            <h1 id="home-title">Spot the printing error in real U.S. currency.</h1>
-            <p>Five notes. No timer.</p>
-            <button id="start-button" class="primary-button sketch-button" type="button">Play</button>
-          </div>
+      <main id="game-screen" class="game-screen" aria-labelledby="prompt-title">
+        <header class="prompt">
+          <h1 id="prompt-title">Can you spot the printing error?</h1>
+          <p>Tap where you see it, then select Check.</p>
+        </header>
 
-          <svg class="vault-drawing" viewBox="0 0 220 180" role="img" aria-label="A simple pen drawing of an open, empty vault">
-            <g class="sketch-lines">
-              <path d="M104 24 C137 19 174 22 195 38 L195 146 C174 157 139 159 105 154" />
-              <path d="M108 34 C136 29 164 31 184 43 L184 137 C162 146 136 148 108 144" />
-              <path d="M102 31 C78 21 49 28 31 48 C13 69 12 107 28 131 C46 158 78 163 104 150" />
-              <path d="M96 42 C72 34 51 40 39 56 C25 74 25 103 38 121 C51 140 73 148 96 140 Z" />
-              <path d="M96 42 L108 34 L108 144 L96 140" />
-              <path d="M62 68 C75 58 91 61 99 74 C106 88 103 108 89 116 C76 124 60 118 54 104 C47 90 51 77 62 68 Z" />
-              <path d="M77 71 L77 111 M58 91 L98 91 M63 77 L92 105 M92 77 L63 105" />
-              <path d="M70 52 L82 49 M45 68 L53 60 M40 111 L48 119 M69 134 L81 136" />
-              <path d="M117 45 L128 43 M117 52 L130 50 M117 128 L131 130 M117 136 L128 138" />
-              <path d="M159 55 L174 57 M159 62 L177 64 M159 118 L176 116 M159 125 L173 123" />
-            </g>
-          </svg>
-        </section>
-
-        <section id="game-screen" class="game-screen" hidden aria-labelledby="round-instruction">
-          <div class="round-head">
+        <div id="image-scroll" class="image-scroll" tabindex="0" aria-label="Zoomable currency image">
+          <p id="loading-message" class="image-message">Loading note...</p>
+          <div id="image-error" class="image-message" hidden>
+            <p>The note image did not load.</p>
             <div>
-              <h1 id="round-instruction">Find the printing error</h1>
-              <p>Tap or click where you see it.</p>
-            </div>
-            <p class="round-line"><span id="round-count">Note 1 of 5</span><span id="score">0 points</span></p>
-          </div>
-
-          <ol id="round-drawers" class="round-progress" aria-label="Progress through five notes"></ol>
-
-          <div id="image-scroll" class="image-scroll" tabindex="0" aria-label="Zoomable currency image">
-            <p id="loading-message" class="image-message">Loading note...</p>
-            <div id="image-error" class="image-message" hidden>
-              <p>The note image did not load.</p>
-              <div>
-                <button id="retry-image" class="secondary-button sketch-button" type="button">Retry</button>
-                <button id="skip-image" class="text-button" type="button">Skip this note</button>
-              </div>
-            </div>
-            <div id="image-canvas" class="image-canvas" hidden>
-              <img id="note-image" alt="" draggable="false" />
-              <div id="number-grid" class="number-grid" hidden aria-label="Numbered image regions"></div>
-              <span id="guess-marker" class="guess-marker" hidden aria-hidden="true"></span>
-              <div id="answer-regions" aria-hidden="true"></div>
+              <button id="retry-image" class="secondary-button sketch-button" type="button">Retry</button>
+              <button id="skip-image" class="text-button" type="button">Next note</button>
             </div>
           </div>
-          <p id="image-status" class="sr-only" aria-live="polite"></p>
-
-          <div id="side-controls" class="side-controls" role="group" aria-label="Note side"></div>
-          <div class="controls">
-            <div class="zoom-controls" role="group" aria-label="Image view controls">
-              <button id="zoom-out" class="sketch-button" type="button" aria-label="Zoom out">Zoom out</button>
-              <output id="zoom-value">100%</output>
-              <button id="zoom-in" class="sketch-button" type="button" aria-label="Zoom in">Zoom in</button>
-              <button id="reset-view" class="sketch-button" type="button">Reset view</button>
-            </div>
-            <div class="action-row" aria-label="Answer controls">
-              <button id="check-button" class="primary-button sketch-button" type="button" disabled>Check</button>
-              <button id="hint-button" class="secondary-button sketch-button" type="button" disabled>Hint</button>
-              <button id="reveal-button" class="secondary-button sketch-button" type="button" disabled>Reveal</button>
-            </div>
+          <div id="image-canvas" class="image-canvas" hidden>
+            <img id="note-image" alt="" draggable="false" />
+            <div id="number-grid" class="number-grid" hidden aria-label="Numbered image regions"></div>
+            <span id="guess-marker" class="guess-marker" hidden aria-hidden="true"></span>
+            <div id="answer-regions" aria-hidden="true"></div>
           </div>
+        </div>
+        <p id="image-status" class="sr-only" aria-live="polite"></p>
 
-          <div class="alternate-row">
-            <button id="alternate-mode" class="text-button" type="button" aria-pressed="false">Use numbered regions</button>
-            <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+        <div id="side-controls" class="side-controls" role="group" aria-label="Note side"></div>
+        <div class="controls">
+          <div class="zoom-controls" role="group" aria-label="Image view controls">
+            <button id="zoom-out" class="sketch-button" type="button" aria-label="Zoom out">Zoom out</button>
+            <output id="zoom-value" class="sr-only" aria-live="polite">100%</output>
+            <button id="zoom-in" class="sketch-button" type="button" aria-label="Zoom in">Zoom in</button>
+            <button id="reset-view" class="sketch-button" type="button">Reset view</button>
           </div>
+          <div class="action-row" aria-label="Answer controls">
+            <button id="check-button" class="primary-button sketch-button" type="button" disabled>Check</button>
+            <button id="hint-button" class="secondary-button sketch-button" type="button" disabled>Hint</button>
+            <button id="reveal-button" class="secondary-button sketch-button" type="button" disabled>Show error</button>
+            <button id="next-button" class="primary-button sketch-button" type="button">Next note</button>
+          </div>
+        </div>
 
-          <section id="answer-panel" class="answer-panel" hidden aria-labelledby="answer-title">
-            <svg class="sketch-rule" viewBox="0 0 320 10" aria-hidden="true" preserveAspectRatio="none">
-              <path d="M2 5 C66 3 112 6.5 166 4.2 C224 2.8 272 6 318 4" />
-            </svg>
-            <h2 id="answer-title"></h2>
-            <p id="answer-explanation"></p>
-            <p class="answer-meta"><span id="answer-note"></span> <span id="answer-series"></span></p>
-            <p class="answer-credit">Image: <span id="answer-credit"></span>. <a id="source-link" href="#" target="_blank" rel="noreferrer">View source</a></p>
-            <div class="answer-actions">
-              <button id="full-image-button" class="text-button" type="button">View full original</button>
-              <button id="next-button" class="primary-button sketch-button" type="button">Next note</button>
-            </div>
-          </section>
-        </section>
+        <div class="alternate-row">
+          <button id="alternate-mode" class="text-button" type="button" aria-pressed="false">Use numbered regions</button>
+          <p id="feedback" class="feedback" role="status" aria-live="polite" hidden></p>
+        </div>
 
-        <section id="result-screen" class="result-screen" hidden aria-labelledby="result-title">
+        <section id="answer-panel" class="answer-panel" hidden aria-labelledby="answer-title">
           <svg class="sketch-rule" viewBox="0 0 320 10" aria-hidden="true" preserveAspectRatio="none">
             <path d="M2 5 C66 3 112 6.5 166 4.2 C224 2.8 272 6 318 4" />
           </svg>
-          <h1 id="result-title">You found <span id="final-score">0</span> of 5.</h1>
-          <p id="result-message"></p>
-          <div class="result-actions">
-            <button id="play-again" class="primary-button sketch-button" type="button">Play again</button>
-            <a id="review-notes" class="secondary-button button-link sketch-button" href="notes.html">Review these notes</a>
-          </div>
+          <h2 id="answer-title"></h2>
+          <p id="answer-explanation"></p>
+          <p class="answer-note"><span id="answer-note"></span>, <span id="answer-series"></span></p>
+          <p class="answer-credit">Image: <span id="answer-credit"></span>. <a id="source-link" href="#" target="_blank" rel="noreferrer">View source</a></p>
+          <button id="full-image-button" class="text-button" type="button">View full image</button>
         </section>
       </main>
     </div>
@@ -133,17 +89,17 @@
         <button class="close-button sketch-button" type="button" data-close-dialog="help-dialog">Close</button>
       </div>
       <ol>
-        <li>Inspect the note. Zoom and pan when you need a closer look.</li>
+        <li>Inspect the note. Zoom and pan for a closer look.</li>
         <li>Tap the image to place a marker, or choose a numbered region.</li>
-        <li>Select Check. You can move the marker and try again.</li>
-        <li>A correct answer earns one point unless you use Reveal.</li>
+        <li>Select Check. Move the marker and try again as often as you like.</li>
+        <li>Use Hint or Show error whenever you want help.</li>
       </ol>
-      <p>Keyboard: use Tab to reach controls. In numbered mode, press 1 through 9 to choose a region, then use Check.</p>
+      <p>Keyboard: use Tab to reach the controls. In numbered mode, press 1 through 9 to choose a region.</p>
     </dialog>
 
     <dialog id="full-image-dialog" class="image-dialog" aria-labelledby="full-image-title">
       <div class="dialog-head">
-        <h2 id="full-image-title">Full source image</h2>
+        <h2 id="full-image-title">Full image</h2>
         <button class="close-button sketch-button" type="button" data-close-dialog="full-image-dialog">Close</button>
       </div>
       <img id="full-image" alt="" />

@@ -8,25 +8,24 @@
     <meta property="og:title" content="Print Check" />
     <meta property="og:description" content="Spot the error in real U.S. coins and paper currency." />
     <title>Print Check - Spot the error</title>
-    <link rel="stylesheet" href="styles.css?v=19" />
+    <link rel="stylesheet" href="styles.css?v=20" />
   </head>
   <body>
     <div class="page-decorations" aria-hidden="true">
-      <img class="decoration decoration-stack" src="assets/art/coin-stack.svg" alt="" />
-      <img class="decoration decoration-stack-tall" src="assets/art/tall-coin-stack.svg" alt="" />
-      <img class="decoration decoration-coins" src="assets/art/overlapping-coins.svg" alt="" />
-      <img class="decoration decoration-coins-loose" src="assets/art/loose-coins.svg" alt="" />
-      <img class="decoration decoration-roll" src="assets/art/rolled-bill.svg" alt="" />
-      <img class="decoration decoration-fan" src="assets/art/bill-fan.svg" alt="" />
       <img class="decoration decoration-envelope" src="assets/art/coin-envelope.svg" alt="" />
-      <img class="decoration decoration-roller" src="assets/art/printing-roller.svg" alt="" />
+      <img class="decoration decoration-coins-loose" src="assets/art/loose-coins.svg" alt="" />
+      <img class="decoration decoration-folded-bill" src="assets/art/folded-bill.svg" alt="" />
+      <img class="decoration decoration-stack" src="assets/art/coin-stack.svg" alt="" />
     </div>
     <div class="page-shell">
       <header class="site-header">
         <a class="site-name" href="index.html">
-          <span>Print Check</span>
-          <svg viewBox="0 0 150 9" aria-hidden="true" preserveAspectRatio="none">
-            <path d="M2 5 C28 3.7 52 6.2 78 4.6 C103 3.1 126 5.8 148 4.1" />
+          <span class="title-line">
+            <span class="title-words"><span class="title-print">Print</span> <span class="title-check"><span class="title-check-ghost" aria-hidden="true">Check</span><span class="title-check-front">Check</span></span></span>
+            <img class="title-coin" src="assets/art/title-coin.svg" alt="" aria-hidden="true" />
+          </span>
+          <svg class="title-underline" viewBox="0 0 150 9" aria-hidden="true" preserveAspectRatio="none">
+            <path d="M3 5.3 C27 3.6 51 6.1 75 4.7 C99 3.5 124 5.7 147 4.2" />
           </svg>
         </a>
         <nav aria-label="Primary navigation">
@@ -94,6 +93,6 @@
       <div id="full-image-gallery" class="full-image-gallery"></div>
     </dialog>
 
-    <script type="module" src="src/game.js?v=18"></script>
+    <script type="module" src="src/game.js?v=20"></script>
   </body>
 </html>

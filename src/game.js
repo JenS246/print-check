@@ -8,6 +8,7 @@ const sideImages = $('#game-side-images');
 const feedback = $('#feedback');
 const answerPanel = $('#answer-panel');
 const playActions = $('.play-actions');
+const titleCoin = $('.title-coin');
 
 const state = {
   queue: [],
@@ -30,6 +31,14 @@ function refillQueue() {
     [state.queue[0], state.queue[1]] = [state.queue[1], state.queue[0]];
   }
 }
+
+function flipTitleCoin() {
+  if (!titleCoin || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  titleCoin.classList.remove('is-flipping');
+  requestAnimationFrame(() => titleCoin.classList.add('is-flipping'));
+}
+
+titleCoin?.addEventListener('animationend', () => titleCoin.classList.remove('is-flipping'));
 
 function setFeedback(message = '', tone = '') {
   feedback.textContent = message;
@@ -306,7 +315,10 @@ $('#reveal-button').addEventListener('click', () => {
   setFeedback();
   showAnswer();
 });
-$('#next-button').addEventListener('click', nextPiece);
+$('#next-button').addEventListener('click', () => {
+  flipTitleCoin();
+  nextPiece();
+});
 $('#enlarge-link').addEventListener('click', openFullImage);
 $('#help-button').addEventListener('click', () => $('#help-dialog').showModal());
 

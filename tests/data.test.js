@@ -85,7 +85,7 @@ test('play screen is immediate and contains no fixed-session or scoring language
   assert.match(visible, />Tap the error\.</);
   assert.match(visible, />Next</);
   assert.equal(/Next (?:note|piece)/i.test(visible), false);
-  assert.equal(/>Check<|>Hint<|Zoom in|Zoom out|Reset view|number-grid|margin-doodle/i.test(visible), false);
+  assert.equal(/<button[^>]*>\s*(?:Check|Hint)\s*<|Zoom in|Zoom out|Reset view|number-grid|margin-doodle/i.test(visible), false);
   assert.match(visible, /Try another spot/);
   assert.match(visible, /Enlarge image/);
   assert.match(visible, /You found it!/);
@@ -120,17 +120,13 @@ test('the game reserves response space and uses measured viewport height', async
   assert.equal(/overflow:\s*hidden[^;]*;\s*\/\* page/i.test(styles), false);
 });
 
-test('the eight money-production drawings use the requested ink and remain inert', async () => {
+test('the asymmetric money drawings use the requested ink and remain inert', async () => {
   const { access, readFile } = await import('node:fs/promises');
   const artFiles = [
     'coin-stack.svg',
-    'tall-coin-stack.svg',
-    'overlapping-coins.svg',
     'loose-coins.svg',
-    'rolled-bill.svg',
-    'bill-fan.svg',
     'coin-envelope.svg',
-    'printing-roller.svg',
+    'folded-bill.svg',
   ];
   for (const file of artFiles) {
     await access(new URL(`../assets/art/${file}`, import.meta.url));
@@ -144,7 +140,27 @@ test('the eight money-production drawings use the requested ink and remain inert
   assert.match(styles, /opacity:\s*0\.38/);
   assert.match(styles, /pointer-events:\s*none/);
   assert.match(html, /aria-hidden="true"/);
-  assert.match(styles, /\.decoration-stack,\s*\n\s*\.decoration-envelope,\s*\n\s*\.decoration-roll \{ display: block; \}/);
+  assert.equal((html.match(/class="decoration /g) ?? []).length, 8);
+  assert.match(styles, /\.decoration-envelope \{ bottom:\s*1\.5%; left:\s*-6px;/);
+  assert.match(styles, /\.decoration-coins-loose \{ bottom:\s*-0\.5%; left:\s*86px;/);
+  assert.match(styles, /\.decoration-folded-bill \{ top:\s*8%; right:\s*-12px;/);
+  assert.match(styles, /\.decoration-stack \{ top:\s*39%; left:\s*25px;/);
+});
+
+test('the title uses two ink colors and a reduced-motion-safe Next flip', async () => {
+  const { access, readFile } = await import('node:fs/promises');
+  await access(new URL('../assets/art/title-coin.svg', import.meta.url));
+  const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  const html = `${await readFile(new URL('../index.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../notes.html', import.meta.url), 'utf8')}`;
+  const scripts = `${await readFile(new URL('../src/game.js', import.meta.url), 'utf8')}\n${await readFile(new URL('../src/collection.js', import.meta.url), 'utf8')}`;
+  assert.match(html, /class="title-print">Print</);
+  assert.match(html, /class="title-check-front">Check</);
+  assert.match(styles, /\.title-check[^}]*color:\s*#963b24/s);
+  assert.match(styles, /translate\(2px, 2px\)/);
+  assert.match(styles, /animation:\s*title-coin-flip 400ms/);
+  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.title-coin\.is-flipping \{ animation:\s*none; \}/);
+  assert.match(scripts, /matchMedia\('\(prefers-reduced-motion: reduce\)'\)/);
+  assert.match(scripts, /classList\.add\('is-flipping'\)/);
 });
 
 test('museum crops have honest source wording and crop-aware enlargement', async () => {

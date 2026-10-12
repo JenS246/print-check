@@ -6,8 +6,17 @@ const list = document.querySelector('#collection-list');
 const previousButton = document.querySelector('#previous-item');
 const nextButton = document.querySelector('#next-item');
 const allItemsLink = document.querySelector('.all-items-link');
+const titleCoin = document.querySelector('.title-coin');
 
 let currentIndex = -1;
+
+function flipTitleCoin() {
+  if (!titleCoin || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  titleCoin.classList.remove('is-flipping');
+  requestAnimationFrame(() => titleCoin.classList.add('is-flipping'));
+}
+
+titleCoin?.addEventListener('animationend', () => titleCoin.classList.remove('is-flipping'));
 
 function identification(piece) {
   const name = piece.pieceKind === 'coin' ? piece.noteType : `${piece.denomination} ${piece.noteType}`;
@@ -160,7 +169,10 @@ function showAdjacent(offset) {
 }
 
 previousButton.addEventListener('click', () => showAdjacent(-1));
-nextButton.addEventListener('click', () => showAdjacent(1));
+nextButton.addEventListener('click', () => {
+  flipTitleCoin();
+  showAdjacent(1);
+});
 allItemsLink.addEventListener('click', (event) => {
   event.preventDefault();
   history.pushState(null, '', window.location.pathname);

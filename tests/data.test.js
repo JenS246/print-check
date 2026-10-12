@@ -118,28 +118,34 @@ test('the game reserves response space and uses measured viewport height', async
   assert.equal(/overflow:\s*hidden[^;]*;\s*\/\* page/i.test(styles), false);
 });
 
-test('the two production drawings are faint, inert, and responsive', async () => {
+test('the two production drawings use the requested ink, remain inert, and respond to narrow screens', async () => {
   const { access, readFile } = await import('node:fs/promises');
   await access(new URL('../assets/art/printing-press.svg', import.meta.url));
   await access(new URL('../assets/art/coin-press.svg', import.meta.url));
+  const printingPress = await readFile(new URL('../assets/art/printing-press.svg', import.meta.url), 'utf8');
+  const coinPress = await readFile(new URL('../assets/art/coin-press.svg', import.meta.url), 'utf8');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   assert.match(styles, /printing-press\.svg/);
   assert.match(styles, /coin-press\.svg/);
   assert.equal(/ink-roller\.svg|engraving-tools\.svg/.test(styles), false);
-  assert.match(styles, /opacity:\s*0\.16/);
+  assert.match(printingPress, /stroke="#64777D"/);
+  assert.match(coinPress, /stroke="#64777D"/);
+  assert.match(styles, /opacity:\s*0\.28/);
   assert.match(styles, /pointer-events:\s*none/);
   assert.match(styles, /@media \(min-width: 1200px\)/);
   assert.match(styles, /@media \(max-width: 1199px\)/);
 });
 
-test('paired sides and thin SVG answer outlines are available', async () => {
+test('paired sides and clean rust SVG answer outlines are available', async () => {
   const { readFile } = await import('node:fs/promises');
   const paired = PLAYABLE_PIECES.find((piece) => piece.id === 'lincoln-cent-broadstrike-indent');
   assert.equal(paired?.showSidesTogether, true);
   const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   assert.match(game, /createElementNS\('http:\/\/www\.w3\.org\/2000\/svg'/);
-  assert.match(styles, /stroke-width:\s*1\.25/);
+  assert.match(styles, /--rust:\s*#a44732/);
+  assert.match(styles, /stroke:\s*var\(--rust\)/);
+  assert.match(styles, /stroke-width:\s*2/);
 });
 
 test('marker hit testing respects both regions and note side', () => {

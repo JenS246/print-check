@@ -21,14 +21,16 @@
 
 :root {
   color-scheme: light;
-  --paper: #faf7ef;
-  --ink: #2f2d29;
-  --muted: #57544d;
-  --sage: #dfe7d9;
-  --red: #7b2f24;
+  --paper: #e9eff1;
+  --ink: #292f31;
+  --muted: #48575b;
+  --sage: #dce6da;
+  --red: #a44732;
+  --rust: #a44732;
   --green: #285830;
-  --line: #77736a;
-  --white: #fffdf7;
+  --line: #64777d;
+  --white: #f8fbfb;
+  --button: #f5f8f7;
 }
 
 * { box-sizing: border-box; }
@@ -53,7 +55,7 @@ body::after {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  opacity: 0.16;
+  opacity: 0.28;
   pointer-events: none;
 }
 body::before {
@@ -81,7 +83,7 @@ body::after {
   position: absolute;
   width: 220px;
   height: auto;
-  opacity: 0.16;
+  opacity: 0.28;
   user-select: none;
 }
 .margin-art-printing { position: fixed; left: min(-12px, calc((100vw - 1578px) / 2)); bottom: -12px; width: 240px; }
@@ -172,7 +174,7 @@ h1, h2, h3, p { overflow-wrap: break-word; }
   padding: 10px 20px;
   border: 1.5px solid var(--ink);
   border-radius: 9px 7px 10px 8px;
-  background: var(--paper);
+  background: var(--button);
   color: var(--ink);
   font-family: 'Patrick Hand', 'Comic Sans MS', cursive;
   font-size: 22px;
@@ -272,10 +274,10 @@ button:disabled { opacity: 0.46; cursor: not-allowed; transform: none; }
 }
 .answer-region {
   fill: none;
-  stroke: var(--green);
-  stroke-width: 1.25;
+  stroke: var(--rust);
+  stroke-width: 2;
   vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 0 1px var(--white));
+  filter: drop-shadow(0 0 0.75px var(--white));
 }
 
 .response-slot {
@@ -346,11 +348,11 @@ dialog {
   font-size: 22px;
   line-height: 1.5;
 }
-dialog::backdrop { background: rgba(47, 45, 41, 0.44); }
+dialog::backdrop { background: rgba(41, 47, 49, 0.44); }
 .image-dialog { width: min(1050px, calc(100% - 32px)); }
 .dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding-bottom: 10px; }
 .dialog-head h2 { margin: 0; font-size: 34px; line-height: 1.1; }
-.close-button { background: var(--paper); }
+.close-button { background: var(--button); }
 .keyboard-controls { margin-top: 14px; }
 .keyboard-controls summary {
   min-height: 48px;
@@ -451,7 +453,7 @@ dialog::backdrop { background: rgba(47, 45, 41, 0.44); }
   padding: 10px 0 14px;
 }
 .collection-image { min-width: 0; }
-.collection-image figure { margin: 0; }
+.collection-image figure { min-width: 0; max-width: 100%; margin: 0; }
 .collection-image-pair {
   display: flex;
   align-items: center;
@@ -470,7 +472,8 @@ dialog::backdrop { background: rgba(47, 45, 41, 0.44); }
   background: var(--white);
 }
 .collection-crop img { position: absolute; max-width: none; height: auto; }
-.collection-image-group-detail { display: flex; align-items: center; justify-content: center; }
+.collection-image-group-detail { width: 100%; display: flex; align-items: center; justify-content: center; }
+.collection-image-group-detail figure { min-width: 0; max-width: 100%; }
 .collection-image-group-detail .collection-crop { max-width: 100%; }
 .collection-copy h2 { margin: 2px 0 8px; font-size: 34px; line-height: 1.08; }
 .collection-meta { margin: 0 0 3px; color: var(--muted); }
@@ -576,7 +579,7 @@ dialog::backdrop { background: rgba(47, 45, 41, 0.44); }
     width: 104px;
     height: 118px;
     background-image: url('assets/art/coin-press.svg');
-    opacity: 0.16;
+    opacity: 0.24;
   }
   .collection-page { padding-bottom: 92px; }
   .collection-page::after {
@@ -588,7 +591,7 @@ dialog::backdrop { background: rgba(47, 45, 41, 0.44); }
     width: 128px;
     height: 92px;
     background-image: url('assets/art/printing-press.svg');
-    opacity: 0.16;
+    opacity: 0.24;
   }
 }
 

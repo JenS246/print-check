@@ -1,4 +1,4 @@
-import { COLLECTION_PIECES } from '../data/notes.js?v=14';
+import { COLLECTION_PIECES } from '../data/notes.js?v=15';
 
 const gallery = document.querySelector('#collection-gallery');
 const detail = document.querySelector('#collection-detail');

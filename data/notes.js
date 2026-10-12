@@ -39,7 +39,7 @@ export const PLAYABLE_NOTES = [
     noteType: 'U.S. Postage Currency',
     series: 'First Issue, 1862-1863',
     errorName: 'Inverted reverse',
-    answerExplanation: 'The reverse is upside down relative to Jefferson on the face. The two sides were normally printed in the same reading direction.',
+    answerExplanation: 'The back is upside down compared with Jefferson on the front. Both sides normally face the same direction.',
     sides: [{
       label: 'Face and reverse',
       image: 'assets/notes/fr1230-inverted-reverse.jpg',
@@ -64,7 +64,7 @@ export const PLAYABLE_NOTES = [
   anaRecord({
     id: 'ana-20-shifted-overprint', denomination: '$20', crop: { x: 850, y: 0, width: 700, height: 315 },
     errorName: 'Shifted seal and serial numbers',
-    answerExplanation: 'The green seal and serial numbers sit too far to the right. This overprint normally aligns with fixed positions in the face design.',
+    answerExplanation: 'The seal and serial numbers were printed out of position. They normally line up with the portrait and border.',
     regions: [{ x: 58, y: 18, width: 34, height: 24 }, { x: 63, y: 38, width: 25, height: 32 }],
     outlines: [{ x: 61, y: 20, width: 29, height: 18 }, { x: 66, y: 40, width: 20, height: 27 }],
   }),
@@ -78,7 +78,7 @@ export const PLAYABLE_NOTES = [
   anaRecord({
     id: 'ana-10-shifted-overprint', denomination: '$10', crop: { x: 860, y: 380, width: 710, height: 330 },
     errorName: 'Shifted seal and serial numbers',
-    answerExplanation: 'The green seal and serial numbers sit too far to the right. This overprint normally aligns with fixed positions in the face design.',
+    answerExplanation: 'The seal and serial numbers were printed out of position. They normally line up with the portrait and border.',
     regions: [
       { x: 59, y: 18, width: 36, height: 24 },
       { x: 18, y: 52, width: 34, height: 24 },
@@ -93,7 +93,7 @@ export const PLAYABLE_NOTES = [
   anaRecord({
     id: 'ana-1-offset-transfer', denomination: '$1', crop: { x: 10, y: 770, width: 735, height: 348 },
     errorName: 'Offset transfer on the back',
-    answerExplanation: 'A reversed impression of the face appears across the back. Ink transferred from another sheet instead of leaving a clean back design.',
+    answerExplanation: 'A faint, backward copy of the front appears across the back. Wet ink transferred from another sheet where the back should have stayed clean.',
     regions: [{ x: 5, y: 5, width: 90, height: 90 }],
     outlines: [{ type: 'path', x: 8, y: 8, width: 84, height: 84, d: 'M10 10 C28 6 69 8 90 15 L91 87 C68 94 31 91 9 84 Z' }],
   }),
@@ -157,7 +157,7 @@ const COIN_RECORDS = [
     denomination: '1 cent',
     noteType: 'Lincoln Memorial cent',
     errorName: 'Broadstrike with an indent',
-    answerExplanation: 'The coin spread beyond a normal rim and has a large curved indent. It was struck without the collar that normally holds its edge while another coin blank overlapped it.',
+    answerExplanation: 'The coin spread past a normal rim and has a large curved dent. It was struck without the ring that normally holds the coin blank in place, while another blank overlapped it.',
     sides: [
       { label: 'Obverse', image: 'assets/coins/lincoln-cent-broadstrike-obverse.jpg', width: 1924, height: 1899, crop: { x: 0, y: 0, width: 1924, height: 1899 }, maxDisplayWidth: 900 },
       { label: 'Reverse', image: 'assets/coins/lincoln-cent-broadstrike-reverse.jpg', width: 1994, height: 1983, crop: { x: 0, y: 0, width: 1994, height: 1983 }, maxDisplayWidth: 900 },
@@ -204,7 +204,7 @@ const COIN_RECORDS = [
     denomination: '1 cent',
     noteType: '2000 Lincoln Memorial cent',
     errorName: 'Brockage',
-    answerExplanation: 'A sunken mirror image of another cent covers the lower half of this coin. A previously struck coin stayed in the press and stamped the next coin blank.',
+    answerExplanation: 'A sunken, backward image of another cent covers the lower half. A struck coin stayed in the press and stamped the next coin blank.',
     sides: [{ label: 'Obverse', image: 'assets/coins/brockage.jpg', width: 295, height: 305, crop: { x: 0, y: 0, width: 295, height: 305 }, maxDisplayWidth: 295 }],
     answerSide: 0,
     regions: [{ x: 8, y: 48, width: 84, height: 49 }],
@@ -223,7 +223,7 @@ const COIN_RECORDS = [
     denomination: '1 cent',
     noteType: '1955 Lincoln Wheat cent',
     errorName: 'Doubled die obverse',
-    answerExplanation: 'The date, LIBERTY, and IN GOD WE TRUST show clear doubled lettering. The working die, the tool that stamps the design, received misaligned impressions while it was being made.',
+    answerExplanation: 'The date, LIBERTY, and IN GOD WE TRUST have doubled edges. The stamping tool picked up two slightly offset impressions when it was made.',
     sides: [{ label: 'Obverse', image: 'assets/coins/1955-doubled-die-obverse.jpg', width: 1880, height: 1896, crop: { x: 0, y: 0, width: 1880, height: 1896 }, maxDisplayWidth: 900 }],
     answerSide: 0,
     regions: [
@@ -254,7 +254,7 @@ const COIN_RECORDS = [
     denomination: '5 cents',
     noteType: 'Jefferson nickel',
     errorName: 'Die cap',
-    answerExplanation: 'The face is almost blank, while the raised rim hints at a cap-like form. Repeated strikes reshaped a coin that remained stuck to the tool that stamps the design.',
+    answerExplanation: 'The face is almost blank, and the rim rises like a shallow cup. The coin stayed stuck to the stamping tool and was hit again.',
     sides: [{ label: 'Cap view', image: 'assets/coins/die-cap.jpg', width: 477, height: 350, crop: { x: 0, y: 0, width: 477, height: 350 }, maxDisplayWidth: 477 }],
     answerSide: 0,
     regions: [{ x: 20, y: 7, width: 62, height: 87 }],

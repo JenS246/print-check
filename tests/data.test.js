@@ -1,19 +1,19 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { PLAYABLE_COINS, PLAYABLE_NOTES, PLAYABLE_PIECES } from '../data/notes.js';
+import { COLLECTION_PIECES, PLAYABLE_COINS, PLAYABLE_NOTES, PLAYABLE_PIECES } from '../data/notes.js';
 import { markerHitsRegions, shuffle } from '../src/rounds.js';
 
-test('the public collection contains only playable records', () => {
-  assert.equal(PLAYABLE_PIECES.length, 11);
+test('the game rotation contains only playable records', () => {
+  assert.equal(PLAYABLE_PIECES.length, 10);
   assert.equal(PLAYABLE_NOTES.length, 5);
-  assert.equal(PLAYABLE_COINS.length, 6);
+  assert.equal(PLAYABLE_COINS.length, 5);
   assert.equal(new Set(PLAYABLE_PIECES.map((piece) => piece.id)).size, PLAYABLE_PIECES.length);
   assert.ok(PLAYABLE_PIECES.every((piece) => piece.playable));
 });
 
 test('every record has specimen evidence, a local image, and a documented reuse basis', async () => {
   const { access } = await import('node:fs/promises');
-  for (const piece of PLAYABLE_PIECES) {
+  for (const piece of COLLECTION_PIECES) {
     assert.match(piece.sourceUrl, /^https:\/\//, piece.id);
     assert.ok(piece.imageCredit, piece.id);
     assert.ok(piece.rights?.label, piece.id);
@@ -26,6 +26,13 @@ test('every record has specimen evidence, a local image, and a documented reuse 
       await access(new URL(`../${side.image}`, import.meta.url));
     }
   }
+});
+
+test('the die cap remains documented in Collection but is held from play', () => {
+  assert.equal(COLLECTION_PIECES.length, 11);
+  const dieCap = COLLECTION_PIECES.find((piece) => piece.id === 'jefferson-nickel-die-cap');
+  assert.equal(dieCap?.playable, false);
+  assert.equal(PLAYABLE_PIECES.includes(dieCap), false);
 });
 
 test('playable crops and image-relative answer regions are valid', () => {
@@ -73,11 +80,23 @@ test('play screen is immediate and contains no fixed-session or scoring language
   assert.match(visible, /Enlarge image/);
 });
 
-test('collection copy contains only the playable coins and bills', async () => {
+test('collection copy contains only documented coins and bills', async () => {
   const { readFile } = await import('node:fs/promises');
   const visible = `${await readFile(new URL('../notes.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../src/collection.js', import.meta.url), 'utf8')}`;
   assert.match(visible, /Coins and bills/);
   assert.equal(/Reference records|Candidates awaiting material|research lead|permission gap|maintenance/i.test(visible), false);
+});
+
+test('the two press drawings are faint, inert, and hidden when margins are narrow', async () => {
+  const { access, readFile } = await import('node:fs/promises');
+  await access(new URL('../assets/art/printing-press.svg', import.meta.url));
+  await access(new URL('../assets/art/coin-press.svg', import.meta.url));
+  const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  assert.match(styles, /printing-press\.svg/);
+  assert.match(styles, /coin-press\.svg/);
+  assert.match(styles, /opacity:\s*0\.14/);
+  assert.match(styles, /pointer-events:\s*none/);
+  assert.match(styles, /@media \(max-width: 1599px\)/);
 });
 
 test('marker hit testing respects both regions and note side', () => {

@@ -1,4 +1,4 @@
-import { PLAYABLE_PIECES } from '../data/notes.js';
+import { COLLECTION_PIECES } from '../data/notes.js?v=10';
 
 const list = document.querySelector('#collection-list');
 
@@ -57,4 +57,4 @@ function pieceArticle(piece) {
   return article;
 }
 
-list.append(...PLAYABLE_PIECES.map(pieceArticle));
+list.append(...COLLECTION_PIECES.map(pieceArticle));

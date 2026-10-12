@@ -101,7 +101,7 @@ const COIN_RIGHTS_4 = {
   detail: 'The photographer released both specimen views under CC BY-SA 4.0.',
 };
 
-export const PLAYABLE_COINS = [
+const COIN_RECORDS = [
   {
     id: 'lincoln-cent-off-center',
     pieceKind: 'coin',
@@ -204,7 +204,7 @@ export const PLAYABLE_COINS = [
     denomination: '5 cents',
     noteType: 'Jefferson nickel',
     errorName: 'Die cap',
-    answerExplanation: 'The coin has spread into a raised cap shape and its design has faded almost completely. It remained attached to a die and changed shape while striking later coins.',
+    answerExplanation: 'The face is almost blank, while the raised rim hints at a cap-like form. Repeated strikes reshaped a coin that remained stuck to the die.',
     sides: [{ label: 'Cap view', image: 'assets/coins/die-cap.jpg', width: 477, height: 350, crop: { x: 0, y: 0, width: 477, height: 350 }, maxDisplayWidth: 477 }],
     answerSide: 0,
     regions: [{ x: 20, y: 7, width: 62, height: 87 }],
@@ -213,8 +213,10 @@ export const PLAYABLE_COINS = [
     documentationLabel: 'Read the PCGS error description',
     imageCredit: 'Economicrealist, via Wikimedia Commons',
     rights: COIN_RIGHTS_4,
-    playable: true,
+    playable: false,
   },
 ];
 
+export const PLAYABLE_COINS = COIN_RECORDS.filter((piece) => piece.playable);
 export const PLAYABLE_PIECES = [...PLAYABLE_NOTES, ...PLAYABLE_COINS];
+export const COLLECTION_PIECES = [...PLAYABLE_NOTES, ...COIN_RECORDS];

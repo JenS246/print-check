@@ -43,6 +43,30 @@ body {
   line-height: 1.5;
 }
 
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  z-index: 0;
+  width: 300px;
+  height: 320px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.14;
+  pointer-events: none;
+}
+body::before {
+  left: -8px;
+  bottom: -4px;
+  background-image: url('assets/art/printing-press.svg');
+}
+body::after {
+  top: 54px;
+  right: -8px;
+  background-image: url('assets/art/coin-press.svg');
+}
+
 button, a { font: inherit; }
 button { color: inherit; }
 a {
@@ -56,6 +80,8 @@ button:focus-visible, a:focus-visible, [tabindex]:focus-visible, summary:focus-v
 }
 
 .page-shell {
+  position: relative;
+  z-index: 1;
   width: min(1050px, calc(100% - 48px));
   margin: 0 auto;
 }
@@ -358,6 +384,11 @@ dialog::backdrop { background: rgba(47, 45, 41, 0.44); }
   .collection-item { grid-template-columns: 1fr; gap: 18px; }
   .collection-image { max-width: 560px; }
   .collection-copy h2 { font-size: 31px; }
+}
+
+@media (max-width: 1599px) {
+  body::before,
+  body::after { display: none; }
 }
 
 @media (max-width: 460px) {

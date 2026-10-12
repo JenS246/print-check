@@ -6,7 +6,7 @@ This file is developer research and is not imported by the public game.
 
 - "Clipped_planchet.jpg": 1984-P Jefferson nickel with a large curved clip. The uploader identifies the image as a clipped planchet, the date and mint mark are readable, and the image is CC BY-SA 3.0.
 - "Brockage.jpg": 2000 Lincoln Memorial cent with a large, incuse mirror impression. The file is categorized as a U.S. Mint error and is CC BY-SA 3.0.
-- "Die_cap.jpg": Jefferson nickel die cap. The uploader describes the die-cap sequence on the exact file page and licenses the image CC BY-SA 4.0.
+- "Die_cap.jpg": Jefferson nickel die cap. The uploader describes the die-cap sequence on the exact file page and licenses the image CC BY-SA 4.0. No verified side view of this same specimen was found, so the record remains in Collection but is held out of play.
 
 Generic production explanations are linked separately to PCGS or NGC. They support the mechanism, while each Commons file page remains the source for the photographed specimen and its image rights.
 

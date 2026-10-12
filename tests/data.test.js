@@ -1,19 +1,20 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { CANDIDATES, NOTES, PLAYABLE_NOTES, REFERENCE_NOTES } from '../data/notes.js';
+import { CANDIDATES, PIECES, PLAYABLE_COINS, PLAYABLE_PIECES, REFERENCE_NOTES } from '../data/notes.js';
 import { markerHitsRegions, shuffle } from '../src/rounds.js';
 
 test('the reviewed collection separates playable and reference-only records', () => {
-  assert.equal(PLAYABLE_NOTES.length, 7);
+  assert.equal(PLAYABLE_PIECES.length, 10);
+  assert.equal(PLAYABLE_COINS.length, 3);
   assert.equal(REFERENCE_NOTES.length, 14);
-  assert.equal(NOTES.length, 21);
-  assert.equal(new Set(NOTES.map((note) => note.id)).size, NOTES.length);
-  assert.ok(PLAYABLE_NOTES.every((note) => note.playable));
+  assert.equal(PIECES.length, 24);
+  assert.equal(new Set(PIECES.map((piece) => piece.id)).size, PIECES.length);
+  assert.ok(PLAYABLE_PIECES.every((piece) => piece.playable));
   assert.ok(REFERENCE_NOTES.every((note) => !note.playable));
 });
 
 test('research candidates remain non-playable and state what is missing', () => {
-  assert.equal(CANDIDATES.length, 10);
+  assert.equal(CANDIDATES.length, 11);
   for (const candidate of CANDIDATES) {
     assert.match(candidate.sourceUrl, /^https:\/\//);
     assert.match(candidate.missing, /permission/i);
@@ -23,44 +24,50 @@ test('research candidates remain non-playable and state what is missing', () => 
 
 test('every record has specimen evidence, a local image, and a documented reuse basis', async () => {
   const { access } = await import('node:fs/promises');
-  for (const note of NOTES) {
-    assert.match(note.sourceUrl, /^https:\/\//, note.id);
-    assert.ok(note.imageCredit, note.id);
-    assert.ok(note.rights?.label, note.id);
-    assert.match(note.rights?.url, /^https:\/\//, note.id);
-    assert.ok(note.series, note.id);
-    assert.equal(note.printingDate, null, note.id);
-    for (const side of note.sides) {
+  for (const piece of PIECES) {
+    assert.match(piece.sourceUrl, /^https:\/\//, piece.id);
+    assert.ok(piece.imageCredit, piece.id);
+    assert.ok(piece.rights?.label, piece.id);
+    assert.match(piece.rights?.url, /^https:\/\//, piece.id);
+    assert.ok(piece.series, piece.id);
+    assert.equal(piece.printingDate, null, piece.id);
+    assert.match(piece.pieceKind, /^(coin|note)$/, piece.id);
+    assert.match(piece.errorProcess, /^(Minting|Printing) error$/, piece.id);
+    for (const side of piece.sides) {
       await access(new URL(`../${side.image}`, import.meta.url));
     }
   }
 });
 
 test('playable crops and image-relative answer regions are valid', () => {
-  for (const note of PLAYABLE_NOTES) {
-    assert.ok(note.regions.length > 0, note.id);
-    const side = note.sides[note.answerSide];
+  for (const piece of PLAYABLE_PIECES) {
+    assert.ok(piece.regions.length > 0, piece.id);
+    const side = piece.sides[piece.answerSide];
     const crop = side.crop;
-    assert.ok(crop.width > 0 && crop.height > 0, note.id);
-    assert.ok(crop.x >= 0 && crop.y >= 0, note.id);
-    assert.ok(crop.x + crop.width <= side.width, note.id);
-    assert.ok(crop.y + crop.height <= side.height, note.id);
-    for (const region of note.regions) {
-      assert.ok(region.x >= 0 && region.y >= 0, note.id);
-      assert.ok(region.width >= 20 && region.height >= 20, note.id);
-      assert.ok(region.x + region.width <= 100, note.id);
-      assert.ok(region.y + region.height <= 100, note.id);
+    assert.ok(crop.width > 0 && crop.height > 0, piece.id);
+    assert.ok(crop.x >= 0 && crop.y >= 0, piece.id);
+    assert.ok(crop.x + crop.width <= side.width, piece.id);
+    assert.ok(crop.y + crop.height <= side.height, piece.id);
+    if (piece.pieceKind === 'coin') {
+      assert.deepEqual(crop, { x: 0, y: 0, width: side.width, height: side.height }, piece.id);
+      assert.ok(side.maxDisplayWidth <= side.width, piece.id);
+    }
+    for (const region of piece.regions) {
+      assert.ok(region.x >= 0 && region.y >= 0, piece.id);
+      assert.ok(region.width >= 20 && region.height >= 20, piece.id);
+      assert.ok(region.x + region.width <= 100, piece.id);
+      assert.ok(region.y + region.height <= 100, piece.id);
     }
   }
 });
 
-test('shuffle keeps every note exactly once', () => {
-  const shuffled = shuffle(PLAYABLE_NOTES, () => 0.42);
-  assert.equal(shuffled.length, PLAYABLE_NOTES.length);
-  assert.equal(new Set(shuffled.map((note) => note.id)).size, PLAYABLE_NOTES.length);
+test('shuffle keeps every piece exactly once', () => {
+  const shuffled = shuffle(PLAYABLE_PIECES, () => 0.42);
+  assert.equal(shuffled.length, PLAYABLE_PIECES.length);
+  assert.equal(new Set(shuffled.map((piece) => piece.id)).size, PLAYABLE_PIECES.length);
   assert.deepEqual(
-    shuffled.map((note) => note.id).sort(),
-    PLAYABLE_NOTES.map((note) => note.id).sort(),
+    shuffled.map((piece) => piece.id).sort(),
+    PLAYABLE_PIECES.map((piece) => piece.id).sort(),
   );
 });
 
@@ -69,6 +76,9 @@ test('play screen contains no fixed-session or scoring language', async () => {
   const visible = `${await readFile(new URL('../index.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../src/game.js', import.meta.url), 'utf8')}`;
   assert.equal(/\b(points?|scores?|streaks?|rankings?|timer)\b/i.test(visible), false);
   assert.equal(/note\s+\d+\s+of\s+\d+|round-count|round-progress/i.test(visible), false);
+  assert.match(visible, /Can you spot the error\?/);
+  assert.equal(/Next note/i.test(visible), false);
+  assert.match(visible, /Next piece/);
 });
 
 test('marker hit testing respects both regions and note side', () => {

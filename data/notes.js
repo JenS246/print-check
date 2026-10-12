@@ -400,6 +400,8 @@ const ANA_RIGHTS = {
 function anaRecord({ id, denomination, noteType, crop, errorName, errorCategory, notice, explanation, cause, hint, regions, numberedRegions }) {
   return {
     id,
+    pieceKind: 'note',
+    errorProcess: 'Printing error',
     denomination,
     noteType,
     series: 'Series not legible in the source photograph',
@@ -429,6 +431,8 @@ function anaRecord({ id, denomination, noteType, crop, errorName, errorCategory,
 
 const DEL_MONTE_PLAYABLE = {
   ...HERITAGE_RECORDS.find((note) => note.id === '1996-20-retained-obstruction'),
+  pieceKind: 'note',
+  errorProcess: 'Printing error',
   sides: [{
     label: 'Affected face detail',
     image: 'assets/notes/del-monte-note.jpg',
@@ -453,10 +457,12 @@ const DEL_MONTE_PLAYABLE = {
   reviewNote: 'PMG and Heritage document this exact retained-obstruction specimen. The public-domain closeup clearly shows official third-print elements crossing the sticker.',
 };
 
-export const PLAYABLE_NOTES = [
+const PLAYABLE_NOTES = [
   DEL_MONTE_PLAYABLE,
   {
     id: 'fractional-5-cent-inverted-reverse',
+    pieceKind: 'note',
+    errorProcess: 'Printing error',
     denomination: '5 cents',
     noteType: 'First Issue U.S. Postage Currency',
     series: 'First Issue, issued 1862 to 1863',
@@ -540,10 +546,121 @@ export const PLAYABLE_NOTES = [
   }),
 ];
 
+const COIN_RIGHTS_3 = {
+  label: 'Creative Commons Attribution-ShareAlike 3.0',
+  url: 'https://creativecommons.org/licenses/by-sa/3.0/',
+  detail: 'The photographer released the exact specimen photograph under CC BY-SA 3.0. The image is reproduced without visual alteration.',
+};
+
+const COIN_RIGHTS_4 = {
+  label: 'Creative Commons Attribution-ShareAlike 4.0',
+  url: 'https://creativecommons.org/licenses/by-sa/4.0/',
+  detail: 'The photographer released both views of this exact specimen under CC BY-SA 4.0. The images are reproduced without visual alteration.',
+};
+
+export const PLAYABLE_COINS = [
+  {
+    id: 'lincoln-cent-off-center',
+    pieceKind: 'coin',
+    errorProcess: 'Minting error',
+    denomination: '1 cent',
+    noteType: 'Lincoln cent',
+    series: 'Date and mint mark not legible in the source photograph',
+    catalog: 'Not provided in the source record',
+    district: 'Not applicable',
+    printingDate: null,
+    errorName: 'Off-center strike',
+    errorCategory: 'Off-center strike',
+    notice: 'Only the lower-left part of the design was struck, leaving most of the planchet blank.',
+    explanation: 'Lincoln and part of the inscription appear at the lower-left edge, while a large smooth area received no design. This is a minting error, not later damage.',
+    cause: 'The exact photograph is documented as an off-center Lincoln cent. PCGS explains that this type occurs when the planchet is not properly positioned between the dies, so only part of the design is struck.',
+    hint: 'Look for a large area of the coin that never received the design.',
+    production: 'The image record identifies this exact photographed piece as a Lincoln cent struck off center. Its date and mint mark are not legible, so no mint facility is assigned.',
+    sides: [{ label: 'Obverse', image: 'assets/coins/lincoln-cent-off-center.jpg', width: 800, height: 600, crop: { x: 0, y: 0, width: 800, height: 600 }, maxDisplayWidth: 800 }],
+    answerSide: 0,
+    regions: [{ x: 24, y: 0, width: 63, height: 67 }],
+    numberedRegions: [1, 2, 3, 5, 6],
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Lincolncentoffcenter.jpg',
+    documentationUrl: 'https://www.pcgs.com/news/the-popular-off-center-strike',
+    documentationLabel: 'Read the PCGS error description',
+    imageCredit: 'Contactsmc, via Wikimedia Commons',
+    rights: COIN_RIGHTS_3,
+    playable: true,
+    reviewNote: 'The photographer identifies the exact image as an off-center Lincoln cent. The visible blank planchet and missing design match the PCGS diagnostic description.',
+  },
+  {
+    id: 'lincoln-cent-flipover-multiple-strike',
+    pieceKind: 'coin',
+    errorProcess: 'Minting error',
+    denomination: '1 cent',
+    noteType: 'Lincoln Memorial cent',
+    series: 'Date and mint mark not legible in the source photograph',
+    catalog: 'Not provided in the source record',
+    district: 'Not applicable',
+    printingDate: null,
+    errorName: 'Flip-over multiple strike',
+    errorCategory: 'Multiple strike',
+    notice: 'A second, curved impression crosses the lower part of the already struck reverse.',
+    explanation: 'The normal reverse is joined by another partial strike at the bottom, including upside-down lettering. The exact image record identifies this as a flip-over multi-struck coin.',
+    cause: 'PCGS explains that a flip-over double strike occurs when a coin is struck, flips over, and is struck again. The source does not document the exact press malfunction for this specimen.',
+    hint: 'Look below ONE CENT for a second impression that curves across the first design.',
+    production: 'The exact photograph is documented as a flip-over multi-struck Lincoln Memorial cent. Its date, mint mark, and production facility are not visible or stated.',
+    sides: [{ label: 'Reverse', image: 'assets/coins/lincoln-cent-flipover-multiple-strike.jpg', width: 498, height: 289, crop: { x: 0, y: 0, width: 498, height: 289 }, maxDisplayWidth: 498 }],
+    answerSide: 0,
+    regions: [{ x: 30, y: 51, width: 48, height: 48 }],
+    numberedRegions: [5, 7, 8],
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Flipover.jpg',
+    documentationUrl: 'https://www.pcgs.com/news/doublestruck-mint-errors',
+    documentationLabel: 'Read the PCGS error description',
+    imageCredit: 'Economicrealist, via Wikimedia Commons',
+    rights: COIN_RIGHTS_3,
+    playable: true,
+    reviewNote: 'The exact image record calls this a flip-over multi-struck coin. The second, inverted partial impression is visible across the lower reverse.',
+  },
+  {
+    id: 'lincoln-cent-broadstrike-indent',
+    pieceKind: 'coin',
+    errorProcess: 'Minting error',
+    denomination: '1 cent',
+    noteType: 'Lincoln Memorial cent',
+    series: 'Date and mint mark obscured in the source photographs',
+    catalog: 'Not provided in the source record',
+    district: 'Not applicable',
+    printingDate: null,
+    errorName: 'Broadstrike with an indent',
+    errorCategory: 'Broadstrike',
+    notice: 'The metal spread beyond a normal round cent, and a second blank left a deep curved indent.',
+    explanation: 'The cent has a broad, irregular outline instead of a normal raised rim, plus a large curved unstruck depression. Both sides are photographs of the same specimen.',
+    cause: 'The exact image records identify a broad strike with an indent. NGC explains that a broadstrike occurs when a coin is struck without the collar that normally contains its diameter; the source does not further document how the indent formed on this piece.',
+    hint: 'Trace the entire outside edge. A normal cent should be round and contained by a rim.',
+    production: 'The paired source photographs identify the exact Lincoln Memorial cent as broadstruck, with an indent visible on the obverse. The date and mint facility are not documented.',
+    sides: [
+      { label: 'Obverse', image: 'assets/coins/lincoln-cent-broadstrike-obverse.jpg', width: 1924, height: 1899, crop: { x: 0, y: 0, width: 1924, height: 1899 }, maxDisplayWidth: 900 },
+      { label: 'Reverse', image: 'assets/coins/lincoln-cent-broadstrike-reverse.jpg', width: 1994, height: 1983, crop: { x: 0, y: 0, width: 1994, height: 1983 }, maxDisplayWidth: 900 },
+    ],
+    answerSide: 0,
+    regions: [{ x: 6, y: 0, width: 88, height: 44 }, { x: 0, y: 35, width: 100, height: 65 }],
+    numberedRegions: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Mint_Error_LMC_Obverse.jpg',
+    documentationUrl: 'https://commons.wikimedia.org/wiki/File:Lincoln_Memorial_Cent_Mint_Error_Reverse.jpg',
+    documentationLabel: 'View the matched reverse photograph',
+    supportingUrl: 'https://www.ngccoin.com/news/article/9300/mint-error-coin-chronicles-ngc-broadstrikes/',
+    supportingLabel: 'Read the NGC error description',
+    imageCredit: 'No Fear Of Change, via Wikimedia Commons',
+    rights: COIN_RIGHTS_4,
+    playable: true,
+    reviewNote: 'The same photographer uploaded high-resolution obverse and reverse views on the same date and identified them as a broad strike with an indent and its reverse.',
+  },
+];
+
+export const PLAYABLE_PIECES = [...PLAYABLE_NOTES, ...PLAYABLE_COINS];
+
 export const REFERENCE_NOTES = HERITAGE_RECORDS
   .filter((note) => note.id !== DEL_MONTE_PLAYABLE.id)
   .map((note) => ({
   ...note,
+  pieceKind: 'note',
+  errorProcess: 'Printing error',
   playable: false,
   reviewNote: 'The exact auction specimen and error are documented, but Heritage\'s one-image noncommercial article allowance does not clearly authorize cropped interactive gameplay.',
   rights: {
@@ -553,9 +670,15 @@ export const REFERENCE_NOTES = HERITAGE_RECORDS
   },
 }));
 
-export const NOTES = [...PLAYABLE_NOTES, ...REFERENCE_NOTES];
+export const PIECES = [...PLAYABLE_PIECES, ...REFERENCE_NOTES];
 
 export const CANDIDATES = [
+  {
+    identification: '1973-D Jefferson nickel, ANA Money Museum, straight-clipped planchet',
+    errorName: 'Straight-clipped planchet',
+    sourceUrl: 'https://www.money.org/uploads/treasures/TreasuresPDF.pdf',
+    missing: 'Explicit reuse permission for the exact ANA specimen photographs. The museum PDF documents both sides and the error, but does not grant a reusable image license.',
+  },
   {
     identification: 'Series 1977 $50 Federal Reserve Note, Kansas City, PMG 65 EPQ',
     errorName: 'Gutter fold in the overprint',
@@ -620,6 +743,8 @@ export const CANDIDATES = [
 
 export const SOURCE_POLICIES = [
   ANA_RIGHTS,
-  PLAYABLE_NOTES[0].rights,
+  PLAYABLE_PIECES[0].rights,
+  COIN_RIGHTS_3,
+  COIN_RIGHTS_4,
   REFERENCE_NOTES[0].rights,
 ];

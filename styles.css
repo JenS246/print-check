@@ -320,6 +320,7 @@ button:disabled { opacity: 0.46; cursor: not-allowed; transform: none; }
 .answer-panel h2 { margin: 0 0 8px; font-size: 34px; line-height: 1.1; }
 .answer-panel > p { max-width: 74ch; margin: 8px 0; font-size: 22px; }
 .answer-panel .answer-note { color: var(--muted); }
+.answer-panel .answer-process { color: var(--green); font-weight: 600; }
 .answer-panel .answer-credit { color: var(--muted); font-size: 18px; }
 .answer-panel .text-button { margin-top: 8px; }
 
@@ -341,7 +342,7 @@ dialog::backdrop { background: rgba(47, 45, 41, 0.44); }
 .dialog-head h2 { margin: 0; font-size: 34px; }
 .close-button { background: var(--paper); }
 .sheet-dialog li + li { margin-top: 10px; }
-.image-dialog > img { display: block; width: 100%; height: auto; margin: 18px 0; }
+.image-dialog > img { display: block; width: 100%; height: auto; margin: 18px auto; }
 .image-dialog > p, .image-dialog > a { font-size: 18px; }
 
 .collection-main { padding: 36px 0 78px; }

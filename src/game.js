@@ -1,4 +1,4 @@
-import { PLAYABLE_NOTES } from '../data/notes.js';
+import { PLAYABLE_PIECES } from '../data/notes.js';
 import { markerHitsRegions, shuffle } from './rounds.js';
 
 const $ = (selector) => document.querySelector(selector);
@@ -14,7 +14,7 @@ const answerPanel = $('#answer-panel');
 const state = {
   queue: [],
   current: null,
-  lastNoteId: null,
+  lastPieceId: null,
   side: 0,
   zoom: 1,
   marker: null,
@@ -24,12 +24,12 @@ const state = {
   drag: null,
 };
 
-function currentNote() { return state.current; }
-function currentSide() { return currentNote().sides[state.side]; }
+function currentPiece() { return state.current; }
+function currentSide() { return currentPiece().sides[state.side]; }
 
 function refillQueue() {
-  state.queue = shuffle(PLAYABLE_NOTES);
-  if (state.queue.length > 1 && state.queue[0].id === state.lastNoteId) {
+  state.queue = shuffle(PLAYABLE_PIECES);
+  if (state.queue.length > 1 && state.queue[0].id === state.lastPieceId) {
     [state.queue[0], state.queue[1]] = [state.queue[1], state.queue[0]];
   }
 }
@@ -49,8 +49,8 @@ function setAnsweringEnabled(enabled) {
   $('#alternate-mode').disabled = !enabled || state.solved;
 }
 
-function resetNoteState() {
-  state.side = currentNote().answerSide;
+function resetPieceState() {
+  state.side = currentPiece().answerSide;
   state.zoom = 1;
   state.marker = null;
   state.numberedMode = false;
@@ -67,11 +67,11 @@ function resetNoteState() {
   $('#alternate-mode').textContent = 'Use numbered regions';
 }
 
-function nextNote() {
+function nextPiece() {
   if (!state.queue.length) refillQueue();
   state.current = state.queue.shift();
-  state.lastNoteId = state.current.id;
-  resetNoteState();
+  state.lastPieceId = state.current.id;
+  resetPieceState();
   renderSideControls();
   renderNumberGrid();
   loadImage();
@@ -81,8 +81,8 @@ function nextNote() {
 function renderSideControls() {
   const container = $('#side-controls');
   container.replaceChildren();
-  container.hidden = currentNote().sides.length < 2;
-  currentNote().sides.forEach((side, index) => {
+  container.hidden = currentPiece().sides.length < 2;
+  currentPiece().sides.forEach((side, index) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.textContent = side.label;
@@ -103,6 +103,8 @@ function prepareImageFrame() {
   const side = currentSide();
   const crop = side.crop ?? { x: 0, y: 0, width: side.width, height: side.height };
   imageCanvas.style.aspectRatio = `${crop.width} / ${crop.height}`;
+  imageScroll.style.maxWidth = side.maxDisplayWidth ? `${side.maxDisplayWidth}px` : '';
+  imageScroll.style.marginInline = side.maxDisplayWidth ? 'auto' : '';
   noteImage.style.width = `${(side.width / crop.width) * 100}%`;
   noteImage.style.left = `${-(crop.x / crop.width) * 100}%`;
   noteImage.style.top = `${-(crop.y / crop.height) * 100}%`;
@@ -110,14 +112,14 @@ function prepareImageFrame() {
 }
 
 function loadImage() {
-  const note = currentNote();
+  const piece = currentPiece();
   const side = currentSide();
   setAnsweringEnabled(false);
   $('#loading-message').hidden = false;
   $('#image-error').hidden = true;
   imageCanvas.hidden = true;
   noteImage.removeAttribute('src');
-  noteImage.alt = `${side.label} view of a genuine ${note.denomination} ${note.noteType}. Error details are hidden until the answer is shown.`;
+  noteImage.alt = `${side.label} view of a genuine ${piece.denomination} ${piece.noteType}. Error details are hidden until the answer is shown.`;
   prepareImageFrame();
   noteImage.onload = () => {
     $('#loading-message').hidden = true;
@@ -193,7 +195,7 @@ function selectNumberedRegion(number) {
 
 function checkAnswer() {
   if (state.solved || !state.marker || !state.imageReady) return;
-  if (markerHitsRegions(state.marker, currentNote().answerSide, currentNote().regions)) {
+  if (markerHitsRegions(state.marker, currentPiece().answerSide, currentPiece().regions)) {
     setFeedback('You found it', 'correct');
     showAnswer();
   } else {
@@ -203,27 +205,28 @@ function checkAnswer() {
 
 function showAnswer() {
   state.solved = true;
-  const note = currentNote();
-  if (state.side !== note.answerSide) {
-    state.side = note.answerSide;
+  const piece = currentPiece();
+  if (state.side !== piece.answerSide) {
+    state.side = piece.answerSide;
     renderSideControls();
     loadImage();
   } else {
     drawAnswerRegions();
   }
   setAnsweringEnabled(false);
-  $('#answer-title').textContent = note.errorName;
-  $('#answer-explanation').textContent = note.explanation;
-  $('#answer-note').textContent = `${note.denomination} ${note.noteType}`;
-  $('#answer-series').textContent = note.series;
-  $('#answer-credit').textContent = note.imageCredit;
-  $('#source-link').href = note.sourceUrl;
+  $('#answer-title').textContent = piece.errorName;
+  $('#answer-explanation').textContent = piece.explanation;
+  $('#answer-process').textContent = piece.errorProcess;
+  $('#answer-note').textContent = `${piece.denomination} ${piece.noteType}`;
+  $('#answer-series').textContent = piece.series;
+  $('#answer-credit').textContent = piece.imageCredit;
+  $('#source-link').href = piece.sourceUrl;
   answerPanel.hidden = false;
 }
 
 function drawAnswerRegions() {
   answerRegions.replaceChildren();
-  currentNote().regions.forEach((region) => {
+  currentPiece().regions.forEach((region) => {
     const outline = document.createElement('span');
     outline.className = 'answer-region';
     outline.style.left = `${region.x}%`;
@@ -235,13 +238,14 @@ function drawAnswerRegions() {
 }
 
 function openFullImage() {
-  const note = currentNote();
+  const piece = currentPiece();
   const side = currentSide();
-  $('#full-image-title').textContent = `${note.denomination} ${note.noteType}`;
+  $('#full-image-title').textContent = `${piece.denomination} ${piece.noteType}`;
   $('#full-image').src = side.image;
-  $('#full-image').alt = `Full source image for ${note.denomination} ${note.noteType}.`;
-  $('#full-image-credit').textContent = `Image: ${note.imageCredit}`;
-  $('#full-image-source').href = note.sourceUrl;
+  $('#full-image').alt = `Full source image for ${piece.denomination} ${piece.noteType}.`;
+  $('#full-image').style.maxWidth = side.maxDisplayWidth ? `${side.maxDisplayWidth}px` : '';
+  $('#full-image-credit').textContent = `Image: ${piece.imageCredit}`;
+  $('#full-image-source').href = piece.sourceUrl;
   $('#full-image-dialog').showModal();
 }
 
@@ -285,16 +289,16 @@ imageCanvas.addEventListener('pointercancel', () => {
 });
 
 $('#check-button').addEventListener('click', checkAnswer);
-$('#hint-button').addEventListener('click', () => setFeedback(currentNote().hint));
+$('#hint-button').addEventListener('click', () => setFeedback(currentPiece().hint));
 $('#reveal-button').addEventListener('click', () => {
   setFeedback();
   showAnswer();
 });
-$('#next-button').addEventListener('click', nextNote);
+$('#next-button').addEventListener('click', nextPiece);
 $('#full-image-button').addEventListener('click', openFullImage);
 $('#help-button').addEventListener('click', () => $('#help-dialog').showModal());
 $('#retry-image').addEventListener('click', loadImage);
-$('#skip-image').addEventListener('click', nextNote);
+$('#skip-image').addEventListener('click', nextPiece);
 $('#alternate-mode').addEventListener('click', () => {
   state.numberedMode = !state.numberedMode;
   numberGrid.hidden = !state.numberedMode;
@@ -317,4 +321,4 @@ document.addEventListener('keydown', (event) => {
 });
 
 if (window.location.hash === '#how-to-play') $('#help-dialog').showModal();
-nextNote();
+nextPiece();

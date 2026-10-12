@@ -2,7 +2,7 @@
 
 Print Check is a casual browser activity about documented production errors on genuine U.S. coins and paper currency. It opens directly to a coin or bill, asks the visitor to mark the error, and continues through a shuffled collection for as long as the visitor wants to play.
 
-The interface is intentionally small and rights-aware. Ten specimens are playable: four paper notes and six coins. The public Collection contains those ten plus one documented die cap held out of play until a matched side view is available.
+The interface is intentionally small and rights-aware. Seven specimens are playable: one paper note and six coins. The public Collection also retains three documented museum-display bills whose available crop is too soft for fair play, plus one documented die cap held out until a matched side view is available.
 
 ## How it works
 
@@ -14,6 +14,8 @@ The interface is intentionally small and rights-aware. Ten specimens are playabl
 - Keyboard answers with the 1 through 9 keys, without a permanent region panel
 - An accessible enlarged-image dialog with one Close control
 - Image-relative crops, markers, generous answer targets, and separate precise reveal outlines that stay aligned through resizing
+- A source-photo close-up of the doubled date on the 1955 doubled-die cent after the answer is shown
+- A stable image stage, tokenized image loading, and preloading of the next specimen
 - Dynamic viewport fitting with reserved answer space, safe-area support, and natural scrolling on short or enlarged-text layouts
 - A fixed asymmetric margin composition: an open coin envelope with loose coins, a folded bill, and a separate coin stack
 - A two-color hand-drawn title with a decorative coin that flips once when Next is selected and stays still for reduced-motion users
@@ -22,11 +24,11 @@ The interface is intentionally small and rights-aware. Ten specimens are playabl
 
 ## Corpus and rights review
 
-The playable note corpus uses two image sources:
+The note corpus uses two image sources:
 
 1. A public-domain Smithsonian National Numismatic Collection scan of a First Issue 5-cent Postage Currency note, Fr. 1230. The Wikimedia Commons record identifies the inverted reverse and includes a reviewed VRT permission ticket.
-2. Three labeled crops from David Shankbone's Creative Commons photograph of the American Numismatic Association Money Museum error-note display. The visible specimens show shifted overprints and a foldover. The site identifies these links as the original group photograph and tells visitors that the gameplay views are crops.
-The museum photograph does not make every series line legible, so those entries omit a series rather than guessing. The site also does not infer a printing facility from a Federal Reserve district.
+2. Three labeled crops from David Shankbone's Creative Commons photograph of the American Numismatic Association Money Museum error-note display. The visible specimens show shifted overprints and a foldover. They remain in Collection, but the 1600 by 1118 available file is too soft for fair tap-to-answer play. The direct Flickr page is currently unavailable, so the public source link uses a verified Internet Archive capture of the original page.
+The archived Flickr record identifies a 3122 by 2182 original, but that original file could not be retrieved during the latest audit. The museum photograph does not make every series line legible, so those entries omit a series rather than guessing. The site also does not infer a printing facility from a Federal Reserve district.
 
 The coin corpus uses seven credited Creative Commons photographs from Wikimedia Commons. Six are playable:
 
@@ -38,7 +40,7 @@ The coin corpus uses seven credited Creative Commons photographs from Wikimedia 
 6. A 1955 Lincoln Wheat cent with a doubled die obverse, photographed by Lost Dutchman Rare Coins under CC BY-SA 3.0 US with reviewed Wikimedia VRT permission.
 7. A Jefferson nickel die cap, photographed by Economicrealist under CC BY-SA 4.0. It remains in Collection, but its top view does not demonstrate the raised shape clearly enough for fair gameplay.
 
-The photographs are shown whole and without visual alteration. Each coin image is capped at its source width during normal viewing, so a small photograph is not enlarged until it blurs. The optional enlarged view also respects that cap; ordinary browser zoom remains available.
+The photographs are shown whole and without visual alteration. Each coin image is capped at its source width during normal viewing, so a small photograph is not enlarged until it blurs. The optional enlarged view also respects that cap; ordinary browser zoom remains available. The doubled-die close-up is a browser crop from the original photograph, not a reconstructed or sharpened image.
 
 Reference records, the Del Monte detail, and candidates that are not ready for play live in `research/records.js`. The latest accepted and rejected image review is in `research/expansion-2026-10-11.md`. Neither file is imported by the game or Collection page.
 

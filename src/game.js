@@ -1,5 +1,5 @@
-import { PLAYABLE_PIECES } from '../data/notes.js?v=18';
-import { markerHitsRegions, shuffle } from './rounds.js?v=18';
+import { PLAYABLE_PIECES } from '../data/notes.js?v=21';
+import { markerHitsRegions, shuffle } from './rounds.js?v=21';
 
 const $ = (selector) => document.querySelector(selector);
 const imageFrame = $('#image-frame');
@@ -17,6 +17,7 @@ const state = {
   marker: null,
   solved: false,
   imageReady: false,
+  loadToken: 0,
   sideNodes: new Map(),
 };
 
@@ -76,17 +77,23 @@ function prepareImageFrame() {
   });
   const combinedRatio = ratios.reduce((sum, ratio) => sum + ratio, 0);
   const widthCap = sides.reduce((sum, side) => sum + (side.maxDisplayWidth ?? Infinity), 0);
-  const availableWidth = Math.min($('#game-screen').clientWidth, 1050, widthCap);
+  const availableWidth = Math.min($('#game-screen').clientWidth, 1050);
   const viewportHeight = window.visualViewport?.height ?? document.documentElement.clientHeight;
   const frameTop = imageFrame.getBoundingClientRect().top;
   const answerReserve = window.matchMedia('(max-width: 760px)').matches ? 132 : 122;
   const reserveBelow = answerReserve + playActions.offsetHeight + 20;
-  const availableHeight = Math.max(140, Math.min(viewportHeight - frameTop - reserveBelow, 520));
-  const fitWidth = Math.min(availableWidth, availableHeight * combinedRatio);
+  const minimumHeight = window.matchMedia('(max-width: 760px)').matches ? 230 : 290;
+  const maximumHeight = window.matchMedia('(max-width: 760px)').matches ? 360 : 460;
+  const stageHeight = Math.max(minimumHeight, Math.min(viewportHeight - frameTop - reserveBelow, maximumHeight));
+  const innerWidth = Math.max(140, availableWidth - 18);
+  const innerHeight = Math.max(140, stageHeight - 18);
+  const fitWidth = Math.min(innerWidth, widthCap, innerHeight * combinedRatio);
   const fitHeight = fitWidth / combinedRatio;
 
-  imageFrame.style.width = `${fitWidth + 3}px`;
-  imageFrame.style.height = `${fitHeight + 3}px`;
+  imageFrame.style.width = `${availableWidth}px`;
+  imageFrame.style.height = `${stageHeight}px`;
+  imageCanvas.style.width = `${fitWidth}px`;
+  imageCanvas.style.height = `${fitHeight}px`;
   imageCanvas.style.aspectRatio = `${combinedRatio} / 1`;
   sideImages.style.gridTemplateColumns = ratios.map((ratio) => `${ratio}fr`).join(' ');
 }
@@ -122,6 +129,8 @@ function buildSide(side, sideIndex) {
 }
 
 function loadImage() {
+  const loadToken = ++state.loadToken;
+  const piece = state.current;
   state.imageReady = false;
   $('#loading-message').hidden = false;
   $('#image-error').hidden = true;
@@ -134,6 +143,7 @@ function loadImage() {
   let failed = false;
   state.sideNodes.forEach(({ image }, sideIndex) => {
     image.onload = () => {
+      if (loadToken !== state.loadToken) return;
       loaded += 1;
       if (!failed && loaded === sideIndexes.length) {
         $('#loading-message').hidden = true;
@@ -143,12 +153,23 @@ function loadImage() {
       }
     };
     image.onerror = () => {
+      if (loadToken !== state.loadToken) return;
       failed = true;
       $('#loading-message').hidden = true;
       $('#image-error').hidden = false;
       state.imageReady = false;
     };
-    image.src = state.current.sides[sideIndex].image;
+    image.src = piece.sides[sideIndex].image;
+  });
+}
+
+function preloadNextPiece() {
+  const next = state.queue[0];
+  if (!next) return;
+  next.sides.forEach((side) => {
+    const image = new Image();
+    image.decoding = 'async';
+    image.src = side.image;
   });
 }
 
@@ -159,6 +180,8 @@ function nextPiece() {
   resetPieceState();
   populateAnswerContent(false);
   loadImage();
+  const schedule = window.requestIdleCallback ?? ((callback) => setTimeout(callback, 0));
+  schedule(preloadNextPiece);
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
@@ -223,6 +246,7 @@ function populateAnswerContent(includeSuccess) {
   $('#answer-process').textContent = state.current.errorProcess;
   $('#answer-identification').textContent = identification(state.current);
   $('#answer-credit').textContent = state.current.imageCredit;
+  renderAnswerCloseup();
   const recordLinks = $('#record-links');
   recordLinks.replaceChildren();
   const links = [
@@ -243,6 +267,34 @@ function populateAnswerContent(includeSuccess) {
     if (index < links.length - 1) recordLinks.append(document.createElement('br'));
   });
   $('#rights-detail').textContent = state.current.rights.detail;
+}
+
+function renderAnswerCloseup() {
+  const figure = $('#answer-closeup');
+  const viewport = $('#answer-closeup-crop');
+  const caption = $('#answer-closeup-caption');
+  const closeup = state.current.revealCrop;
+  viewport.replaceChildren();
+  figure.hidden = !closeup;
+  if (!closeup) return;
+
+  const side = state.current.sides[closeup.side ?? state.current.answerSide];
+  const baseCrop = cropFor(side);
+  const sourceCrop = {
+    x: baseCrop.x + baseCrop.width * (closeup.x / 100),
+    y: baseCrop.y + baseCrop.height * (closeup.y / 100),
+    width: baseCrop.width * (closeup.width / 100),
+    height: baseCrop.height * (closeup.height / 100),
+  };
+  const image = document.createElement('img');
+  viewport.style.aspectRatio = `${sourceCrop.width} / ${sourceCrop.height}`;
+  image.src = side.image;
+  image.alt = closeup.label;
+  image.style.width = `${(side.width / sourceCrop.width) * 100}%`;
+  image.style.left = `${-(sourceCrop.x / sourceCrop.width) * 100}%`;
+  image.style.top = `${-(sourceCrop.y / sourceCrop.height) * 100}%`;
+  viewport.append(image);
+  caption.textContent = closeup.label;
 }
 
 function showAnswer(found = false) {

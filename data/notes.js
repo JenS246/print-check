@@ -1,4 +1,4 @@
-const FLICKR_SOURCE = 'https://www.flickr.com/photos/shankbone/3200806102';
+const FLICKR_SOURCE = 'https://web.archive.org/web/20250816034619/https://www.flickr.com/photos/shankbone/3200806102/';
 const ANA_DOCUMENTATION = 'https://www.sc-na.org/documents/Scanner48v2.pdf';
 const ANA_IMAGE = 'assets/notes/ana-error-display.jpg';
 
@@ -22,16 +22,16 @@ function anaRecord({ id, denomination, crop, errorName, answerExplanation, regio
     regions,
     outlines,
     sourceUrl: FLICKR_SOURCE,
-    sourceLabel: 'Original museum photograph',
+    sourceLabel: 'Archived original museum photograph',
     documentationUrl: ANA_DOCUMENTATION,
     documentationLabel: 'ANA exhibit documentation',
     imageCredit: '“U.S. Currency Error Notes” by David Shankbone',
     rights: ANA_RIGHTS,
-    playable: true,
+    playable: false,
   };
 }
 
-export const PLAYABLE_NOTES = [
+const NOTE_RECORDS = [
   {
     id: 'fractional-5-cent-inverted-reverse',
     pieceKind: 'note',
@@ -138,7 +138,7 @@ const COIN_RECORDS = [
     sides: [{ label: 'Reverse', image: 'assets/coins/lincoln-cent-flipover-multiple-strike.jpg', width: 498, height: 289, crop: { x: 0, y: 0, width: 498, height: 289 }, maxDisplayWidth: 498 }],
     answerSide: 0,
     regions: [{ x: 30, y: 51, width: 48, height: 48 }],
-    outlines: [{ type: 'path', x: 34, y: 55, width: 40, height: 40, d: 'M35 59 C45 53 66 55 74 66 L69 93 L39 92 Z' }],
+    outlines: [{ type: 'path', x: 34, y: 55, width: 40, height: 40, d: 'M35 59 C45 53 66 55 74 66 C72 77 70 87 69 93 C56 95 45 94 39 92' }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Flipover.jpg',
     sourceLabel: 'Photograph and specimen record',
     documentationUrl: 'https://www.pcgs.com/news/doublestruck-mint-errors',
@@ -163,8 +163,8 @@ const COIN_RECORDS = [
     answerSide: 0,
     regions: [{ x: 6, y: 0, width: 88, height: 44 }, { x: 0, y: 35, width: 100, height: 65 }],
     outlines: [
-      { type: 'path', x: 12, y: 1, width: 76, height: 35, d: 'M13 22 C27 3 70 0 87 17 C82 29 71 35 53 35 C34 36 20 32 13 22 Z' },
-      { type: 'path', x: 4, y: 48, width: 92, height: 47, d: 'M5 65 C18 49 78 47 95 65 L90 91 C69 97 29 96 9 88 Z' },
+      { type: 'path', x: 12, y: 1, width: 76, height: 35, d: 'M13 22 C27 3 70 0 87 17 C82 29 71 35 53 35 C34 36 20 32 13 22' },
+      { type: 'path', x: 4, y: 48, width: 92, height: 47, d: 'M5 65 C18 49 78 47 95 65 M90 91 C69 97 29 96 9 88' },
     ],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Mint_Error_LMC_Obverse.jpg',
     sourceLabel: 'Obverse photograph and specimen record',
@@ -236,6 +236,7 @@ const COIN_RECORDS = [
       { type: 'ellipse', x: 2, y: 48, width: 34, height: 18 },
       { type: 'ellipse', x: 66, y: 70, width: 29, height: 19 },
     ],
+    revealCrop: { side: 0, x: 64, y: 67, width: 34, height: 25, label: 'Close-up of the doubled date' },
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:1955_doubled_die_Lincoln_cent.jpg',
     sourceLabel: 'Photograph and specimen record',
     documentationUrl: 'https://www.pcgs.com/news/seeing-double',
@@ -269,6 +270,7 @@ const COIN_RECORDS = [
   },
 ];
 
+export const PLAYABLE_NOTES = NOTE_RECORDS.filter((piece) => piece.playable);
 export const PLAYABLE_COINS = COIN_RECORDS.filter((piece) => piece.playable);
 export const PLAYABLE_PIECES = [...PLAYABLE_NOTES, ...PLAYABLE_COINS];
-export const COLLECTION_PIECES = [...PLAYABLE_NOTES, ...COIN_RECORDS];
+export const COLLECTION_PIECES = [...NOTE_RECORDS, ...COIN_RECORDS];

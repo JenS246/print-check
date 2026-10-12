@@ -4,8 +4,8 @@ import { COLLECTION_PIECES, PLAYABLE_COINS, PLAYABLE_NOTES, PLAYABLE_PIECES } fr
 import { markerHitsRegions, shuffle } from '../src/rounds.js';
 
 test('the game rotation contains only playable records', () => {
-  assert.equal(PLAYABLE_PIECES.length, 10);
-  assert.equal(PLAYABLE_NOTES.length, 4);
+  assert.equal(PLAYABLE_PIECES.length, 7);
+  assert.equal(PLAYABLE_NOTES.length, 1);
   assert.equal(PLAYABLE_COINS.length, 6);
   assert.equal(new Set(PLAYABLE_PIECES.map((piece) => piece.id)).size, PLAYABLE_PIECES.length);
   assert.ok(PLAYABLE_PIECES.every((piece) => piece.playable));
@@ -28,11 +28,15 @@ test('every record has specimen evidence, a local image, and a documented reuse 
   }
 });
 
-test('the die cap remains documented in Collection but is held from play', () => {
+test('soft museum crops and the die cap remain documented but are held from play', () => {
   assert.equal(COLLECTION_PIECES.length, 11);
   const dieCap = COLLECTION_PIECES.find((piece) => piece.id === 'jefferson-nickel-die-cap');
   assert.equal(dieCap?.playable, false);
   assert.equal(PLAYABLE_PIECES.includes(dieCap), false);
+  const museumPieces = COLLECTION_PIECES.filter((piece) => piece.sides.some((side) => side.croppedFromGroup));
+  assert.equal(museumPieces.length, 3);
+  assert.ok(museumPieces.every((piece) => piece.playable === false));
+  assert.ok(museumPieces.every((piece) => !PLAYABLE_PIECES.includes(piece)));
 });
 
 test('playable crops and image-relative answer regions are valid', () => {
@@ -117,6 +121,9 @@ test('the game reserves response space and uses measured viewport height', async
   assert.match(styles, /min-height:\s*100dvh/);
   assert.equal(/\.page-shell\s*\{[^}]*min-height/s.test(styles), false);
   assert.match(styles, /\.response-slot:has\(/);
+  assert.match(game, /loadToken/);
+  assert.match(game, /preloadNextPiece/);
+  assert.match(game, /requestIdleCallback/);
   assert.equal(/overflow:\s*hidden[^;]*;\s*\/\* page/i.test(styles), false);
 });
 
@@ -163,13 +170,14 @@ test('the title uses two ink colors and a reduced-motion-safe Next flip', async 
   assert.match(scripts, /classList\.add\('is-flipping'\)/);
 });
 
-test('museum crops have honest source wording and crop-aware enlargement', async () => {
+test('museum crops have honest archived source wording and remain in Collection', async () => {
   const { readFile } = await import('node:fs/promises');
-  const museumPieces = PLAYABLE_NOTES.filter((piece) => piece.sides.some((side) => side.croppedFromGroup));
+  const museumPieces = COLLECTION_PIECES.filter((piece) => piece.sides.some((side) => side.croppedFromGroup));
   assert.equal(museumPieces.length, 3);
-  assert.ok(museumPieces.every((piece) => piece.sourceLabel === 'Original museum photograph'));
+  assert.ok(museumPieces.every((piece) => piece.sourceLabel === 'Archived original museum photograph'));
   assert.ok(museumPieces.every((piece) => piece.documentationLabel === 'ANA exhibit documentation'));
   assert.ok(museumPieces.every((piece) => /crops the original group photograph/i.test(piece.rights.detail)));
+  assert.ok(museumPieces.every((piece) => piece.playable === false));
   assert.equal(COLLECTION_PIECES.some((piece) => piece.id === 'ana-1-offset-transfer'), false);
   const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
   const collection = await readFile(new URL('../src/collection.js', import.meta.url), 'utf8');
@@ -187,13 +195,15 @@ test('the public palette uses the warm flat colors', async () => {
   assert.match(styles, /--ink:\s*#302820/);
   assert.match(styles, /--accent:\s*#b94726/);
   assert.match(styles, /--decor:\s*#76541e/);
-  assert.equal(/gradient|box-shadow|drop-shadow/i.test(styles), false);
+  assert.equal(/gradient|drop-shadow/i.test(styles), false);
+  assert.match(styles, /box-shadow:\s*0 8px 14px rgb\(82 55 25 \/ 0\.18\)/);
+  assert.match(styles, /paper-grain\.svg/);
 });
 
 test('the drawing-paper surface and requested large type are explicit', async () => {
   const { readFile } = await import('node:fs/promises');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
-  assert.match(styles, /\.page-shell\s*\{[^}]*background:\s*var\(--paper\)/s);
+  assert.match(styles, /\.page-shell\s*\{[^}]*background-color:\s*var\(--paper\)/s);
   assert.match(styles, /\.site-name\s*\{[^}]*font-size:\s*58px/s);
   assert.match(styles, /\.prompt h1\s*\{[^}]*font-size:\s*32px/s);
   assert.match(styles, /\.primary-button\s*\{\s*background:\s*var\(--accent\);\s*color:\s*var\(--white\)/);
@@ -211,6 +221,23 @@ test('paired sides and clean rust SVG answer outlines are available', async () =
   assert.match(styles, /--rust:\s*#96331f/);
   assert.match(styles, /stroke:\s*var\(--rust\)/);
   assert.match(styles, /stroke-width:\s*1\.5/);
+});
+
+test('the doubled-die answer uses a crop from the original photograph', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const doubledDie = PLAYABLE_PIECES.find((piece) => piece.id === '1955-lincoln-cent-doubled-die-obverse');
+  assert.deepEqual(doubledDie?.revealCrop, {
+    side: 0,
+    x: 64,
+    y: 67,
+    width: 34,
+    height: 25,
+    label: 'Close-up of the doubled date',
+  });
+  const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
+  assert.match(game, /function renderAnswerCloseup/);
+  assert.match(game, /sourceCrop/);
+  assert.equal(/createElement\(['"]canvas|sharpen|filter\s*=/.test(game), false);
 });
 
 test('marker hit testing respects both regions and note side', () => {

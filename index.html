@@ -8,7 +8,7 @@
     <meta property="og:title" content="Print Check" />
     <meta property="og:description" content="Spot the error in real U.S. coins and paper currency." />
     <title>Print Check - Spot the error</title>
-    <link rel="stylesheet" href="styles.css?v=20" />
+    <link rel="stylesheet" href="styles.css?v=21" />
   </head>
   <body>
     <div class="page-decorations" aria-hidden="true">
@@ -53,6 +53,10 @@
             <p id="answer-success" class="answer-success">You found it!</p>
             <h2 id="answer-title"></h2>
             <p id="answer-explanation"></p>
+            <figure id="answer-closeup" class="answer-closeup" hidden>
+              <div id="answer-closeup-crop" class="answer-closeup-crop"></div>
+              <figcaption id="answer-closeup-caption"></figcaption>
+            </figure>
             <details class="source-details">
               <summary>Source and image credit</summary>
               <p id="answer-identification"></p>
@@ -93,6 +97,6 @@
       <div id="full-image-gallery" class="full-image-gallery"></div>
     </dialog>
 
-    <script type="module" src="src/game.js?v=20"></script>
+    <script type="module" src="src/game.js?v=21"></script>
   </body>
 </html>

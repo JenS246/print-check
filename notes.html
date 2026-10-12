@@ -6,9 +6,15 @@
     <meta name="theme-color" content="#faf7ef" />
     <meta name="description" content="The coins and bills currently available in Print Check." />
     <title>Coins and bills | Print Check</title>
-    <link rel="stylesheet" href="styles.css?v=11" />
+    <link rel="stylesheet" href="styles.css?v=12" />
   </head>
-  <body>
+  <body class="collection-page">
+    <div class="collection-margin-art" aria-hidden="true">
+      <img class="margin-art margin-art-printing" src="assets/art/printing-press.svg" alt="" />
+      <img class="margin-art margin-art-roller" src="assets/art/ink-roller.svg" alt="" />
+      <img class="margin-art margin-art-coin" src="assets/art/coin-press.svg" alt="" />
+      <img class="margin-art margin-art-engraving" src="assets/art/engraving-tools.svg" alt="" />
+    </div>
     <div class="page-shell">
       <header class="site-header">
         <a class="site-name" href="index.html">
@@ -26,16 +32,21 @@
       <main class="collection-main">
         <header class="collection-intro">
           <h1>Coins and bills</h1>
+          <a class="collection-play-link" href="index.html">Play</a>
         </header>
 
-        <div id="collection-list" class="collection-list" aria-live="polite"></div>
-        <div class="collection-actions" aria-label="Collection controls">
-          <button id="previous-item" class="secondary-button sketch-button" type="button">Previous</button>
-          <a class="primary-button sketch-button collection-play" href="index.html">Play</a>
-          <button id="next-item" class="secondary-button sketch-button" type="button">Next</button>
-        </div>
+        <div id="collection-gallery" class="collection-gallery"></div>
+
+        <section id="collection-detail" class="collection-detail" hidden aria-live="polite">
+          <a class="all-items-link" href="notes.html">All coins and bills</a>
+          <div id="collection-list" class="collection-list"></div>
+          <div class="collection-actions" aria-label="Collection controls">
+            <button id="previous-item" class="secondary-button sketch-button" type="button">Previous</button>
+            <button id="next-item" class="secondary-button sketch-button" type="button">Next</button>
+          </div>
+        </section>
       </main>
     </div>
-    <script type="module" src="src/collection.js?v=11"></script>
+    <script type="module" src="src/collection.js?v=12"></script>
   </body>
 </html>

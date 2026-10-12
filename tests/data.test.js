@@ -97,6 +97,9 @@ test('collection copy contains only documented coins and bills', async () => {
   assert.match(visible, />Previous</);
   assert.match(visible, />Next</);
   assert.match(visible, />Play</);
+  assert.match(visible, /All coins and bills/);
+  assert.match(visible, /gallery\.replaceChildren\(\.\.\.COLLECTION_PIECES\.map\(galleryEntry\)\)/);
+  assert.match(visible, /link\.href = `#\$\{piece\.id\}`/);
   assert.match(visible, /replaceChildren\(pieceArticle\(piece\)\)/);
   assert.match(visible, /<details class="source-details collection-credit">/);
   assert.equal(/Reference records|Candidates awaiting material|research lead|permission gap|maintenance/i.test(visible), false);
@@ -113,15 +116,19 @@ test('the game reserves response space and uses measured viewport height', async
   assert.equal(/overflow:\s*hidden[^;]*;\s*\/\* page/i.test(styles), false);
 });
 
-test('the two press drawings are faint, inert, and hidden when margins are narrow', async () => {
+test('the production drawings are faint, inert, and responsive', async () => {
   const { access, readFile } = await import('node:fs/promises');
   await access(new URL('../assets/art/printing-press.svg', import.meta.url));
   await access(new URL('../assets/art/coin-press.svg', import.meta.url));
+  await access(new URL('../assets/art/ink-roller.svg', import.meta.url));
+  await access(new URL('../assets/art/engraving-tools.svg', import.meta.url));
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   assert.match(styles, /printing-press\.svg/);
   assert.match(styles, /coin-press\.svg/);
-  assert.match(styles, /opacity:\s*0\.14/);
+  assert.match(styles, /ink-roller\.svg/);
+  assert.match(styles, /opacity:\s*0\.1[67]/);
   assert.match(styles, /pointer-events:\s*none/);
+  assert.match(styles, /@media \(min-width: 1600px\)/);
   assert.match(styles, /@media \(max-width: 1599px\)/);
 });
 

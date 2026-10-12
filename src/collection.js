@@ -1,29 +1,51 @@
-import { COLLECTION_PIECES } from '../data/notes.js?v=11';
+import { COLLECTION_PIECES } from '../data/notes.js?v=12';
 
+const gallery = document.querySelector('#collection-gallery');
+const detail = document.querySelector('#collection-detail');
 const list = document.querySelector('#collection-list');
 const previousButton = document.querySelector('#previous-item');
 const nextButton = document.querySelector('#next-item');
-let currentIndex = Math.max(0, COLLECTION_PIECES.findIndex((piece) => `#${piece.id}` === window.location.hash));
+const allItemsLink = document.querySelector('.all-items-link');
+
+let currentIndex = -1;
 
 function identification(piece) {
   const name = piece.pieceKind === 'coin' ? piece.noteType : `${piece.denomination} ${piece.noteType}`;
   return piece.series ? `${name}, ${piece.series}` : name;
 }
 
-function imageFigure(piece, side) {
-  const crop = side.crop ?? { x: 0, y: 0, width: side.width, height: side.height };
+function cropFor(side) {
+  return side.crop ?? { x: 0, y: 0, width: side.width, height: side.height };
+}
+
+function imageFigure(piece, side, mode) {
+  const crop = cropFor(side);
+  const ratio = crop.width / crop.height;
   const figure = document.createElement('figure');
-  const viewport = document.createElement('a');
+  const viewport = document.createElement(mode === 'detail' ? 'a' : 'span');
   viewport.className = 'collection-crop';
-  viewport.href = side.image;
-  viewport.target = '_blank';
-  viewport.rel = 'noreferrer';
   viewport.style.aspectRatio = `${crop.width} / ${crop.height}`;
-  viewport.style.maxWidth = `${Math.min(crop.width, side.maxDisplayWidth ?? crop.width)}px`;
-  viewport.setAttribute('aria-label', `Open the full photograph for ${identification(piece)}`);
+
+  if (mode === 'detail') {
+    const viewportHeight = window.visualViewport?.height ?? document.documentElement.clientHeight;
+    const heightLimit = window.matchMedia('(max-width: 760px)').matches
+      ? Math.min(280, viewportHeight * 0.36)
+      : Math.min(460, viewportHeight * 0.54);
+    const widthLimit = Math.min(crop.width, side.maxDisplayWidth ?? crop.width, heightLimit * ratio);
+    viewport.style.width = `${widthLimit}px`;
+    viewport.href = side.image;
+    viewport.target = '_blank';
+    viewport.rel = 'noreferrer';
+    viewport.setAttribute('aria-label', `Open the full photograph for ${identification(piece)}`);
+  } else {
+    const widthLimit = Math.min(crop.width, side.maxDisplayWidth ?? crop.width, 220 * ratio);
+    viewport.style.width = `${widthLimit}px`;
+  }
+
   const image = document.createElement('img');
   image.src = side.image;
   image.alt = `${side.label} view of ${identification(piece)} showing ${piece.errorName.toLowerCase()}.`;
+  image.loading = mode === 'gallery' ? 'lazy' : 'eager';
   image.style.width = `${(side.width / crop.width) * 100}%`;
   image.style.left = `${-(crop.x / crop.width) * 100}%`;
   image.style.top = `${-(crop.y / crop.height) * 100}%`;
@@ -32,11 +54,30 @@ function imageFigure(piece, side) {
   return figure;
 }
 
-function imageGroup(piece) {
+function imageGroup(piece, mode) {
   const group = document.createElement('div');
-  if (piece.sides.length > 1) group.className = 'collection-image-pair';
-  group.append(...piece.sides.map((side) => imageFigure(piece, side)));
+  group.className = `collection-image-group collection-image-group-${mode}`;
+  if (piece.sides.length > 1) group.classList.add('collection-image-pair');
+  group.append(...piece.sides.map((side) => imageFigure(piece, side, mode)));
   return group;
+}
+
+function galleryEntry(piece) {
+  const link = document.createElement('a');
+  link.className = 'gallery-entry';
+  link.href = `#${piece.id}`;
+
+  const photo = document.createElement('div');
+  photo.className = 'gallery-photo';
+  photo.append(imageGroup(piece, 'gallery'));
+
+  const copy = document.createElement('div');
+  copy.className = 'gallery-copy';
+  copy.innerHTML = `
+    <p>${identification(piece)}</p>
+    <h2>${piece.errorName}</h2>`;
+  link.append(photo, copy);
+  return link;
 }
 
 function pieceArticle(piece) {
@@ -46,7 +87,7 @@ function pieceArticle(piece) {
 
   const imageColumn = document.createElement('div');
   imageColumn.className = 'collection-image';
-  imageColumn.append(imageGroup(piece));
+  imageColumn.append(imageGroup(piece, 'detail'));
 
   const copy = document.createElement('div');
   copy.className = 'collection-copy';
@@ -64,24 +105,63 @@ function pieceArticle(piece) {
   return article;
 }
 
-function renderCurrentItem() {
+function renderGallery() {
+  gallery.replaceChildren(...COLLECTION_PIECES.map(galleryEntry));
+}
+
+function indexFromHash() {
+  const id = decodeURIComponent(window.location.hash.slice(1));
+  if (!id) return -1;
+  return COLLECTION_PIECES.findIndex((piece) => piece.id === id);
+}
+
+function renderFromHash() {
+  currentIndex = indexFromHash();
+  if (currentIndex < 0) {
+    document.body.classList.remove('collection-detail-active');
+    gallery.hidden = false;
+    detail.hidden = true;
+    document.title = 'Coins and bills | Print Check';
+    return;
+  }
+
   const piece = COLLECTION_PIECES[currentIndex];
+  document.body.classList.add('collection-detail-active');
+  gallery.hidden = true;
+  detail.hidden = false;
   list.replaceChildren(pieceArticle(piece));
   previousButton.disabled = currentIndex === 0;
   nextButton.disabled = currentIndex === COLLECTION_PIECES.length - 1;
-  history.replaceState(null, '', `#${piece.id}`);
+  document.title = `${piece.errorName} | Print Check`;
+  requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'instant' }));
 }
 
-previousButton.addEventListener('click', () => {
-  if (currentIndex === 0) return;
-  currentIndex -= 1;
-  renderCurrentItem();
+function showAdjacent(offset) {
+  const nextIndex = currentIndex + offset;
+  if (nextIndex < 0 || nextIndex >= COLLECTION_PIECES.length) return;
+  window.location.hash = COLLECTION_PIECES[nextIndex].id;
+}
+
+previousButton.addEventListener('click', () => showAdjacent(-1));
+nextButton.addEventListener('click', () => showAdjacent(1));
+allItemsLink.addEventListener('click', (event) => {
+  event.preventDefault();
+  history.pushState(null, '', window.location.pathname);
+  renderFromHash();
+  window.scrollTo({ top: 0, behavior: 'instant' });
 });
 
-nextButton.addEventListener('click', () => {
-  if (currentIndex === COLLECTION_PIECES.length - 1) return;
-  currentIndex += 1;
-  renderCurrentItem();
-});
+window.addEventListener('hashchange', renderFromHash);
 
-renderCurrentItem();
+let resizeFrame;
+function scheduleDetailResize() {
+  cancelAnimationFrame(resizeFrame);
+  resizeFrame = requestAnimationFrame(() => {
+    if (currentIndex >= 0) renderFromHash();
+  });
+}
+window.addEventListener('resize', scheduleDetailResize);
+window.visualViewport?.addEventListener('resize', scheduleDetailResize);
+
+renderGallery();
+renderFromHash();

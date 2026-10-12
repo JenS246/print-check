@@ -1,5 +1,5 @@
-import { PLAYABLE_PIECES } from '../data/notes.js?v=11';
-import { markerHitsRegions, shuffle } from './rounds.js?v=11';
+import { PLAYABLE_PIECES } from '../data/notes.js?v=12';
+import { markerHitsRegions, shuffle } from './rounds.js?v=12';
 
 const $ = (selector) => document.querySelector(selector);
 const imageFrame = $('#image-frame');

@@ -8,7 +8,7 @@
     <meta property="og:title" content="Print Check" />
     <meta property="og:description" content="Spot the error in real U.S. coins and paper currency." />
     <title>Print Check - Spot the error</title>
-    <link rel="stylesheet" href="styles.css?v=12" />
+    <link rel="stylesheet" href="styles.css?v=14" />
   </head>
   <body>
     <div class="page-shell">
@@ -34,22 +34,21 @@
           <p id="loading-message" class="image-message">Loading photograph…</p>
           <p id="image-error" class="image-message" hidden>The photograph did not load. Select Next to continue.</p>
           <div id="image-canvas" class="image-canvas" tabindex="0" role="group" aria-label="Currency photograph. Tap the image, or press a number from 1 through 9 to choose an image area." hidden>
-            <img id="note-image" alt="" draggable="false" />
-            <span id="guess-marker" class="guess-marker" hidden aria-hidden="true"></span>
-            <div id="answer-regions" aria-hidden="true"></div>
+            <div id="game-side-images" class="game-side-images"></div>
           </div>
         </div>
         <div id="response-slot" class="response-slot">
           <p id="feedback" class="feedback" role="status" aria-live="polite" hidden></p>
 
           <section id="answer-panel" class="answer-panel" hidden aria-live="polite" aria-labelledby="answer-title">
+            <p id="answer-success" class="answer-success">You found it!</p>
             <h2 id="answer-title"></h2>
             <p id="answer-explanation"></p>
             <details class="source-details">
               <summary>Source and image credit</summary>
               <p id="answer-identification"></p>
               <p><span id="answer-process"></span>. Image: <span id="answer-credit"></span>.</p>
-              <p><a id="source-link" href="#" target="_blank" rel="noreferrer">View specimen source</a> · <a id="documentation-link" href="#" target="_blank" rel="noreferrer">Read documentation</a> · <a id="answer-rights" href="#" target="_blank" rel="noreferrer"></a></p>
+              <p><a id="source-link" href="#" target="_blank" rel="noreferrer">View specimen source</a>, <a id="documentation-link" href="#" target="_blank" rel="noreferrer">Read documentation</a>, <a id="answer-rights" href="#" target="_blank" rel="noreferrer"></a></p>
               <p id="rights-detail"></p>
             </details>
           </section>
@@ -85,6 +84,6 @@
       <div id="full-image-gallery" class="full-image-gallery"></div>
     </dialog>
 
-    <script type="module" src="src/game.js?v=12"></script>
+    <script type="module" src="src/game.js?v=14"></script>
   </body>
 </html>

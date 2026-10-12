@@ -4,9 +4,9 @@ import { COLLECTION_PIECES, PLAYABLE_COINS, PLAYABLE_NOTES, PLAYABLE_PIECES } fr
 import { markerHitsRegions, shuffle } from '../src/rounds.js';
 
 test('the game rotation contains only playable records', () => {
-  assert.equal(PLAYABLE_PIECES.length, 10);
+  assert.equal(PLAYABLE_PIECES.length, 11);
   assert.equal(PLAYABLE_NOTES.length, 5);
-  assert.equal(PLAYABLE_COINS.length, 5);
+  assert.equal(PLAYABLE_COINS.length, 6);
   assert.equal(new Set(PLAYABLE_PIECES.map((piece) => piece.id)).size, PLAYABLE_PIECES.length);
   assert.ok(PLAYABLE_PIECES.every((piece) => piece.playable));
 });
@@ -29,7 +29,7 @@ test('every record has specimen evidence, a local image, and a documented reuse 
 });
 
 test('the die cap remains documented in Collection but is held from play', () => {
-  assert.equal(COLLECTION_PIECES.length, 11);
+  assert.equal(COLLECTION_PIECES.length, 12);
   const dieCap = COLLECTION_PIECES.find((piece) => piece.id === 'jefferson-nickel-die-cap');
   assert.equal(dieCap?.playable, false);
   assert.equal(PLAYABLE_PIECES.includes(dieCap), false);
@@ -88,6 +88,8 @@ test('play screen is immediate and contains no fixed-session or scoring language
   assert.equal(/>Check<|>Hint<|Zoom in|Zoom out|Reset view|number-grid|margin-doodle/i.test(visible), false);
   assert.match(visible, /Try another spot/);
   assert.match(visible, /Enlarge image/);
+  assert.match(visible, /You found it!/);
+  assert.match(visible, /answer-title/);
 });
 
 test('collection copy contains only documented coins and bills', async () => {
@@ -116,20 +118,28 @@ test('the game reserves response space and uses measured viewport height', async
   assert.equal(/overflow:\s*hidden[^;]*;\s*\/\* page/i.test(styles), false);
 });
 
-test('the production drawings are faint, inert, and responsive', async () => {
+test('the two production drawings are faint, inert, and responsive', async () => {
   const { access, readFile } = await import('node:fs/promises');
   await access(new URL('../assets/art/printing-press.svg', import.meta.url));
   await access(new URL('../assets/art/coin-press.svg', import.meta.url));
-  await access(new URL('../assets/art/ink-roller.svg', import.meta.url));
-  await access(new URL('../assets/art/engraving-tools.svg', import.meta.url));
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   assert.match(styles, /printing-press\.svg/);
   assert.match(styles, /coin-press\.svg/);
-  assert.match(styles, /ink-roller\.svg/);
-  assert.match(styles, /opacity:\s*0\.1[67]/);
+  assert.equal(/ink-roller\.svg|engraving-tools\.svg/.test(styles), false);
+  assert.match(styles, /opacity:\s*0\.16/);
   assert.match(styles, /pointer-events:\s*none/);
-  assert.match(styles, /@media \(min-width: 1600px\)/);
-  assert.match(styles, /@media \(max-width: 1599px\)/);
+  assert.match(styles, /@media \(min-width: 1200px\)/);
+  assert.match(styles, /@media \(max-width: 1199px\)/);
+});
+
+test('paired sides and thin SVG answer outlines are available', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const paired = PLAYABLE_PIECES.find((piece) => piece.id === 'lincoln-cent-broadstrike-indent');
+  assert.equal(paired?.showSidesTogether, true);
+  const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
+  const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  assert.match(game, /createElementNS\('http:\/\/www\.w3\.org\/2000\/svg'/);
+  assert.match(styles, /stroke-width:\s*1\.25/);
 });
 
 test('marker hit testing respects both regions and note side', () => {

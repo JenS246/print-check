@@ -1,15 +1,12 @@
-import { PLAYABLE_PIECES } from '../data/notes.js?v=12';
-import { markerHitsRegions, shuffle } from './rounds.js?v=12';
+import { PLAYABLE_PIECES } from '../data/notes.js?v=14';
+import { markerHitsRegions, shuffle } from './rounds.js?v=14';
 
 const $ = (selector) => document.querySelector(selector);
 const imageFrame = $('#image-frame');
 const imageCanvas = $('#image-canvas');
-const noteImage = $('#note-image');
-const marker = $('#guess-marker');
-const answerRegions = $('#answer-regions');
+const sideImages = $('#game-side-images');
 const feedback = $('#feedback');
 const answerPanel = $('#answer-panel');
-const responseSlot = $('#response-slot');
 const playActions = $('.play-actions');
 
 const state = {
@@ -19,6 +16,7 @@ const state = {
   marker: null,
   solved: false,
   imageReady: false,
+  sideNodes: new Map(),
 };
 
 function identification(piece) {
@@ -44,58 +42,105 @@ function resetPieceState() {
   state.marker = null;
   state.solved = false;
   state.imageReady = false;
-  marker.hidden = true;
-  answerRegions.replaceChildren();
+  state.sideNodes.clear();
+  sideImages.replaceChildren();
   answerPanel.hidden = true;
   setFeedback();
   $('#reveal-button').disabled = true;
 }
 
-function currentSide() {
-  return state.current.sides[state.current.answerSide];
+function cropFor(side) {
+  return side.crop ?? { x: 0, y: 0, width: side.width, height: side.height };
+}
+
+function displayedSideIndexes() {
+  return state.current.showSidesTogether
+    ? state.current.sides.map((_, index) => index)
+    : [state.current.answerSide];
 }
 
 function prepareImageFrame() {
-  const side = currentSide();
-  const crop = side.crop ?? { x: 0, y: 0, width: side.width, height: side.height };
-  const availableWidth = Math.min($('#game-screen').clientWidth, 1050, side.maxDisplayWidth ?? Infinity);
+  const sides = displayedSideIndexes().map((index) => state.current.sides[index]);
+  const ratios = sides.map((side) => {
+    const crop = cropFor(side);
+    return crop.width / crop.height;
+  });
+  const combinedRatio = ratios.reduce((sum, ratio) => sum + ratio, 0);
+  const widthCap = sides.reduce((sum, side) => sum + (side.maxDisplayWidth ?? Infinity), 0);
+  const availableWidth = Math.min($('#game-screen').clientWidth, 1050, widthCap);
   const viewportHeight = window.visualViewport?.height ?? document.documentElement.clientHeight;
   const frameTop = imageFrame.getBoundingClientRect().top;
-  const reserveBelow = responseSlot.offsetHeight + playActions.offsetHeight + 30;
+  const answerReserve = window.matchMedia('(max-width: 760px)').matches ? 132 : 122;
+  const reserveBelow = answerReserve + playActions.offsetHeight + 20;
   const availableHeight = Math.max(140, Math.min(viewportHeight - frameTop - reserveBelow, 520));
-  const fitWidth = Math.min(availableWidth, availableHeight * (crop.width / crop.height));
-  const fitHeight = fitWidth * (crop.height / crop.width);
+  const fitWidth = Math.min(availableWidth, availableHeight * combinedRatio);
+  const fitHeight = fitWidth / combinedRatio;
 
   imageFrame.style.width = `${fitWidth + 3}px`;
   imageFrame.style.height = `${fitHeight + 3}px`;
-  imageCanvas.style.aspectRatio = `${crop.width} / ${crop.height}`;
-  noteImage.style.width = `${(side.width / crop.width) * 100}%`;
-  noteImage.style.left = `${-(crop.x / crop.width) * 100}%`;
-  noteImage.style.top = `${-(crop.y / crop.height) * 100}%`;
+  imageCanvas.style.aspectRatio = `${combinedRatio} / 1`;
+  sideImages.style.gridTemplateColumns = ratios.map((ratio) => `${ratio}fr`).join(' ');
+}
+
+function buildSide(side, sideIndex) {
+  const crop = cropFor(side);
+  const wrapper = document.createElement('div');
+  wrapper.className = 'game-side';
+  wrapper.dataset.side = `${sideIndex}`;
+  wrapper.style.aspectRatio = `${crop.width} / ${crop.height}`;
+
+  const image = document.createElement('img');
+  image.alt = `${side.label} view of a genuine ${identification(state.current)}. Error details are hidden until the answer is shown.`;
+  image.draggable = false;
+  image.style.width = `${(side.width / crop.width) * 100}%`;
+  image.style.left = `${-(crop.x / crop.width) * 100}%`;
+  image.style.top = `${-(crop.y / crop.height) * 100}%`;
+
+  const marker = document.createElement('span');
+  marker.className = 'guess-marker';
+  marker.hidden = true;
+  marker.setAttribute('aria-hidden', 'true');
+
+  const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  overlay.classList.add('answer-overlay');
+  overlay.setAttribute('viewBox', '0 0 100 100');
+  overlay.setAttribute('preserveAspectRatio', 'none');
+  overlay.setAttribute('aria-hidden', 'true');
+
+  wrapper.append(image, marker, overlay);
+  state.sideNodes.set(sideIndex, { wrapper, image, marker, overlay });
+  return wrapper;
 }
 
 function loadImage() {
-  const piece = state.current;
-  const side = currentSide();
   state.imageReady = false;
   $('#loading-message').hidden = false;
   $('#image-error').hidden = true;
   imageCanvas.hidden = true;
-  noteImage.removeAttribute('src');
-  noteImage.alt = `${side.label} view of a genuine ${identification(piece)}. Error details are hidden until the answer is shown.`;
+  const sideIndexes = displayedSideIndexes();
+  sideImages.classList.toggle('game-side-images-pair', sideIndexes.length > 1);
+  sideImages.replaceChildren(...sideIndexes.map((index) => buildSide(state.current.sides[index], index)));
   prepareImageFrame();
-  noteImage.onload = () => {
-    $('#loading-message').hidden = true;
-    imageCanvas.hidden = false;
-    state.imageReady = true;
-    $('#reveal-button').disabled = false;
-  };
-  noteImage.onerror = () => {
-    $('#loading-message').hidden = true;
-    $('#image-error').hidden = false;
-    state.imageReady = false;
-  };
-  noteImage.src = side.image;
+  let loaded = 0;
+  let failed = false;
+  state.sideNodes.forEach(({ image }, sideIndex) => {
+    image.onload = () => {
+      loaded += 1;
+      if (!failed && loaded === sideIndexes.length) {
+        $('#loading-message').hidden = true;
+        imageCanvas.hidden = false;
+        state.imageReady = true;
+        $('#reveal-button').disabled = false;
+      }
+    };
+    image.onerror = () => {
+      failed = true;
+      $('#loading-message').hidden = true;
+      $('#image-error').hidden = false;
+      state.imageReady = false;
+    };
+    image.src = state.current.sides[sideIndex].image;
+  });
 }
 
 function nextPiece() {
@@ -103,29 +148,27 @@ function nextPiece() {
   state.current = state.queue.shift();
   state.lastPieceId = state.current.id;
   resetPieceState();
-  populateAnswerContent(true);
-  responseSlot.style.minHeight = '';
-  responseSlot.style.minHeight = `${responseSlot.offsetHeight}px`;
+  populateAnswerContent(false);
   loadImage();
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 function renderMarker() {
-  if (!state.marker) {
-    marker.hidden = true;
-    return;
-  }
+  state.sideNodes.forEach(({ marker }) => { marker.hidden = true; });
+  if (!state.marker) return;
+  const marker = state.sideNodes.get(state.marker.side)?.marker;
+  if (!marker) return;
   marker.style.left = `${state.marker.x}%`;
   marker.style.top = `${state.marker.y}%`;
   marker.hidden = false;
 }
 
-function placeAndJudge(x, y) {
+function placeAndJudge(x, y, side = state.current.answerSide) {
   if (state.solved || !state.imageReady) return;
   state.marker = {
     x: Math.max(0, Math.min(100, x)),
     y: Math.max(0, Math.min(100, y)),
-    side: state.current.answerSide,
+    side,
   };
   renderMarker();
 
@@ -137,20 +180,36 @@ function placeAndJudge(x, y) {
 }
 
 function drawAnswerRegions() {
-  answerRegions.replaceChildren();
+  state.sideNodes.forEach(({ overlay }) => overlay.replaceChildren());
   (state.current.outlines ?? state.current.regions).forEach((region) => {
-    const outline = document.createElement('span');
-    outline.className = 'answer-region';
-    outline.style.left = `${region.x}%`;
-    outline.style.top = `${region.y}%`;
-    outline.style.width = `${region.width}%`;
-    outline.style.height = `${region.height}%`;
-    answerRegions.append(outline);
+    const overlay = state.sideNodes.get(region.side ?? state.current.answerSide)?.overlay;
+    if (!overlay) return;
+    let outline;
+    if (region.type === 'path') {
+      outline = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      outline.setAttribute('d', region.d);
+    } else if (region.type === 'ellipse') {
+      outline = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+      outline.setAttribute('cx', region.x + region.width / 2);
+      outline.setAttribute('cy', region.y + region.height / 2);
+      outline.setAttribute('rx', region.width / 2);
+      outline.setAttribute('ry', region.height / 2);
+    } else {
+      outline = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      outline.setAttribute('x', region.x);
+      outline.setAttribute('y', region.y);
+      outline.setAttribute('width', region.width);
+      outline.setAttribute('height', region.height);
+      outline.setAttribute('rx', region.radius ?? 2);
+    }
+    outline.classList.add('answer-region');
+    overlay.append(outline);
   });
 }
 
 function populateAnswerContent(includeSuccess) {
-  $('#answer-title').textContent = includeSuccess ? `You found it: ${state.current.errorName}` : state.current.errorName;
+  $('#answer-success').hidden = !includeSuccess;
+  $('#answer-title').textContent = state.current.errorName;
   $('#answer-explanation').textContent = state.current.answerExplanation;
   $('#answer-process').textContent = state.current.errorProcess;
   $('#answer-identification').textContent = identification(state.current);
@@ -173,8 +232,8 @@ function showAnswer(found = false) {
   answerPanel.hidden = false;
 }
 
-function pointerPosition(event) {
-  const rect = imageCanvas.getBoundingClientRect();
+function pointerPosition(event, sideNode) {
+  const rect = sideNode.getBoundingClientRect();
   return {
     x: ((event.clientX - rect.left) / rect.width) * 100,
     y: ((event.clientY - rect.top) / rect.height) * 100,
@@ -208,8 +267,10 @@ function openFullImage(event) {
 }
 
 imageCanvas.addEventListener('click', (event) => {
-  const position = pointerPosition(event);
-  placeAndJudge(position.x, position.y);
+  const sideNode = event.target.closest('.game-side');
+  if (!sideNode) return;
+  const position = pointerPosition(event, sideNode);
+  placeAndJudge(position.x, position.y, Number(sideNode.dataset.side));
 });
 
 imageCanvas.addEventListener('keydown', (event) => {

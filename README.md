@@ -2,7 +2,7 @@
 
 Print Check is a casual browser activity about documented production errors on genuine U.S. coins and paper currency. It opens directly to a coin or bill, asks the visitor to mark the error, and continues through a shuffled collection for as long as the visitor wants to play.
 
-The interface is intentionally small and rights-aware. Ten specimens are playable: five paper notes and five coins. The public Collection contains those ten plus one documented die cap held out of play until a matched side view is available.
+The interface is intentionally small and rights-aware. Eleven specimens are playable: five paper notes and six coins. The public Collection contains those eleven plus one documented die cap held out of play until a matched side view is available.
 
 ## How it works
 
@@ -15,7 +15,7 @@ The interface is intentionally small and rights-aware. Ten specimens are playabl
 - An accessible enlarged-image dialog with one Close control
 - Image-relative crops, markers, generous answer targets, and separate precise reveal outlines that stay aligned through resizing
 - Dynamic viewport fitting with reserved answer space, safe-area support, and natural scrolling on short or enlarged-text layouts
-- Faint, non-interactive printing and minting illustrations kept outside the central content
+- Two faint, non-interactive press illustrations kept outside the central content
 - A loading state and an always-available Next fallback for image failures
 - Static HTML, CSS, and JavaScript with no accounts, tracking, backend, or dependencies
 
@@ -27,14 +27,15 @@ The playable note corpus uses two image sources:
 2. Four labeled crops from David Shankbone's Creative Commons photograph of the American Numismatic Association Money Museum error-note display. The visible specimens show shifted overprints, a foldover, and an offset transfer.
 The museum photograph does not make every series line legible, so those entries omit a series rather than guessing. The site also does not infer a printing facility from a Federal Reserve district.
 
-The coin corpus uses six credited Creative Commons photographs from Wikimedia Commons. Five are playable:
+The coin corpus uses seven credited Creative Commons photographs from Wikimedia Commons. Six are playable:
 
 1. A Lincoln cent with a large off-center strike, photographed by Contactsmc under CC BY-SA 3.0.
 2. A Lincoln Memorial cent with a flip-over multiple strike, photographed by Economicrealist under CC BY-SA 3.0.
 3. Matched obverse and reverse photographs of one broadstruck and indented Lincoln Memorial cent, photographed by No Fear Of Change under CC BY-SA 4.0.
 4. A 1984-P Jefferson nickel with a clipped planchet, photographed by Economicrealist under CC BY-SA 3.0.
 5. A 2000 Lincoln Memorial cent with a brockage, photographed by Economicrealist under CC BY-SA 3.0.
-6. A Jefferson nickel die cap, photographed by Economicrealist under CC BY-SA 4.0. It remains in Collection, but its top view does not demonstrate the raised shape clearly enough for fair gameplay.
+6. A 1955 Lincoln Wheat cent with a doubled die obverse, photographed by Lost Dutchman Rare Coins under CC BY-SA 3.0 US with reviewed Wikimedia VRT permission.
+7. A Jefferson nickel die cap, photographed by Economicrealist under CC BY-SA 4.0. It remains in Collection, but its top view does not demonstrate the raised shape clearly enough for fair gameplay.
 
 The photographs are shown whole and without visual alteration. Each coin image is capped at its source width during normal viewing, so a small photograph is not enlarged until it blurs. The optional enlarged view also respects that cap; ordinary browser zoom remains available.
 
@@ -86,6 +87,7 @@ The tests cover the playable collection, local image availability, reuse metadat
 - Broadstrike reverse photograph: https://commons.wikimedia.org/wiki/File:Lincoln_Memorial_Cent_Mint_Error_Reverse.jpg
 - Clipped-planchet nickel photograph: https://commons.wikimedia.org/wiki/File:Clipped_planchet.jpg
 - Brockage cent photograph: https://commons.wikimedia.org/wiki/File:Brockage.jpg
+- 1955 doubled-die cent photograph: https://commons.wikimedia.org/wiki/File:1955_doubled_die_Lincoln_cent.jpg
 - Die-cap nickel photograph: https://commons.wikimedia.org/wiki/File:Die_cap.jpg
 - Hosting: GitHub Pages
 - Backend services: none

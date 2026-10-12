@@ -8,6 +8,14 @@ This file is developer research and is not imported by the public game.
 - "Brockage.jpg": 2000 Lincoln Memorial cent with a large, incuse mirror impression. The file is categorized as a U.S. Mint error and is CC BY-SA 3.0.
 - "Die_cap.jpg": Jefferson nickel die cap. The uploader describes the die-cap sequence on the exact file page and licenses the image CC BY-SA 4.0. No verified side view of this same specimen was found, so the record remains in Collection but is held out of play.
 
+## Review - 2026-10-12
+
+- Added "1955 doubled die Lincoln cent.jpg" to play. The 1880 by 1896 photograph shows the complete obverse and clear doubling in the motto, LIBERTY, and date. Wikimedia records reviewed permission from Lost Dutchman Rare Coins under CC BY-SA 3.0 US, and PCGS documents the variety and the misaligned hub impressions that made the working die.
+- Held "1993 MAD clash.jpg" because it is a cropped detail with arrows drawn over the photograph.
+- Held the paired 1963 split-planchet photographs because the Commons records rely only on uploader identification and the surfaces could be mistaken for later damage without stronger specimen authentication.
+- Held "InGodWeRust.jpg" because the file record calls it only an unusual die error and does not identify the exact error mechanism.
+- Held "Jefferson cud.jpg" and "Broad strike.jpg" because the file records lack a specific specimen description, and the broadstrike photograph uses another coin as a comparison object.
+
 Generic production explanations are linked separately to PCGS or NGC. They support the mechanism, while each Commons file page remains the source for the photographed specimen and its image rights.
 
 ## Held out

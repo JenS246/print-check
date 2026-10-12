@@ -1,4 +1,4 @@
-import { COLLECTION_PIECES } from '../data/notes.js?v=12';
+import { COLLECTION_PIECES } from '../data/notes.js?v=14';
 
 const gallery = document.querySelector('#collection-gallery');
 const detail = document.querySelector('#collection-detail');
@@ -98,7 +98,7 @@ function pieceArticle(piece) {
     <details class="source-details collection-credit">
       <summary>Source and image credit</summary>
       <p>Image: ${piece.imageCredit}.</p>
-      <p><a href="${piece.sourceUrl}" target="_blank" rel="noreferrer">View specimen source</a> · <a href="${piece.documentationUrl}" target="_blank" rel="noreferrer">${piece.documentationLabel ?? 'Read documentation'}</a> · <a href="${piece.rights.url}" target="_blank" rel="noreferrer">${piece.rights.label}</a></p>
+      <p><a href="${piece.sourceUrl}" target="_blank" rel="noreferrer">View specimen source</a>, <a href="${piece.documentationUrl}" target="_blank" rel="noreferrer">${piece.documentationLabel ?? 'Read documentation'}</a>, <a href="${piece.rights.url}" target="_blank" rel="noreferrer">${piece.rights.label}</a></p>
       <p>${piece.rights.detail}</p>
     </details>`;
   article.append(imageColumn, copy);

@@ -115,12 +115,23 @@ test('the game reserves response space and uses measured viewport height', async
   assert.match(html, /id="response-slot"/);
   assert.match(game, /window\.visualViewport\?\.height/);
   assert.match(styles, /min-height:\s*100dvh/);
+  assert.equal(/\.page-shell\s*\{[^}]*min-height/s.test(styles), false);
+  assert.match(styles, /\.response-slot:has\(/);
   assert.equal(/overflow:\s*hidden[^;]*;\s*\/\* page/i.test(styles), false);
 });
 
-test('the four money-production drawings use the requested ink and remain inert', async () => {
+test('the eight money-production drawings use the requested ink and remain inert', async () => {
   const { access, readFile } = await import('node:fs/promises');
-  const artFiles = ['coin-stack.svg', 'overlapping-coins.svg', 'rolled-bill.svg', 'bill-fan.svg'];
+  const artFiles = [
+    'coin-stack.svg',
+    'tall-coin-stack.svg',
+    'overlapping-coins.svg',
+    'loose-coins.svg',
+    'rolled-bill.svg',
+    'bill-fan.svg',
+    'coin-envelope.svg',
+    'printing-roller.svg',
+  ];
   for (const file of artFiles) {
     await access(new URL(`../assets/art/${file}`, import.meta.url));
     const artwork = await readFile(new URL(`../assets/art/${file}`, import.meta.url), 'utf8');
@@ -130,10 +141,10 @@ test('the four money-production drawings use the requested ink and remain inert'
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   const html = `${await readFile(new URL('../index.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../notes.html', import.meta.url), 'utf8')}`;
   for (const file of artFiles) assert.match(html, new RegExp(file.replace('.', '\\.')));
-  assert.match(styles, /opacity:\s*0\.35/);
+  assert.match(styles, /opacity:\s*0\.38/);
   assert.match(styles, /pointer-events:\s*none/);
   assert.match(html, /aria-hidden="true"/);
-  assert.match(styles, /\.decoration-coins,\s*\n\s*\.decoration-fan \{ display: none; \}/);
+  assert.match(styles, /\.decoration-stack,\s*\n\s*\.decoration-envelope,\s*\n\s*\.decoration-roll \{ display: block; \}/);
 });
 
 test('museum crops have honest source wording and crop-aware enlargement', async () => {
@@ -183,7 +194,7 @@ test('paired sides and clean rust SVG answer outlines are available', async () =
   assert.match(game, /createElementNS\('http:\/\/www\.w3\.org\/2000\/svg'/);
   assert.match(styles, /--rust:\s*#96331f/);
   assert.match(styles, /stroke:\s*var\(--rust\)/);
-  assert.match(styles, /stroke-width:\s*2/);
+  assert.match(styles, /stroke-width:\s*1\.5/);
 });
 
 test('marker hit testing respects both regions and note side', () => {

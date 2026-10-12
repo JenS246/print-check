@@ -207,7 +207,7 @@ const COIN_RECORDS = [
     sides: [{ label: 'Obverse', image: 'assets/coins/brockage.jpg', width: 295, height: 305, crop: { x: 0, y: 0, width: 295, height: 305 }, maxDisplayWidth: 295 }],
     answerSide: 0,
     regions: [{ x: 8, y: 48, width: 84, height: 49 }],
-    outlines: [{ type: 'ellipse', x: 12, y: 52, width: 76, height: 42 }],
+    outlines: [{ type: 'path', x: 13, y: 51, width: 75, height: 46, d: 'M13 67 C25 53 75 50 88 64 C87 82 77 94 52 97 C28 96 16 84 13 67 Z' }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Brockage.jpg',
     sourceLabel: 'Photograph and specimen record',
     documentationUrl: 'https://www.ngccoin.com/news/article/12631/mint-error-brockage/',

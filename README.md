@@ -2,7 +2,7 @@
 
 Print Check is a casual browser activity about documented production errors on genuine U.S. coins and paper currency. It opens directly to a coin or bill, asks the visitor to mark the error, and continues through a shuffled collection for as long as the visitor wants to play.
 
-The interface is intentionally small and rights-aware. Eleven specimens are playable: five paper notes and six coins. The public Collection contains those eleven plus one documented die cap held out of play until a matched side view is available.
+The interface is intentionally small and rights-aware. Ten specimens are playable: four paper notes and six coins. The public Collection contains those ten plus one documented die cap held out of play until a matched side view is available.
 
 ## How it works
 
@@ -24,7 +24,7 @@ The interface is intentionally small and rights-aware. Eleven specimens are play
 The playable note corpus uses two image sources:
 
 1. A public-domain Smithsonian National Numismatic Collection scan of a First Issue 5-cent Postage Currency note, Fr. 1230. The Wikimedia Commons record identifies the inverted reverse and includes a reviewed VRT permission ticket.
-2. Four labeled crops from David Shankbone's Creative Commons photograph of the American Numismatic Association Money Museum error-note display. The visible specimens show shifted overprints, a foldover, and an offset transfer.
+2. Three labeled crops from David Shankbone's Creative Commons photograph of the American Numismatic Association Money Museum error-note display. The visible specimens show shifted overprints and a foldover. The site identifies these links as the original group photograph and tells visitors that the gameplay views are crops.
 The museum photograph does not make every series line legible, so those entries omit a series rather than guessing. The site also does not infer a printing facility from a Federal Reserve district.
 
 The coin corpus uses seven credited Creative Commons photographs from Wikimedia Commons. Six are playable:

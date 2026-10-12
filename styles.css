@@ -21,16 +21,16 @@
 
 :root {
   color-scheme: light;
-  --paper: #e9eff1;
-  --ink: #292f31;
-  --muted: #48575b;
-  --sage: #dce6da;
+  --paper: #f3dcc8;
+  --ink: #352c27;
+  --muted: #5f493d;
+  --sage: #e8c58f;
   --red: #a44732;
   --rust: #a44732;
-  --green: #285830;
-  --line: #64777d;
-  --white: #f8fbfb;
-  --button: #f5f8f7;
+  --green: #315a36;
+  --line: #80604d;
+  --white: #fff7ed;
+  --button: #fff7ed;
 }
 
 * { box-sizing: border-box; }
@@ -55,7 +55,7 @@ body::after {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  opacity: 0.28;
+  opacity: 0.25;
   pointer-events: none;
 }
 body::before {
@@ -83,7 +83,7 @@ body::after {
   position: absolute;
   width: 220px;
   height: auto;
-  opacity: 0.28;
+  opacity: 0.25;
   user-select: none;
 }
 .margin-art-printing { position: fixed; left: min(-12px, calc((100vw - 1578px) / 2)); bottom: -12px; width: 240px; }
@@ -277,7 +277,6 @@ button:disabled { opacity: 0.46; cursor: not-allowed; transform: none; }
   stroke: var(--rust);
   stroke-width: 2;
   vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 0 0.75px var(--white));
 }
 
 .response-slot {
@@ -348,7 +347,7 @@ dialog {
   font-size: 22px;
   line-height: 1.5;
 }
-dialog::backdrop { background: rgba(41, 47, 49, 0.44); }
+dialog::backdrop { background: rgba(53, 44, 39, 0.44); }
 .image-dialog { width: min(1050px, calc(100% - 32px)); }
 .dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding-bottom: 10px; }
 .dialog-head h2 { margin: 0; font-size: 34px; line-height: 1.1; }
@@ -372,7 +371,15 @@ dialog::backdrop { background: rgba(41, 47, 49, 0.44); }
   margin-top: 14px;
 }
 .full-image-gallery figure { max-width: 100%; margin: 0; text-align: center; }
-.full-image-gallery img { display: block; width: auto; max-width: 100%; height: auto; margin-inline: auto; }
+.full-image-crop {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--white);
+}
+.full-image-crop img { position: absolute; max-width: none; height: auto; }
 .full-image-gallery figcaption { margin-top: 6px; font-size: 18px; }
 
 .collection-main { padding: 22px 0 max(34px, env(safe-area-inset-bottom)); }
@@ -405,10 +412,11 @@ dialog::backdrop { background: rgba(41, 47, 49, 0.44); }
   text-decoration: none;
 }
 .gallery-photo {
-  height: 220px;
+  height: 252px;
   display: grid;
   place-items: center;
   padding: 8px;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 3px 5px 4px 2px;
   background: var(--white);
@@ -538,7 +546,7 @@ dialog::backdrop { background: rgba(41, 47, 49, 0.44); }
   .collection-main { padding-top: 18px; }
   .collection-intro h1 { font-size: 38px; }
   .collection-gallery { grid-template-columns: 1fr; gap: 28px; padding-top: 20px; }
-  .gallery-photo { height: 250px; }
+  .gallery-photo { height: 270px; }
   .gallery-copy p { font-size: 20px; }
   .gallery-copy h2 { font-size: 31px; }
   .collection-detail { padding-top: 8px; }
@@ -579,7 +587,7 @@ dialog::backdrop { background: rgba(41, 47, 49, 0.44); }
     width: 104px;
     height: 118px;
     background-image: url('assets/art/coin-press.svg');
-    opacity: 0.24;
+    opacity: 0.22;
   }
   .collection-page { padding-bottom: 92px; }
   .collection-page::after {
@@ -591,7 +599,7 @@ dialog::backdrop { background: rgba(41, 47, 49, 0.44); }
     width: 128px;
     height: 92px;
     background-image: url('assets/art/printing-press.svg');
-    opacity: 0.24;
+    opacity: 0.22;
   }
 }
 

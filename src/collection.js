@@ -1,4 +1,4 @@
-import { COLLECTION_PIECES } from '../data/notes.js?v=15';
+import { COLLECTION_PIECES } from '../data/notes.js?v=16';
 
 const gallery = document.querySelector('#collection-gallery');
 const detail = document.querySelector('#collection-detail');
@@ -18,11 +18,17 @@ function cropFor(side) {
   return side.crop ?? { x: 0, y: 0, width: side.width, height: side.height };
 }
 
+function usesWholePhotograph(side) {
+  const crop = cropFor(side);
+  return crop.x === 0 && crop.y === 0 && crop.width === side.width && crop.height === side.height;
+}
+
 function imageFigure(piece, side, mode) {
   const crop = cropFor(side);
   const ratio = crop.width / crop.height;
   const figure = document.createElement('figure');
-  const viewport = document.createElement(mode === 'detail' ? 'a' : 'span');
+  const canOpenOriginal = mode === 'detail' && usesWholePhotograph(side);
+  const viewport = document.createElement(canOpenOriginal ? 'a' : 'span');
   viewport.className = 'collection-crop';
   viewport.style.aspectRatio = `${crop.width} / ${crop.height}`;
 
@@ -33,12 +39,14 @@ function imageFigure(piece, side, mode) {
       : Math.min(460, viewportHeight * 0.54);
     const widthLimit = Math.min(crop.width, side.maxDisplayWidth ?? crop.width, heightLimit * ratio);
     viewport.style.width = `${widthLimit}px`;
-    viewport.href = side.image;
-    viewport.target = '_blank';
-    viewport.rel = 'noreferrer';
-    viewport.setAttribute('aria-label', `Open the full photograph for ${identification(piece)}`);
+    if (canOpenOriginal) {
+      viewport.href = side.image;
+      viewport.target = '_blank';
+      viewport.rel = 'noreferrer';
+      viewport.setAttribute('aria-label', `Open the full photograph for ${identification(piece)}`);
+    }
   } else {
-    const widthLimit = Math.min(crop.width, side.maxDisplayWidth ?? crop.width, 220 * ratio);
+    const widthLimit = Math.min(crop.width, side.maxDisplayWidth ?? crop.width, 234 * ratio);
     viewport.style.width = `${widthLimit}px`;
   }
 
@@ -91,6 +99,12 @@ function pieceArticle(piece) {
 
   const copy = document.createElement('div');
   copy.className = 'collection-copy';
+  const documentationLink = piece.documentationUrl && piece.documentationLabel
+    ? `<p>Documentation: <a href="${piece.documentationUrl}" target="_blank" rel="noreferrer">${piece.documentationLabel}</a>.</p>`
+    : '';
+  const supportingLink = piece.supportingUrl && piece.supportingLabel
+    ? `<p>Background: <a href="${piece.supportingUrl}" target="_blank" rel="noreferrer">${piece.supportingLabel}</a>.</p>`
+    : '';
   copy.innerHTML = `
     <p class="collection-meta">${identification(piece)}</p>
     <h2>${piece.errorName}</h2>
@@ -98,7 +112,10 @@ function pieceArticle(piece) {
     <details class="source-details collection-credit">
       <summary>Source and image credit</summary>
       <p>Image: ${piece.imageCredit}.</p>
-      <p><a href="${piece.sourceUrl}" target="_blank" rel="noreferrer">View specimen source</a>, <a href="${piece.documentationUrl}" target="_blank" rel="noreferrer">${piece.documentationLabel ?? 'Read documentation'}</a>, <a href="${piece.rights.url}" target="_blank" rel="noreferrer">${piece.rights.label}</a></p>
+      <p>Photograph: <a href="${piece.sourceUrl}" target="_blank" rel="noreferrer">${piece.sourceLabel ?? 'Photograph and specimen record'}</a>.</p>
+      ${documentationLink}
+      ${supportingLink}
+      <p>License: <a href="${piece.rights.url}" target="_blank" rel="noreferrer">${piece.rights.label}</a>.</p>
       <p>${piece.rights.detail}</p>
     </details>`;
   article.append(imageColumn, copy);
@@ -152,6 +169,7 @@ allItemsLink.addEventListener('click', (event) => {
 });
 
 window.addEventListener('hashchange', renderFromHash);
+window.addEventListener('popstate', renderFromHash);
 
 let resizeFrame;
 function scheduleDetailResize() {

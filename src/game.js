@@ -1,5 +1,5 @@
-import { PLAYABLE_PIECES } from '../data/notes.js?v=15';
-import { markerHitsRegions, shuffle } from './rounds.js?v=15';
+import { PLAYABLE_PIECES } from '../data/notes.js?v=16';
+import { markerHitsRegions, shuffle } from './rounds.js?v=16';
 
 const $ = (selector) => document.querySelector(selector);
 const imageFrame = $('#image-frame');
@@ -214,11 +214,25 @@ function populateAnswerContent(includeSuccess) {
   $('#answer-process').textContent = state.current.errorProcess;
   $('#answer-identification').textContent = identification(state.current);
   $('#answer-credit').textContent = state.current.imageCredit;
-  $('#source-link').href = state.current.sourceUrl;
-  $('#documentation-link').href = state.current.documentationUrl;
-  $('#documentation-link').textContent = state.current.documentationLabel ?? 'Read documentation';
-  $('#answer-rights').href = state.current.rights.url;
-  $('#answer-rights').textContent = state.current.rights.label;
+  const recordLinks = $('#record-links');
+  recordLinks.replaceChildren();
+  const links = [
+    ['Photograph: ', state.current.sourceUrl, state.current.sourceLabel ?? 'Photograph and specimen record'],
+    ['Documentation: ', state.current.documentationUrl, state.current.documentationLabel],
+    ['Background: ', state.current.supportingUrl, state.current.supportingLabel],
+    ['License: ', state.current.rights.url, state.current.rights.label],
+  ].filter(([, url, label]) => url && label);
+  links.forEach(([prefix, url, label], index) => {
+    const row = document.createElement('span');
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noreferrer';
+    link.textContent = label;
+    row.append(prefix, link);
+    recordLinks.append(row);
+    if (index < links.length - 1) recordLinks.append(document.createElement('br'));
+  });
   $('#rights-detail').textContent = state.current.rights.detail;
 }
 
@@ -253,14 +267,22 @@ function openFullImage(event) {
   $('#full-image-title').textContent = identification(state.current);
 
   state.current.sides.forEach((side) => {
+    const crop = cropFor(side);
     const figure = document.createElement('figure');
+    const viewport = document.createElement('div');
+    viewport.className = 'full-image-crop';
+    viewport.style.aspectRatio = `${crop.width} / ${crop.height}`;
+    viewport.style.width = `${Math.min(crop.width, side.maxDisplayWidth ?? crop.width)}px`;
     const image = document.createElement('img');
     const caption = document.createElement('figcaption');
     image.src = side.image;
     image.alt = `${side.label} view of ${identification(state.current)}.`;
-    image.style.maxWidth = side.maxDisplayWidth ? `${side.maxDisplayWidth}px` : '';
+    image.style.width = `${(side.width / crop.width) * 100}%`;
+    image.style.left = `${-(crop.x / crop.width) * 100}%`;
+    image.style.top = `${-(crop.y / crop.height) * 100}%`;
     caption.textContent = side.label;
-    figure.append(image, caption);
+    viewport.append(image);
+    figure.append(viewport, caption);
     gallery.append(figure);
   });
   $('#full-image-dialog').showModal();
@@ -302,5 +324,13 @@ function resizeCurrentFrame() {
 window.addEventListener('resize', resizeCurrentFrame);
 window.visualViewport?.addEventListener('resize', resizeCurrentFrame);
 
-if (window.location.hash === '#how-to-play') $('#help-dialog').showModal();
+function openHelpFromLocation() {
+  if (window.location.hash === '#how-to-play' && !$('#help-dialog').open) {
+    $('#help-dialog').showModal();
+  }
+}
+
+window.addEventListener('hashchange', openHelpFromLocation);
+window.addEventListener('pageshow', openHelpFromLocation);
+openHelpFromLocation();
 nextPiece();

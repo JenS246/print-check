@@ -1,11 +1,11 @@
 const FLICKR_SOURCE = 'https://www.flickr.com/photos/shankbone/3200806102';
-const ANA_SUPPORT = 'https://www.sc-na.org/documents/Scanner48v2.pdf';
+const ANA_DOCUMENTATION = 'https://www.sc-na.org/documents/Scanner48v2.pdf';
 const ANA_IMAGE = 'assets/notes/ana-error-display.jpg';
 
 const ANA_RIGHTS = {
   label: 'Creative Commons Attribution 2.0',
   url: 'https://creativecommons.org/licenses/by/2.0/',
-  detail: 'David Shankbone published the museum photograph under a Creative Commons attribution license.',
+  detail: '“U.S. Currency Error Notes” by David Shankbone, licensed under CC BY 2.0. Print Check crops the original group photograph to show one bill; no content was added or reconstructed.',
 };
 
 function anaRecord({ id, denomination, crop, errorName, answerExplanation, regions, outlines }) {
@@ -17,13 +17,14 @@ function anaRecord({ id, denomination, crop, errorName, answerExplanation, regio
     noteType: 'Federal Reserve Note',
     errorName,
     answerExplanation,
-    sides: [{ label: 'Exhibit photograph', image: ANA_IMAGE, width: 1600, height: 1118, crop }],
+    sides: [{ label: 'Individual bill crop', image: ANA_IMAGE, width: 1600, height: 1118, crop, croppedFromGroup: true }],
     answerSide: 0,
     regions,
     outlines,
     sourceUrl: FLICKR_SOURCE,
-    documentationUrl: ANA_SUPPORT,
-    documentationLabel: 'View the museum display reference',
+    sourceLabel: 'Original museum photograph',
+    documentationUrl: ANA_DOCUMENTATION,
+    documentationLabel: 'ANA exhibit documentation',
     imageCredit: '“U.S. Currency Error Notes” by David Shankbone',
     rights: ANA_RIGHTS,
     playable: true,
@@ -51,8 +52,9 @@ export const PLAYABLE_NOTES = [
     regions: [{ x: 9, y: 54, width: 82, height: 43 }],
     outlines: [{ type: 'path', x: 13, y: 57, width: 74, height: 37, d: 'M14 59 L86 58 L87 92 L13 94 Z' }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:US-Fractional_(1st_Issue)-$0.05-Fr.1230.jpg',
+    sourceLabel: 'Photograph and specimen record',
     documentationUrl: 'https://americanhistory.si.edu/collections/object-groups/national-numismatic-collection',
-    documentationLabel: 'About the National Numismatic Collection',
+    documentationLabel: 'National Numismatic Collection background',
     imageCredit: 'National Numismatic Collection, Smithsonian Institution; scanned by Godot13',
     rights: {
       label: 'Public domain; Wikimedia VRT permission confirmed',
@@ -90,13 +92,6 @@ export const PLAYABLE_NOTES = [
       { x: 70, y: 37, width: 20, height: 31 },
     ],
   }),
-  anaRecord({
-    id: 'ana-1-offset-transfer', denomination: '$1', crop: { x: 10, y: 770, width: 735, height: 348 },
-    errorName: 'Offset transfer on the back',
-    answerExplanation: 'A faint, backward copy of the front appears across the back. Wet ink transferred from another sheet where the back should have stayed clean.',
-    regions: [{ x: 5, y: 5, width: 90, height: 90 }],
-    outlines: [{ type: 'path', x: 8, y: 8, width: 84, height: 84, d: 'M10 10 C28 6 69 8 90 15 L91 87 C68 94 31 91 9 84 Z' }],
-  }),
 ];
 
 const COIN_RIGHTS_3 = {
@@ -108,7 +103,7 @@ const COIN_RIGHTS_3 = {
 const COIN_RIGHTS_4 = {
   label: 'Creative Commons Attribution-ShareAlike 4.0',
   url: 'https://creativecommons.org/licenses/by-sa/4.0/',
-  detail: 'The photographer released both specimen views under CC BY-SA 4.0.',
+  detail: 'The photographer released the credited specimen photographs under CC BY-SA 4.0.',
 };
 
 const COIN_RECORDS = [
@@ -125,8 +120,9 @@ const COIN_RECORDS = [
     regions: [{ x: 17, y: 4, width: 68, height: 44 }],
     outlines: [{ type: 'ellipse', x: 20, y: 7, width: 62, height: 37 }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Lincolncentoffcenter.jpg',
+    sourceLabel: 'Photograph and specimen record',
     documentationUrl: 'https://www.pcgs.com/news/the-popular-off-center-strike',
-    documentationLabel: 'Read the PCGS error description',
+    documentationLabel: 'Off-center strike background',
     imageCredit: 'Contactsmc, via Wikimedia Commons',
     rights: COIN_RIGHTS_3,
     playable: true,
@@ -144,8 +140,9 @@ const COIN_RECORDS = [
     regions: [{ x: 30, y: 51, width: 48, height: 48 }],
     outlines: [{ type: 'path', x: 34, y: 55, width: 40, height: 40, d: 'M35 59 C45 53 66 55 74 66 L69 93 L39 92 Z' }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Flipover.jpg',
+    sourceLabel: 'Photograph and specimen record',
     documentationUrl: 'https://www.pcgs.com/news/doublestruck-mint-errors',
-    documentationLabel: 'Read the PCGS error description',
+    documentationLabel: 'Multiple-strike background',
     imageCredit: 'Economicrealist, via Wikimedia Commons',
     rights: COIN_RIGHTS_3,
     playable: true,
@@ -157,7 +154,7 @@ const COIN_RECORDS = [
     denomination: '1 cent',
     noteType: 'Lincoln Memorial cent',
     errorName: 'Broadstrike with an indent',
-    answerExplanation: 'The coin spread past a normal rim and has a large curved dent. It was struck without the ring that normally holds the coin blank in place, while another blank overlapped it.',
+    answerExplanation: 'The coin spread past a normal rim, and a broad curved dent cuts into one side. The photograph records identify a broadstrike with an indent.',
     sides: [
       { label: 'Obverse', image: 'assets/coins/lincoln-cent-broadstrike-obverse.jpg', width: 1924, height: 1899, crop: { x: 0, y: 0, width: 1924, height: 1899 }, maxDisplayWidth: 900 },
       { label: 'Reverse', image: 'assets/coins/lincoln-cent-broadstrike-reverse.jpg', width: 1994, height: 1983, crop: { x: 0, y: 0, width: 1994, height: 1983 }, maxDisplayWidth: 900 },
@@ -170,10 +167,11 @@ const COIN_RECORDS = [
       { type: 'path', x: 4, y: 48, width: 92, height: 47, d: 'M5 65 C18 49 78 47 95 65 L90 91 C69 97 29 96 9 88 Z' },
     ],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Mint_Error_LMC_Obverse.jpg',
+    sourceLabel: 'Obverse photograph and specimen record',
     documentationUrl: 'https://commons.wikimedia.org/wiki/File:Lincoln_Memorial_Cent_Mint_Error_Reverse.jpg',
-    documentationLabel: 'View the matched reverse photograph',
+    documentationLabel: 'Matched reverse photograph and record',
     supportingUrl: 'https://www.ngccoin.com/news/article/9300/mint-error-coin-chronicles-ngc-broadstrikes/',
-    supportingLabel: 'Read the NGC error description',
+    supportingLabel: 'Broadstrike background',
     imageCredit: 'No Fear Of Change, via Wikimedia Commons',
     rights: COIN_RIGHTS_4,
     playable: true,
@@ -191,8 +189,9 @@ const COIN_RECORDS = [
     regions: [{ x: 29, y: 61, width: 42, height: 38 }],
     outlines: [{ type: 'path', x: 34, y: 65, width: 32, height: 29, d: 'M35 67 C44 76 56 76 65 67 L63 91 C54 96 43 95 36 90 Z' }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Clipped_planchet.jpg',
+    sourceLabel: 'Photograph and specimen record',
     documentationUrl: 'https://www.pcgs.com/news/collecting-clipped-planchet-error-coins',
-    documentationLabel: 'Read the PCGS error description',
+    documentationLabel: 'Clipped-planchet background',
     imageCredit: 'Economicrealist, via Wikimedia Commons',
     rights: COIN_RIGHTS_3,
     playable: true,
@@ -210,8 +209,9 @@ const COIN_RECORDS = [
     regions: [{ x: 8, y: 48, width: 84, height: 49 }],
     outlines: [{ type: 'ellipse', x: 12, y: 52, width: 76, height: 42 }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Brockage.jpg',
+    sourceLabel: 'Photograph and specimen record',
     documentationUrl: 'https://www.ngccoin.com/news/article/12631/mint-error-brockage/',
-    documentationLabel: 'Read the NGC error description',
+    documentationLabel: 'Brockage background',
     imageCredit: 'Economicrealist, via Wikimedia Commons',
     rights: COIN_RIGHTS_3,
     playable: true,
@@ -237,8 +237,9 @@ const COIN_RECORDS = [
       { type: 'ellipse', x: 66, y: 70, width: 29, height: 19 },
     ],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:1955_doubled_die_Lincoln_cent.jpg',
+    sourceLabel: 'Photograph and specimen record',
     documentationUrl: 'https://www.pcgs.com/news/seeing-double',
-    documentationLabel: 'Read the PCGS specimen and production description',
+    documentationLabel: 'Doubled-die background',
     imageCredit: 'Lost Dutchman Rare Coins, via Wikimedia Commons',
     rights: {
       label: 'Creative Commons Attribution-ShareAlike 3.0 United States',
@@ -259,8 +260,9 @@ const COIN_RECORDS = [
     answerSide: 0,
     regions: [{ x: 20, y: 7, width: 62, height: 87 }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Die_cap.jpg',
+    sourceLabel: 'Photograph and specimen record',
     documentationUrl: 'https://www.pcgs.com/news/reviewing-error-coins',
-    documentationLabel: 'Read the PCGS error description',
+    documentationLabel: 'Die-cap background',
     imageCredit: 'Economicrealist, via Wikimedia Commons',
     rights: COIN_RIGHTS_4,
     playable: false,

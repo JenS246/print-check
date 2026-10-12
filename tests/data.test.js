@@ -4,8 +4,8 @@ import { COLLECTION_PIECES, PLAYABLE_COINS, PLAYABLE_NOTES, PLAYABLE_PIECES } fr
 import { markerHitsRegions, shuffle } from '../src/rounds.js';
 
 test('the game rotation contains only playable records', () => {
-  assert.equal(PLAYABLE_PIECES.length, 11);
-  assert.equal(PLAYABLE_NOTES.length, 5);
+  assert.equal(PLAYABLE_PIECES.length, 10);
+  assert.equal(PLAYABLE_NOTES.length, 4);
   assert.equal(PLAYABLE_COINS.length, 6);
   assert.equal(new Set(PLAYABLE_PIECES.map((piece) => piece.id)).size, PLAYABLE_PIECES.length);
   assert.ok(PLAYABLE_PIECES.every((piece) => piece.playable));
@@ -29,7 +29,7 @@ test('every record has specimen evidence, a local image, and a documented reuse 
 });
 
 test('the die cap remains documented in Collection but is held from play', () => {
-  assert.equal(COLLECTION_PIECES.length, 12);
+  assert.equal(COLLECTION_PIECES.length, 11);
   const dieCap = COLLECTION_PIECES.find((piece) => piece.id === 'jefferson-nickel-die-cap');
   assert.equal(dieCap?.playable, false);
   assert.equal(PLAYABLE_PIECES.includes(dieCap), false);
@@ -128,12 +128,38 @@ test('the two production drawings use the requested ink, remain inert, and respo
   assert.match(styles, /printing-press\.svg/);
   assert.match(styles, /coin-press\.svg/);
   assert.equal(/ink-roller\.svg|engraving-tools\.svg/.test(styles), false);
-  assert.match(printingPress, /stroke="#64777D"/);
-  assert.match(coinPress, /stroke="#64777D"/);
-  assert.match(styles, /opacity:\s*0\.28/);
+  assert.match(printingPress, /stroke="#80604D"/);
+  assert.match(coinPress, /stroke="#80604D"/);
+  assert.match(styles, /opacity:\s*0\.25/);
   assert.match(styles, /pointer-events:\s*none/);
   assert.match(styles, /@media \(min-width: 1200px\)/);
   assert.match(styles, /@media \(max-width: 1199px\)/);
+});
+
+test('museum crops have honest source wording and crop-aware enlargement', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const museumPieces = PLAYABLE_NOTES.filter((piece) => piece.sides.some((side) => side.croppedFromGroup));
+  assert.equal(museumPieces.length, 3);
+  assert.ok(museumPieces.every((piece) => piece.sourceLabel === 'Original museum photograph'));
+  assert.ok(museumPieces.every((piece) => piece.documentationLabel === 'ANA exhibit documentation'));
+  assert.ok(museumPieces.every((piece) => /crops the original group photograph/i.test(piece.rights.detail)));
+  assert.equal(COLLECTION_PIECES.some((piece) => piece.id === 'ana-1-offset-transfer'), false);
+  const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
+  const collection = await readFile(new URL('../src/collection.js', import.meta.url), 'utf8');
+  assert.match(game, /className = 'full-image-crop'/);
+  assert.match(collection, /usesWholePhotograph/);
+  assert.equal(/View specimen source/.test(`${game}\n${collection}`), false);
+  assert.ok(museumPieces.every((piece) => /Scanner48v2\.pdf$/.test(piece.documentationUrl)));
+});
+
+test('the public palette uses the warm flat colors', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  assert.match(styles, /--paper:\s*#f3dcc8/);
+  assert.match(styles, /--ink:\s*#352c27/);
+  assert.match(styles, /--sage:\s*#e8c58f/);
+  assert.match(styles, /--button:\s*#fff7ed/);
+  assert.equal(/gradient|box-shadow|drop-shadow/i.test(styles), false);
 });
 
 test('paired sides and clean rust SVG answer outlines are available', async () => {

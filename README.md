@@ -7,11 +7,13 @@ The interface is intentionally small and rights-aware. Ten specimens are playabl
 ## How it works
 
 - One coin or note at a time, with Next always available
+- One Collection record at a time in a stable Previous and Next sequence
 - A shuffled queue that shows every playable specimen before reshuffling
 - Direct tap-to-answer with unlimited guesses and Show error
 - Keyboard answers with the 1 through 9 keys, without a permanent region panel
 - An accessible enlarged-image dialog with one Close control
-- Image-relative crops, markers, and answer regions that stay aligned through resizing
+- Image-relative crops, markers, generous answer targets, and separate precise reveal outlines that stay aligned through resizing
+- Dynamic viewport fitting with reserved answer space, safe-area support, and natural scrolling on short or enlarged-text layouts
 - A loading state and an always-available Next fallback for image failures
 - Static HTML, CSS, and JavaScript with no accounts, tracking, backend, or dependencies
 

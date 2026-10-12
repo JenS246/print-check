@@ -1,5 +1,5 @@
-import { PLAYABLE_PIECES } from '../data/notes.js?v=10';
-import { markerHitsRegions, shuffle } from './rounds.js?v=10';
+import { PLAYABLE_PIECES } from '../data/notes.js?v=11';
+import { markerHitsRegions, shuffle } from './rounds.js?v=11';
 
 const $ = (selector) => document.querySelector(selector);
 const imageFrame = $('#image-frame');
@@ -9,6 +9,8 @@ const marker = $('#guess-marker');
 const answerRegions = $('#answer-regions');
 const feedback = $('#feedback');
 const answerPanel = $('#answer-panel');
+const responseSlot = $('#response-slot');
+const playActions = $('.play-actions');
 
 const state = {
   queue: [],
@@ -57,9 +59,11 @@ function prepareImageFrame() {
   const side = currentSide();
   const crop = side.crop ?? { x: 0, y: 0, width: side.width, height: side.height };
   const availableWidth = Math.min($('#game-screen').clientWidth, 1050, side.maxDisplayWidth ?? Infinity);
-  const heightShare = window.matchMedia('(max-width: 760px)').matches ? 0.54 : 0.5;
-  const availableHeight = Math.max(230, Math.min(window.innerHeight * heightShare, 520));
-  const fitWidth = Math.max(220, Math.min(availableWidth, availableHeight * (crop.width / crop.height)));
+  const viewportHeight = window.visualViewport?.height ?? document.documentElement.clientHeight;
+  const frameTop = imageFrame.getBoundingClientRect().top;
+  const reserveBelow = responseSlot.offsetHeight + playActions.offsetHeight + 30;
+  const availableHeight = Math.max(140, Math.min(viewportHeight - frameTop - reserveBelow, 520));
+  const fitWidth = Math.min(availableWidth, availableHeight * (crop.width / crop.height));
   const fitHeight = fitWidth * (crop.height / crop.width);
 
   imageFrame.style.width = `${fitWidth + 3}px`;
@@ -99,6 +103,9 @@ function nextPiece() {
   state.current = state.queue.shift();
   state.lastPieceId = state.current.id;
   resetPieceState();
+  populateAnswerContent(true);
+  responseSlot.style.minHeight = '';
+  responseSlot.style.minHeight = `${responseSlot.offsetHeight}px`;
   loadImage();
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
@@ -123,8 +130,7 @@ function placeAndJudge(x, y) {
   renderMarker();
 
   if (markerHitsRegions(state.marker, state.current.answerSide, state.current.regions)) {
-    setFeedback('You found it', 'correct');
-    showAnswer();
+    showAnswer(true);
   } else {
     setFeedback('Try another spot', 'wrong');
   }
@@ -132,7 +138,7 @@ function placeAndJudge(x, y) {
 
 function drawAnswerRegions() {
   answerRegions.replaceChildren();
-  state.current.regions.forEach((region) => {
+  (state.current.outlines ?? state.current.regions).forEach((region) => {
     const outline = document.createElement('span');
     outline.className = 'answer-region';
     outline.style.left = `${region.x}%`;
@@ -143,12 +149,8 @@ function drawAnswerRegions() {
   });
 }
 
-function showAnswer() {
-  if (state.solved || !state.imageReady) return;
-  state.solved = true;
-  drawAnswerRegions();
-  $('#reveal-button').disabled = true;
-  $('#answer-title').textContent = state.current.errorName;
+function populateAnswerContent(includeSuccess) {
+  $('#answer-title').textContent = includeSuccess ? `You found it: ${state.current.errorName}` : state.current.errorName;
   $('#answer-explanation').textContent = state.current.answerExplanation;
   $('#answer-process').textContent = state.current.errorProcess;
   $('#answer-identification').textContent = identification(state.current);
@@ -159,6 +161,15 @@ function showAnswer() {
   $('#answer-rights').href = state.current.rights.url;
   $('#answer-rights').textContent = state.current.rights.label;
   $('#rights-detail').textContent = state.current.rights.detail;
+}
+
+function showAnswer(found = false) {
+  if (state.solved || !state.imageReady) return;
+  state.solved = true;
+  setFeedback();
+  drawAnswerRegions();
+  $('#reveal-button').disabled = true;
+  populateAnswerContent(found);
   answerPanel.hidden = false;
 }
 
@@ -221,12 +232,14 @@ document.querySelectorAll('[data-close-dialog]').forEach((button) => {
 });
 
 let resizeFrame;
-window.addEventListener('resize', () => {
+function resizeCurrentFrame() {
   cancelAnimationFrame(resizeFrame);
   resizeFrame = requestAnimationFrame(() => {
     if (state.current) prepareImageFrame();
   });
-});
+}
+window.addEventListener('resize', resizeCurrentFrame);
+window.visualViewport?.addEventListener('resize', resizeCurrentFrame);
 
 if (window.location.hash === '#how-to-play') $('#help-dialog').showModal();
 nextPiece();

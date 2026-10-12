@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#faf7ef" />
     <meta name="description" content="The coins and bills currently available in Print Check." />
     <title>Coins and bills | Print Check</title>
-    <link rel="stylesheet" href="styles.css?v=10" />
+    <link rel="stylesheet" href="styles.css?v=11" />
   </head>
   <body>
     <div class="page-shell">
@@ -28,9 +28,14 @@
           <h1>Coins and bills</h1>
         </header>
 
-        <div id="collection-list" class="collection-list"></div>
+        <div id="collection-list" class="collection-list" aria-live="polite"></div>
+        <div class="collection-actions" aria-label="Collection controls">
+          <button id="previous-item" class="secondary-button sketch-button" type="button">Previous</button>
+          <a class="primary-button sketch-button collection-play" href="index.html">Play</a>
+          <button id="next-item" class="secondary-button sketch-button" type="button">Next</button>
+        </div>
       </main>
     </div>
-    <script type="module" src="src/collection.js?v=10"></script>
+    <script type="module" src="src/collection.js?v=11"></script>
   </body>
 </html>

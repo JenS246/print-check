@@ -38,6 +38,7 @@ test('the die cap remains documented in Collection but is held from play', () =>
 test('playable crops and image-relative answer regions are valid', () => {
   for (const piece of PLAYABLE_PIECES) {
     assert.ok(piece.regions.length > 0, piece.id);
+    assert.ok(piece.outlines.length > 0, piece.id);
     const side = piece.sides[piece.answerSide];
     const crop = side.crop;
     assert.ok(crop.width > 0 && crop.height > 0, piece.id);
@@ -54,6 +55,15 @@ test('playable crops and image-relative answer regions are valid', () => {
       assert.ok(region.x + region.width <= 100, piece.id);
       assert.ok(region.y + region.height <= 100, piece.id);
     }
+    for (const outline of piece.outlines) {
+      assert.ok(outline.x >= 0 && outline.y >= 0, piece.id);
+      assert.ok(outline.width > 0 && outline.height > 0, piece.id);
+      assert.ok(outline.x + outline.width <= 100, piece.id);
+      assert.ok(outline.y + outline.height <= 100, piece.id);
+    }
+    const toleranceArea = piece.regions.reduce((sum, region) => sum + region.width * region.height, 0);
+    const outlineArea = piece.outlines.reduce((sum, region) => sum + region.width * region.height, 0);
+    assert.ok(outlineArea < toleranceArea, piece.id);
   }
 });
 
@@ -84,7 +94,23 @@ test('collection copy contains only documented coins and bills', async () => {
   const { readFile } = await import('node:fs/promises');
   const visible = `${await readFile(new URL('../notes.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../src/collection.js', import.meta.url), 'utf8')}`;
   assert.match(visible, /Coins and bills/);
+  assert.match(visible, />Previous</);
+  assert.match(visible, />Next</);
+  assert.match(visible, />Play</);
+  assert.match(visible, /replaceChildren\(pieceArticle\(piece\)\)/);
+  assert.match(visible, /<details class="source-details collection-credit">/);
   assert.equal(/Reference records|Candidates awaiting material|research lead|permission gap|maintenance/i.test(visible), false);
+});
+
+test('the game reserves response space and uses measured viewport height', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
+  const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  assert.match(html, /id="response-slot"/);
+  assert.match(game, /window\.visualViewport\?\.height/);
+  assert.match(styles, /min-height:\s*100dvh/);
+  assert.equal(/overflow:\s*hidden[^;]*;\s*\/\* page/i.test(styles), false);
 });
 
 test('the two press drawings are faint, inert, and hidden when margins are narrow', async () => {

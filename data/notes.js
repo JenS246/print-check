@@ -8,7 +8,7 @@ const ANA_RIGHTS = {
   detail: 'David Shankbone published the museum photograph under a Creative Commons attribution license.',
 };
 
-function anaRecord({ id, denomination, crop, errorName, answerExplanation, regions }) {
+function anaRecord({ id, denomination, crop, errorName, answerExplanation, regions, outlines }) {
   return {
     id,
     pieceKind: 'note',
@@ -20,6 +20,7 @@ function anaRecord({ id, denomination, crop, errorName, answerExplanation, regio
     sides: [{ label: 'Exhibit photograph', image: ANA_IMAGE, width: 1600, height: 1118, crop }],
     answerSide: 0,
     regions,
+    outlines,
     sourceUrl: FLICKR_SOURCE,
     documentationUrl: ANA_SUPPORT,
     documentationLabel: 'View the museum display reference',
@@ -48,6 +49,7 @@ export const PLAYABLE_NOTES = [
     }],
     answerSide: 0,
     regions: [{ x: 9, y: 54, width: 82, height: 43 }],
+    outlines: [{ x: 13, y: 57, width: 74, height: 37 }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:US-Fractional_(1st_Issue)-$0.05-Fr.1230.jpg',
     documentationUrl: 'https://americanhistory.si.edu/collections/object-groups/national-numismatic-collection',
     documentationLabel: 'About the National Numismatic Collection',
@@ -64,12 +66,14 @@ export const PLAYABLE_NOTES = [
     errorName: 'Shifted seal and serial numbers',
     answerExplanation: 'The green seal and serial numbers sit too far to the right. This overprint normally aligns with fixed positions in the face design.',
     regions: [{ x: 58, y: 18, width: 34, height: 24 }, { x: 63, y: 38, width: 25, height: 32 }],
+    outlines: [{ x: 61, y: 20, width: 29, height: 18 }, { x: 66, y: 40, width: 20, height: 27 }],
   }),
   anaRecord({
     id: 'ana-5-foldover', denomination: '$5', crop: { x: 35, y: 385, width: 705, height: 320 },
     errorName: 'Foldover printing error',
     answerExplanation: 'A diagonal fold left a large blank area across the reverse. The sheet was folded when this part of the design was printed.',
     regions: [{ x: 48, y: 2, width: 50, height: 94 }],
+    outlines: [{ x: 53, y: 4, width: 43, height: 90 }],
   }),
   anaRecord({
     id: 'ana-10-shifted-overprint', denomination: '$10', crop: { x: 860, y: 380, width: 710, height: 330 },
@@ -80,12 +84,18 @@ export const PLAYABLE_NOTES = [
       { x: 18, y: 52, width: 34, height: 24 },
       { x: 67, y: 34, width: 26, height: 38 },
     ],
+    outlines: [
+      { x: 62, y: 20, width: 30, height: 18 },
+      { x: 21, y: 54, width: 28, height: 18 },
+      { x: 70, y: 37, width: 20, height: 31 },
+    ],
   }),
   anaRecord({
     id: 'ana-1-offset-transfer', denomination: '$1', crop: { x: 10, y: 770, width: 735, height: 348 },
     errorName: 'Offset transfer on the back',
     answerExplanation: 'A reversed impression of the face appears across the back. Ink transferred from another sheet instead of leaving a clean back design.',
     regions: [{ x: 5, y: 5, width: 90, height: 90 }],
+    outlines: [{ x: 8, y: 8, width: 84, height: 84 }],
   }),
 ];
 
@@ -113,6 +123,7 @@ const COIN_RECORDS = [
     sides: [{ label: 'Obverse', image: 'assets/coins/lincoln-cent-off-center.jpg', width: 800, height: 600, crop: { x: 0, y: 0, width: 800, height: 600 }, maxDisplayWidth: 800 }],
     answerSide: 0,
     regions: [{ x: 17, y: 4, width: 68, height: 44 }],
+    outlines: [{ x: 20, y: 7, width: 62, height: 37 }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Lincolncentoffcenter.jpg',
     documentationUrl: 'https://www.pcgs.com/news/the-popular-off-center-strike',
     documentationLabel: 'Read the PCGS error description',
@@ -131,6 +142,7 @@ const COIN_RECORDS = [
     sides: [{ label: 'Reverse', image: 'assets/coins/lincoln-cent-flipover-multiple-strike.jpg', width: 498, height: 289, crop: { x: 0, y: 0, width: 498, height: 289 }, maxDisplayWidth: 498 }],
     answerSide: 0,
     regions: [{ x: 30, y: 51, width: 48, height: 48 }],
+    outlines: [{ x: 34, y: 55, width: 40, height: 40 }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Flipover.jpg',
     documentationUrl: 'https://www.pcgs.com/news/doublestruck-mint-errors',
     documentationLabel: 'Read the PCGS error description',
@@ -145,13 +157,14 @@ const COIN_RECORDS = [
     denomination: '1 cent',
     noteType: 'Lincoln Memorial cent',
     errorName: 'Broadstrike with an indent',
-    answerExplanation: 'The coin spread beyond a normal round rim, with a large curved indent across the face. A broadstrike happens without the collar containing the metal, while another planchet caused the indent.',
+    answerExplanation: 'The coin spread beyond a normal rim and has a large curved indent. It was struck without a containing collar while another planchet overlapped it.',
     sides: [
       { label: 'Obverse', image: 'assets/coins/lincoln-cent-broadstrike-obverse.jpg', width: 1924, height: 1899, crop: { x: 0, y: 0, width: 1924, height: 1899 }, maxDisplayWidth: 900 },
       { label: 'Reverse', image: 'assets/coins/lincoln-cent-broadstrike-reverse.jpg', width: 1994, height: 1983, crop: { x: 0, y: 0, width: 1994, height: 1983 }, maxDisplayWidth: 900 },
     ],
     answerSide: 0,
     regions: [{ x: 6, y: 0, width: 88, height: 44 }, { x: 0, y: 35, width: 100, height: 65 }],
+    outlines: [{ x: 12, y: 1, width: 76, height: 35 }, { x: 4, y: 48, width: 92, height: 47 }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Mint_Error_LMC_Obverse.jpg',
     documentationUrl: 'https://commons.wikimedia.org/wiki/File:Lincoln_Memorial_Cent_Mint_Error_Reverse.jpg',
     documentationLabel: 'View the matched reverse photograph',
@@ -172,6 +185,7 @@ const COIN_RECORDS = [
     sides: [{ label: 'Obverse', image: 'assets/coins/clipped-planchet.jpg', width: 507, height: 280, crop: { x: 0, y: 0, width: 507, height: 280 }, maxDisplayWidth: 507 }],
     answerSide: 0,
     regions: [{ x: 29, y: 61, width: 42, height: 38 }],
+    outlines: [{ x: 34, y: 65, width: 32, height: 29 }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Clipped_planchet.jpg',
     documentationUrl: 'https://www.pcgs.com/news/collecting-clipped-planchet-error-coins',
     documentationLabel: 'Read the PCGS error description',
@@ -190,6 +204,7 @@ const COIN_RECORDS = [
     sides: [{ label: 'Obverse', image: 'assets/coins/brockage.jpg', width: 295, height: 305, crop: { x: 0, y: 0, width: 295, height: 305 }, maxDisplayWidth: 295 }],
     answerSide: 0,
     regions: [{ x: 8, y: 48, width: 84, height: 49 }],
+    outlines: [{ x: 12, y: 52, width: 76, height: 42 }],
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:Brockage.jpg',
     documentationUrl: 'https://www.ngccoin.com/news/article/12631/mint-error-brockage/',
     documentationLabel: 'Read the NGC error description',

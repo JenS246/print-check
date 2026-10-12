@@ -8,7 +8,7 @@
     <meta property="og:title" content="Print Check" />
     <meta property="og:description" content="Spot the error in real U.S. coins and paper currency." />
     <title>Print Check - Spot the error</title>
-    <link rel="stylesheet" href="styles.css?v=10" />
+    <link rel="stylesheet" href="styles.css?v=11" />
   </head>
   <body>
     <div class="page-shell">
@@ -39,19 +39,21 @@
             <div id="answer-regions" aria-hidden="true"></div>
           </div>
         </div>
-        <p id="feedback" class="feedback" role="status" aria-live="polite" hidden></p>
+        <div id="response-slot" class="response-slot">
+          <p id="feedback" class="feedback" role="status" aria-live="polite" hidden></p>
 
-        <section id="answer-panel" class="answer-panel" hidden aria-labelledby="answer-title">
-          <h2 id="answer-title"></h2>
-          <p id="answer-explanation"></p>
-          <details class="source-details">
-            <summary>Source and image credit</summary>
-            <p id="answer-identification"></p>
-            <p><span id="answer-process"></span>. Image: <span id="answer-credit"></span>.</p>
-            <p><a id="source-link" href="#" target="_blank" rel="noreferrer">View specimen source</a> · <a id="documentation-link" href="#" target="_blank" rel="noreferrer">Read documentation</a> · <a id="answer-rights" href="#" target="_blank" rel="noreferrer"></a></p>
-            <p id="rights-detail"></p>
-          </details>
-        </section>
+          <section id="answer-panel" class="answer-panel" hidden aria-live="polite" aria-labelledby="answer-title">
+            <h2 id="answer-title"></h2>
+            <p id="answer-explanation"></p>
+            <details class="source-details">
+              <summary>Source and image credit</summary>
+              <p id="answer-identification"></p>
+              <p><span id="answer-process"></span>. Image: <span id="answer-credit"></span>.</p>
+              <p><a id="source-link" href="#" target="_blank" rel="noreferrer">View specimen source</a> · <a id="documentation-link" href="#" target="_blank" rel="noreferrer">Read documentation</a> · <a id="answer-rights" href="#" target="_blank" rel="noreferrer"></a></p>
+              <p id="rights-detail"></p>
+            </details>
+          </section>
+        </div>
 
         <div class="play-actions">
           <a id="enlarge-link" href="#full-image-dialog">Enlarge image</a>
@@ -83,6 +85,6 @@
       <div id="full-image-gallery" class="full-image-gallery"></div>
     </dialog>
 
-    <script type="module" src="src/game.js?v=10"></script>
+    <script type="module" src="src/game.js?v=11"></script>
   </body>
 </html>

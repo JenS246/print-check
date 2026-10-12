@@ -1,6 +1,9 @@
-import { COLLECTION_PIECES } from '../data/notes.js?v=10';
+import { COLLECTION_PIECES } from '../data/notes.js?v=11';
 
 const list = document.querySelector('#collection-list');
+const previousButton = document.querySelector('#previous-item');
+const nextButton = document.querySelector('#next-item');
+let currentIndex = Math.max(0, COLLECTION_PIECES.findIndex((piece) => `#${piece.id}` === window.location.hash));
 
 function identification(piece) {
   const name = piece.pieceKind === 'coin' ? piece.noteType : `${piece.denomination} ${piece.noteType}`;
@@ -21,7 +24,6 @@ function imageFigure(piece, side) {
   const image = document.createElement('img');
   image.src = side.image;
   image.alt = `${side.label} view of ${identification(piece)} showing ${piece.errorName.toLowerCase()}.`;
-  image.loading = 'lazy';
   image.style.width = `${(side.width / crop.width) * 100}%`;
   image.style.left = `${-(crop.x / crop.width) * 100}%`;
   image.style.top = `${-(crop.y / crop.height) * 100}%`;
@@ -52,9 +54,34 @@ function pieceArticle(piece) {
     <p class="collection-meta">${identification(piece)}</p>
     <h2>${piece.errorName}</h2>
     <p>${piece.answerExplanation}</p>
-    <p class="collection-credit">Image: ${piece.imageCredit}. <a href="${piece.sourceUrl}" target="_blank" rel="noreferrer">View source</a>. <a href="${piece.rights.url}" target="_blank" rel="noreferrer">${piece.rights.label}</a>.</p>`;
+    <details class="source-details collection-credit">
+      <summary>Source and image credit</summary>
+      <p>Image: ${piece.imageCredit}.</p>
+      <p><a href="${piece.sourceUrl}" target="_blank" rel="noreferrer">View specimen source</a> · <a href="${piece.documentationUrl}" target="_blank" rel="noreferrer">${piece.documentationLabel ?? 'Read documentation'}</a> · <a href="${piece.rights.url}" target="_blank" rel="noreferrer">${piece.rights.label}</a></p>
+      <p>${piece.rights.detail}</p>
+    </details>`;
   article.append(imageColumn, copy);
   return article;
 }
 
-list.append(...COLLECTION_PIECES.map(pieceArticle));
+function renderCurrentItem() {
+  const piece = COLLECTION_PIECES[currentIndex];
+  list.replaceChildren(pieceArticle(piece));
+  previousButton.disabled = currentIndex === 0;
+  nextButton.disabled = currentIndex === COLLECTION_PIECES.length - 1;
+  history.replaceState(null, '', `#${piece.id}`);
+}
+
+previousButton.addEventListener('click', () => {
+  if (currentIndex === 0) return;
+  currentIndex -= 1;
+  renderCurrentItem();
+});
+
+nextButton.addEventListener('click', () => {
+  if (currentIndex === COLLECTION_PIECES.length - 1) return;
+  currentIndex += 1;
+  renderCurrentItem();
+});
+
+renderCurrentItem();

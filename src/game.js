@@ -378,7 +378,33 @@ $('#next-button').addEventListener('click', () => {
   nextPiece();
 });
 $('#enlarge-link').addEventListener('click', openFullImage);
-$('#help-button').addEventListener('click', () => $('#help-dialog').showModal());
+
+const helpButton = $('#help-button');
+const helpDialog = $('#help-dialog');
+const keyboardControls = helpDialog.querySelector('.keyboard-controls');
+
+function openHelp() {
+  keyboardControls.open = false;
+  if (!helpDialog.open) helpDialog.showModal();
+}
+
+helpButton.addEventListener('click', openHelp);
+helpDialog.addEventListener('close', () => helpButton.focus({ preventScroll: true }));
+helpDialog.addEventListener('keydown', (event) => {
+  if (event.key !== 'Tab') return;
+  const focusable = [...helpDialog.querySelectorAll('button:not([disabled]), a[href], summary, [tabindex]:not([tabindex="-1"])')]
+    .filter((element) => element.getClientRects().length > 0);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable.at(-1);
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+});
 
 document.querySelectorAll('[data-close-dialog]').forEach((button) => {
   button.addEventListener('click', () => document.getElementById(button.dataset.closeDialog).close());
@@ -395,9 +421,7 @@ window.addEventListener('resize', resizeCurrentFrame);
 window.visualViewport?.addEventListener('resize', resizeCurrentFrame);
 
 function openHelpFromLocation() {
-  if (window.location.hash === '#how-to-play' && !$('#help-dialog').open) {
-    $('#help-dialog').showModal();
-  }
+  if (window.location.hash === '#how-to-play') openHelp();
 }
 
 window.addEventListener('hashchange', openHelpFromLocation);

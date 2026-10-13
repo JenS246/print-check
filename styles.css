@@ -386,6 +386,63 @@ dialog {
   line-height: 1.5;
 }
 dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
+.help-dialog {
+  width: min(650px, calc(100% - 32px));
+  padding: 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 7px 5px 8px 6px;
+  background-color: var(--paper);
+  background-image: url('assets/art/paper-grain.svg');
+  background-size: 360px 360px;
+  box-shadow: 0 10px 24px rgb(82 55 25 / 0.24);
+}
+.help-dialog-inner {
+  position: relative;
+  min-width: 0;
+  padding: 30px 32px 22px;
+}
+.help-dialog .dialog-head {
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgb(48 40 32 / 0.42);
+}
+.help-dialog .dialog-head h2 {
+  font-size: 44px;
+  line-height: 1;
+}
+.help-instructions {
+  display: grid;
+  gap: 12px;
+  max-width: 46ch;
+}
+.help-instructions p {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.45;
+}
+.help-dialog .keyboard-controls {
+  margin-top: 18px;
+  padding-top: 8px;
+  border-top: 1px solid rgb(48 40 32 / 0.28);
+}
+.help-dialog .keyboard-controls p {
+  max-width: 48ch;
+  margin: 4px 0 0;
+  font-size: 20px;
+  line-height: 1.45;
+}
+.help-dialog-art {
+  position: relative;
+  width: 154px;
+  height: 76px;
+  margin: 12px 0 -5px auto;
+  pointer-events: none;
+  user-select: none;
+}
+.help-dialog-art img { position: absolute; height: auto; opacity: 0.56; }
+.help-art-bill { top: 1px; right: -5px; width: 112px; transform: rotate(5deg); }
+.help-art-coins { bottom: 0; left: 0; width: 73px; transform: rotate(-8deg); }
 .image-dialog { width: min(1050px, calc(100% - 32px)); }
 .dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding-bottom: 10px; }
 .dialog-head h2 { margin: 0; font-size: 34px; line-height: 1.1; }
@@ -686,6 +743,21 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   #enlarge-link { font-size: 22px; }
   .action-row > button { font-size: 22px; }
   dialog { font-size: 22px; }
+  .help-dialog {
+    width: min(650px, calc(100% - 20px));
+    max-height: calc(100dvh - 20px);
+  }
+  .help-dialog-inner { padding: 22px 18px 16px; }
+  .help-dialog .dialog-head { align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+  .help-dialog .dialog-head h2 { font-size: 36px; }
+  .help-dialog .close-button { min-height: 48px; padding-inline: 15px; font-size: 22px; }
+  .help-instructions { gap: 10px; }
+  .help-instructions p { font-size: 20px; line-height: 1.4; }
+  .help-dialog .keyboard-controls { margin-top: 15px; }
+  .help-dialog .keyboard-controls p { font-size: 18px; }
+  .help-dialog-art { width: 132px; height: 65px; margin-top: 8px; }
+  .help-art-bill { width: 96px; }
+  .help-art-coins { width: 62px; }
   .collection-main { padding-top: 18px; }
   .collection-intro h1 { font-size: 42px; }
   .collection-gallery { padding-top: 4px; }

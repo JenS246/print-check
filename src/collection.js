@@ -235,7 +235,7 @@ nextButton.addEventListener('click', () => {
 });
 allItemsLink.addEventListener('click', (event) => {
   event.preventDefault();
-  history.pushState(null, '', window.location.pathname);
+  history.pushState(null, '', `${window.location.pathname}${window.location.search}`);
   renderFromHash();
   window.scrollTo({ top: 0, behavior: 'instant' });
 });

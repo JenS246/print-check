@@ -94,6 +94,40 @@ test('play screen is immediate and contains no fixed-session or scoring language
   assert.match(visible, /Enlarge image/);
   assert.match(visible, /You found it!/);
   assert.match(visible, /answer-title/);
+  assert.match(visible, /href="notes\.html\?rev=25">Collection/);
+});
+
+test('the How to play dialog has exact guidance, real shortcuts, and modal focus safeguards', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
+  const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  const expected = [
+    'Spot the error in real US coins and bills.',
+    'Tap the part of the coin or bill that looks wrong.',
+    'Need help? Choose Show error.',
+    'Choose Next to try another.',
+    'Every photograph shows real US currency with a documented production error.',
+  ];
+  let position = -1;
+  for (const sentence of expected) {
+    const nextPosition = html.indexOf(sentence);
+    assert.ok(nextPosition > position, sentence);
+    position = nextPosition;
+  }
+  assert.match(html, /<details class="keyboard-controls">/);
+  assert.equal(/<details class="keyboard-controls"\s+open/.test(html), false);
+  assert.match(html, /press 1 through 9/);
+  assert.match(html, /Press Escape to close this panel/);
+  assert.match(html, /class="help-dialog-art" aria-hidden="true"/);
+  assert.match(html, /assets\/art\/folded-bill\.svg/);
+  assert.match(html, /assets\/art\/loose-coins\.svg/);
+  assert.match(game, /keyboardControls\.open = false/);
+  assert.match(game, /helpDialog\.addEventListener\('close', \(\) => helpButton\.focus/);
+  assert.match(game, /event\.key !== 'Tab'/);
+  assert.match(styles, /\.help-dialog\s*\{[^}]*background-color:\s*var\(--paper\)[^}]*box-shadow:/s);
+  assert.match(styles, /\.help-instructions p\s*\{[^}]*font-size:\s*22px/s);
+  assert.match(styles, /@media \(max-width: 760px\)[\s\S]*\.help-instructions p\s*\{[^}]*font-size:\s*20px/s);
 });
 
 test('collection copy contains only documented coins and bills', async () => {
@@ -112,7 +146,9 @@ test('collection copy contains only documented coins and bills', async () => {
   assert.match(visible, /<details class="source-details collection-credit">/);
   assert.match(visible, /Loading collection\.\.\./);
   assert.match(visible, />Retry</);
-  assert.match(visible, /import\('\.\/src\/collection\.js\?v=24'\)/);
+  assert.match(visible, /import\('\.\/src\/collection\.js\?v=25'\)/);
+  assert.match(visible, /href="notes\.html\?rev=25"/);
+  assert.match(visible, /index\.html\?rev=25#how-to-play/);
   assert.equal(/Reference records|Candidates awaiting material|research lead|permission gap|maintenance/i.test(visible), false);
 });
 

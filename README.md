@@ -7,15 +7,15 @@ The interface is intentionally small and rights-aware. Ten specimens are playabl
 ## How it works
 
 - One coin or note at a time, with Next always available
-- A three-, two-, or one-column Collection gallery with stable specimen fragments
-- Larger Collection details with Previous, Next, and All coins and bills navigation
+- An album-style Collection with wide paper-money mounts, square coin mounts, and separate Paper money and Coins sections
+- Larger Collection details with Previous, Next, All coins and bills navigation, and source-photo close-ups where they clarify the error
 - A shuffled queue that shows every playable specimen before reshuffling
 - Direct tap-to-answer with unlimited guesses and Show error
 - Keyboard answers with the 1 through 9 keys, without a permanent region panel
 - An accessible enlarged-image dialog with one Close control
 - Image-relative crops, markers, generous answer targets, and separate precise reveal outlines that stay aligned through resizing
 - Separate face and reverse crops from the original postage-currency scan, shown side by side on wide screens and stacked on narrow screens
-- A source-photo close-up of the doubled date on the 1955 doubled-die cent after the answer is shown
+- A source-photo close-up of the doubled date on the 1955 doubled-die cent in the answer reveal and Collection detail
 - A stable image stage, tokenized image loading, and preloading of the next specimen
 - A visible Collection loading state with a retry path if the data module fails
 - Dynamic viewport fitting with reserved answer space, safe-area support, and natural scrolling on short or enlarged-text layouts

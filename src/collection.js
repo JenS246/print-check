@@ -55,14 +55,15 @@ function imageFigure(piece, side, mode) {
       viewport.setAttribute('aria-label', `Open the full photograph for ${identification(piece)}`);
     }
   } else {
-    const widthLimit = Math.min(crop.width, side.maxDisplayWidth ?? crop.width, 234 * ratio);
-    viewport.style.width = `${widthLimit}px`;
+    viewport.style.width = '100%';
+    viewport.style.maxWidth = `${Math.min(crop.width, side.maxDisplayWidth ?? crop.width)}px`;
   }
 
   const image = document.createElement('img');
   image.src = side.image;
   image.alt = `${side.label} view of ${identification(piece)} showing ${piece.errorName.toLowerCase()}.`;
   image.loading = mode === 'gallery' ? 'lazy' : 'eager';
+  image.decoding = 'async';
   image.style.width = `${(side.width / crop.width) * 100}%`;
   image.style.left = `${-(crop.x / crop.width) * 100}%`;
   image.style.top = `${-(crop.y / crop.height) * 100}%`;
@@ -82,20 +83,68 @@ function imageGroup(piece, mode) {
 
 function galleryEntry(piece) {
   const link = document.createElement('a');
-  link.className = 'gallery-entry';
+  link.className = `gallery-entry gallery-entry-${piece.pieceKind}`;
   link.href = `#${piece.id}`;
 
   const photo = document.createElement('div');
-  photo.className = 'gallery-photo';
+  photo.className = `gallery-photo specimen-mount specimen-mount-${piece.pieceKind}`;
   photo.append(imageGroup(piece, 'gallery'));
 
   const copy = document.createElement('div');
   copy.className = 'gallery-copy';
   copy.innerHTML = `
-    <p>${identification(piece)}</p>
-    <h2>${piece.errorName}</h2>`;
+    <h3>${piece.errorName}</h3>
+    <p>${identification(piece)}</p>`;
   link.append(photo, copy);
   return link;
+}
+
+function gallerySection(title, pieces, kind) {
+  const section = document.createElement('section');
+  section.className = `album-section album-section-${kind}`;
+
+  const heading = document.createElement('h2');
+  heading.className = 'album-section-title';
+  heading.textContent = title;
+
+  const grid = document.createElement('div');
+  grid.className = `album-grid album-grid-${kind}`;
+  grid.append(...pieces.map(galleryEntry));
+  section.append(heading, grid);
+  return section;
+}
+
+function detailCloseup(piece) {
+  if (!piece.revealCrop) return null;
+  const crop = piece.revealCrop;
+  const side = piece.sides[crop.side];
+  const sourceCrop = cropFor(side);
+  const source = {
+    x: sourceCrop.x + (crop.x / 100) * sourceCrop.width,
+    y: sourceCrop.y + (crop.y / 100) * sourceCrop.height,
+    width: (crop.width / 100) * sourceCrop.width,
+    height: (crop.height / 100) * sourceCrop.height,
+  };
+
+  const figure = document.createElement('figure');
+  figure.className = 'collection-closeup';
+  const label = document.createElement('figcaption');
+  label.textContent = crop.label;
+
+  const viewport = document.createElement('span');
+  viewport.className = 'collection-closeup-crop';
+  viewport.style.aspectRatio = `${source.width} / ${source.height}`;
+
+  const image = document.createElement('img');
+  image.src = side.image;
+  image.alt = `${crop.label} from the original photograph of ${identification(piece)}.`;
+  image.loading = 'eager';
+  image.style.width = `${(side.width / source.width) * 100}%`;
+  image.style.left = `${-(source.x / source.width) * 100}%`;
+  image.style.top = `${-(source.y / source.height) * 100}%`;
+  viewport.append(image);
+  figure.append(label, viewport);
+  return figure;
 }
 
 function pieceArticle(piece) {
@@ -105,7 +154,12 @@ function pieceArticle(piece) {
 
   const imageColumn = document.createElement('div');
   imageColumn.className = 'collection-image';
-  imageColumn.append(imageGroup(piece, 'detail'));
+  const mount = document.createElement('div');
+  mount.className = `detail-mount detail-mount-${piece.pieceKind}`;
+  mount.append(imageGroup(piece, 'detail'));
+  imageColumn.append(mount);
+  const closeup = detailCloseup(piece);
+  if (closeup) imageColumn.append(closeup);
 
   const copy = document.createElement('div');
   copy.className = 'collection-copy';
@@ -133,7 +187,12 @@ function pieceArticle(piece) {
 }
 
 function renderGallery() {
-  gallery.replaceChildren(...COLLECTION_PIECES.map(galleryEntry));
+  const notes = COLLECTION_PIECES.filter((piece) => piece.pieceKind === 'note');
+  const coins = COLLECTION_PIECES.filter((piece) => piece.pieceKind === 'coin');
+  gallery.replaceChildren(
+    gallerySection('Paper money', notes, 'notes'),
+    gallerySection('Coins', coins, 'coins'),
+  );
 }
 
 function indexFromHash() {

@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#d6ab45" />
     <meta name="description" content="The coins and bills currently available in Print Check." />
     <title>Coins and bills | Print Check</title>
-    <link rel="stylesheet" href="styles.css?v=22" />
+    <link rel="stylesheet" href="styles.css?v=23" />
   </head>
   <body class="collection-page">
     <div class="page-decorations" aria-hidden="true">
@@ -63,7 +63,7 @@
 
       retry.addEventListener('click', () => window.location.reload());
 
-      import('./src/collection.js?v=22')
+      import('./src/collection.js?v=23')
         .then(() => { status.hidden = true; })
         .catch(() => {
           gallery.hidden = true;

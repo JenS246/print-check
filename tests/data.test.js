@@ -104,14 +104,31 @@ test('collection copy contains only documented coins and bills', async () => {
   assert.match(visible, />Next</);
   assert.match(visible, />Play</);
   assert.match(visible, /All coins and bills/);
-  assert.match(visible, /gallery\.replaceChildren\(\.\.\.COLLECTION_PIECES\.map\(galleryEntry\)\)/);
+  assert.match(visible, /gallerySection\('Paper money', notes, 'notes'\)/);
+  assert.match(visible, /gallerySection\('Coins', coins, 'coins'\)/);
+  assert.match(visible, /<h3>\$\{piece\.errorName\}<\/h3>[\s\S]*<p>\$\{identification\(piece\)\}<\/p>/);
   assert.match(visible, /link\.href = `#\$\{piece\.id\}`/);
   assert.match(visible, /replaceChildren\(pieceArticle\(piece\)\)/);
   assert.match(visible, /<details class="source-details collection-credit">/);
   assert.match(visible, /Loading collection\.\.\./);
   assert.match(visible, />Retry</);
-  assert.match(visible, /import\('\.\/src\/collection\.js\?v=22'\)/);
+  assert.match(visible, /import\('\.\/src\/collection\.js\?v=23'\)/);
   assert.equal(/Reference records|Candidates awaiting material|research lead|permission gap|maintenance/i.test(visible), false);
+});
+
+test('collection album mounts preserve every entry and show the documented close-up', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const collection = await readFile(new URL('../src/collection.js', import.meta.url), 'utf8');
+  const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+  assert.equal(COLLECTION_PIECES.filter((piece) => piece.pieceKind === 'note').length, 4);
+  assert.equal(COLLECTION_PIECES.filter((piece) => piece.pieceKind === 'coin').length, 7);
+  assert.match(collection, /specimen-mount-\$\{piece\.pieceKind\}/);
+  assert.match(styles, /\.specimen-mount-note\s*\{[^}]*aspect-ratio:\s*1\.62 \/ 1/s);
+  assert.match(styles, /\.specimen-mount-coin\s*\{[^}]*aspect-ratio:\s*1 \/ 1/s);
+  assert.match(collection, /function detailCloseup/);
+  assert.match(collection, /sourceCrop\.x \+ \(crop\.x \/ 100\)/);
+  assert.match(styles, /\.collection-closeup-crop/);
+  assert.equal(/createElement\(['"]canvas|sharpen|filter\s*=/.test(collection), false);
 });
 
 test('the game reserves response space and uses measured viewport height', async () => {

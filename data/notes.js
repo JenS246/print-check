@@ -27,7 +27,7 @@ function anaRecord({ id, denomination, crop, errorName, answerExplanation, regio
     documentationLabel: 'ANA exhibit documentation',
     imageCredit: '“U.S. Currency Error Notes” by David Shankbone',
     rights: ANA_RIGHTS,
-    playable: false,
+    playable: true,
   };
 }
 

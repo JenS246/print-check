@@ -4,8 +4,8 @@ import { COLLECTION_PIECES, PLAYABLE_COINS, PLAYABLE_NOTES, PLAYABLE_PIECES } fr
 import { markerHitsRegions, shuffle } from '../src/rounds.js';
 
 test('the game rotation contains only playable records', () => {
-  assert.equal(PLAYABLE_PIECES.length, 7);
-  assert.equal(PLAYABLE_NOTES.length, 1);
+  assert.equal(PLAYABLE_PIECES.length, 10);
+  assert.equal(PLAYABLE_NOTES.length, 4);
   assert.equal(PLAYABLE_COINS.length, 6);
   assert.equal(new Set(PLAYABLE_PIECES.map((piece) => piece.id)).size, PLAYABLE_PIECES.length);
   assert.ok(PLAYABLE_PIECES.every((piece) => piece.playable));
@@ -28,15 +28,15 @@ test('every record has specimen evidence, a local image, and a documented reuse 
   }
 });
 
-test('soft museum crops and the die cap remain documented but are held from play', () => {
+test('museum crops are playable while the die cap remains held from play', () => {
   assert.equal(COLLECTION_PIECES.length, 11);
   const dieCap = COLLECTION_PIECES.find((piece) => piece.id === 'jefferson-nickel-die-cap');
   assert.equal(dieCap?.playable, false);
   assert.equal(PLAYABLE_PIECES.includes(dieCap), false);
   const museumPieces = COLLECTION_PIECES.filter((piece) => piece.sides.some((side) => side.croppedFromGroup));
   assert.equal(museumPieces.length, 3);
-  assert.ok(museumPieces.every((piece) => piece.playable === false));
-  assert.ok(museumPieces.every((piece) => !PLAYABLE_PIECES.includes(piece)));
+  assert.ok(museumPieces.every((piece) => piece.playable === true));
+  assert.ok(museumPieces.every((piece) => PLAYABLE_PIECES.includes(piece)));
 });
 
 test('playable crops and image-relative answer regions are valid', () => {
@@ -170,14 +170,14 @@ test('the title uses two ink colors and a reduced-motion-safe Next flip', async 
   assert.match(scripts, /classList\.add\('is-flipping'\)/);
 });
 
-test('museum crops have honest archived source wording and remain in Collection', async () => {
+test('museum crops have honest archived source wording and remain playable', async () => {
   const { readFile } = await import('node:fs/promises');
   const museumPieces = COLLECTION_PIECES.filter((piece) => piece.sides.some((side) => side.croppedFromGroup));
   assert.equal(museumPieces.length, 3);
   assert.ok(museumPieces.every((piece) => piece.sourceLabel === 'Archived original museum photograph'));
   assert.ok(museumPieces.every((piece) => piece.documentationLabel === 'ANA exhibit documentation'));
   assert.ok(museumPieces.every((piece) => /crops the original group photograph/i.test(piece.rights.detail)));
-  assert.ok(museumPieces.every((piece) => piece.playable === false));
+  assert.ok(museumPieces.every((piece) => piece.playable === true));
   assert.equal(COLLECTION_PIECES.some((piece) => piece.id === 'ana-1-offset-transfer'), false);
   const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
   const collection = await readFile(new URL('../src/collection.js', import.meta.url), 'utf8');

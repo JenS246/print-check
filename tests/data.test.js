@@ -108,6 +108,9 @@ test('collection copy contains only documented coins and bills', async () => {
   assert.match(visible, /link\.href = `#\$\{piece\.id\}`/);
   assert.match(visible, /replaceChildren\(pieceArticle\(piece\)\)/);
   assert.match(visible, /<details class="source-details collection-credit">/);
+  assert.match(visible, /Loading collection\.\.\./);
+  assert.match(visible, />Retry</);
+  assert.match(visible, /import\('\.\/src\/collection\.js\?v=22'\)/);
   assert.equal(/Reference records|Candidates awaiting material|research lead|permission gap|maintenance/i.test(visible), false);
 });
 
@@ -124,6 +127,7 @@ test('the game reserves response space and uses measured viewport height', async
   assert.match(game, /loadToken/);
   assert.match(game, /preloadNextPiece/);
   assert.match(game, /requestIdleCallback/);
+  assert.match(game, /game-side-images-stack/);
   assert.equal(/overflow:\s*hidden[^;]*;\s*\/\* page/i.test(styles), false);
 });
 
@@ -148,10 +152,10 @@ test('the asymmetric money drawings use the requested ink and remain inert', asy
   assert.match(styles, /pointer-events:\s*none/);
   assert.match(html, /aria-hidden="true"/);
   assert.equal((html.match(/class="decoration /g) ?? []).length, 8);
-  assert.match(styles, /\.decoration-envelope \{ bottom:\s*1\.5%; left:\s*-6px;/);
-  assert.match(styles, /\.decoration-coins-loose \{ bottom:\s*-0\.5%; left:\s*86px;/);
-  assert.match(styles, /\.decoration-folded-bill \{ top:\s*8%; right:\s*-12px;/);
-  assert.match(styles, /\.decoration-stack \{ top:\s*39%; left:\s*25px;/);
+  assert.match(styles, /\.decoration-envelope \{ bottom:\s*-30px; left:\s*-42px;/);
+  assert.match(styles, /\.decoration-coins-loose \{ bottom:\s*1%; left:\s*128px;/);
+  assert.match(styles, /\.decoration-folded-bill \{ top:\s*6%; right:\s*-52px;/);
+  assert.match(styles, /\.decoration-stack \{ top:\s*52%; left:\s*18px;/);
 });
 
 test('the title uses two ink colors and a reduced-motion-safe Next flip', async () => {
@@ -215,6 +219,12 @@ test('paired sides and clean rust SVG answer outlines are available', async () =
   const { readFile } = await import('node:fs/promises');
   const paired = PLAYABLE_PIECES.find((piece) => piece.id === 'lincoln-cent-broadstrike-indent');
   assert.equal(paired?.showSidesTogether, true);
+  const postage = PLAYABLE_PIECES.find((piece) => piece.id === 'fractional-5-cent-inverted-reverse');
+  assert.equal(postage?.showSidesTogether, true);
+  assert.equal(postage?.stackOnNarrow, true);
+  assert.equal(postage?.sides.length, 2);
+  assert.equal(postage?.answerSide, 1);
+  assert.ok(postage?.sides.every((side) => side.image === 'assets/notes/fr1230-inverted-reverse.jpg'));
   const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   assert.match(game, /createElementNS\('http:\/\/www\.w3\.org\/2000\/svg'/);

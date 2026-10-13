@@ -1,5 +1,5 @@
-import { PLAYABLE_PIECES } from '../data/notes.js?v=21';
-import { markerHitsRegions, shuffle } from './rounds.js?v=21';
+import { PLAYABLE_PIECES } from '../data/notes.js?v=22';
+import { markerHitsRegions, shuffle } from './rounds.js?v=22';
 
 const $ = (selector) => document.querySelector(selector);
 const imageFrame = $('#image-frame');
@@ -75,15 +75,19 @@ function prepareImageFrame() {
     const crop = cropFor(side);
     return crop.width / crop.height;
   });
-  const combinedRatio = ratios.reduce((sum, ratio) => sum + ratio, 0);
+  const stackSides = state.current.stackOnNarrow && window.matchMedia('(max-width: 760px)').matches;
+  const combinedRatio = stackSides
+    ? 1 / ratios.reduce((sum, ratio) => sum + (1 / ratio), 0)
+    : ratios.reduce((sum, ratio) => sum + ratio, 0);
   const widthCap = sides.reduce((sum, side) => sum + (side.maxDisplayWidth ?? Infinity), 0);
   const availableWidth = Math.min($('#game-screen').clientWidth, 1050);
   const viewportHeight = window.visualViewport?.height ?? document.documentElement.clientHeight;
   const frameTop = imageFrame.getBoundingClientRect().top;
   const answerReserve = window.matchMedia('(max-width: 760px)').matches ? 132 : 122;
   const reserveBelow = answerReserve + playActions.offsetHeight + 20;
-  const minimumHeight = window.matchMedia('(max-width: 760px)').matches ? 230 : 290;
-  const maximumHeight = window.matchMedia('(max-width: 760px)').matches ? 360 : 460;
+  const isNarrow = window.matchMedia('(max-width: 760px)').matches;
+  const minimumHeight = stackSides ? 430 : (isNarrow ? 230 : 290);
+  const maximumHeight = stackSides ? 520 : (isNarrow ? 360 : 460);
   const stageHeight = Math.max(minimumHeight, Math.min(viewportHeight - frameTop - reserveBelow, maximumHeight));
   const innerWidth = Math.max(140, availableWidth - 18);
   const innerHeight = Math.max(140, stageHeight - 18);
@@ -95,7 +99,9 @@ function prepareImageFrame() {
   imageCanvas.style.width = `${fitWidth}px`;
   imageCanvas.style.height = `${fitHeight}px`;
   imageCanvas.style.aspectRatio = `${combinedRatio} / 1`;
-  sideImages.style.gridTemplateColumns = ratios.map((ratio) => `${ratio}fr`).join(' ');
+  sideImages.classList.toggle('game-side-images-stack', stackSides);
+  sideImages.style.gridTemplateColumns = stackSides ? '1fr' : ratios.map((ratio) => `${ratio}fr`).join(' ');
+  sideImages.style.gridTemplateRows = stackSides ? ratios.map((ratio) => `${1 / ratio}fr`).join(' ') : '1fr';
 }
 
 function buildSide(side, sideIndex) {

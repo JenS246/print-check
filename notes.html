@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#d6ab45" />
     <meta name="description" content="The coins and bills currently available in Print Check." />
     <title>Coins and bills | Print Check</title>
-    <link rel="stylesheet" href="styles.css?v=21" />
+    <link rel="stylesheet" href="styles.css?v=22" />
   </head>
   <body class="collection-page">
     <div class="page-decorations" aria-hidden="true">
@@ -38,7 +38,12 @@
           <a class="collection-play-link" href="index.html">Play</a>
         </header>
 
-        <div id="collection-gallery" class="collection-gallery"></div>
+        <div id="collection-status" class="collection-status" role="status">
+          <p id="collection-status-message">Loading collection...</p>
+          <button id="collection-retry" class="secondary-button sketch-button" type="button" hidden>Retry</button>
+        </div>
+
+        <div id="collection-gallery" class="collection-gallery" hidden></div>
 
         <section id="collection-detail" class="collection-detail" hidden aria-live="polite">
           <a class="all-items-link" href="notes.html">All coins and bills</a>
@@ -50,6 +55,21 @@
         </section>
       </main>
     </div>
-    <script type="module" src="src/collection.js?v=21"></script>
+    <script type="module">
+      const status = document.querySelector('#collection-status');
+      const message = document.querySelector('#collection-status-message');
+      const retry = document.querySelector('#collection-retry');
+      const gallery = document.querySelector('#collection-gallery');
+
+      retry.addEventListener('click', () => window.location.reload());
+
+      import('./src/collection.js?v=22')
+        .then(() => { status.hidden = true; })
+        .catch(() => {
+          gallery.hidden = true;
+          message.textContent = 'The collection did not load.';
+          retry.hidden = false;
+        });
+    </script>
   </body>
 </html>

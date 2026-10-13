@@ -64,10 +64,10 @@ body {
   opacity: 0.38;
   user-select: none;
 }
-.decoration-envelope { bottom: 1.5%; left: -6px; width: 176px; transform: rotate(-5deg); }
-.decoration-coins-loose { bottom: -0.5%; left: 86px; width: 126px; transform: rotate(9deg); }
-.decoration-folded-bill { top: 8%; right: -12px; width: 158px; transform: rotate(7deg); }
-.decoration-stack { top: 39%; left: 25px; width: 90px; transform: rotate(-4deg); }
+.decoration-envelope { bottom: -30px; left: -42px; width: 238px; transform: rotate(-7deg); }
+.decoration-coins-loose { bottom: 1%; left: 128px; width: 148px; transform: rotate(13deg); }
+.decoration-folded-bill { top: 6%; right: -52px; width: 214px; transform: rotate(8deg); }
+.decoration-stack { top: 52%; left: 18px; width: 112px; transform: rotate(-11deg); }
 
 button, a { font: inherit; }
 button { color: inherit; }
@@ -254,6 +254,7 @@ button:disabled { opacity: 0.46; cursor: not-allowed; transform: none; }
   align-items: stretch;
   gap: 8px;
 }
+.game-side-images-stack { gap: 6px; }
 .game-side {
   position: relative;
   min-width: 0;
@@ -304,6 +305,7 @@ button:disabled { opacity: 0.46; cursor: not-allowed; transform: none; }
   position: relative;
   width: 100%;
   padding-top: 0;
+  min-height: 72px;
 }
 .response-slot:has(.feedback:not([hidden]), .answer-panel:not([hidden])) { padding-top: 8px; }
 .feedback {
@@ -442,6 +444,15 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   gap: 34px 24px;
   padding: 28px 0 18px;
 }
+.collection-status {
+  min-height: 252px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+}
+.collection-status p { margin: 0; font-size: 22px; }
 .gallery-entry {
   min-width: 0;
   color: var(--ink);
@@ -532,18 +543,18 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
 }
 
 @media (min-width: 1500px) {
-  .decoration-envelope { left: 8px; width: 202px; }
-  .decoration-coins-loose { left: 117px; width: 142px; }
-  .decoration-folded-bill { right: 8px; width: 184px; }
-  .decoration-stack { top: 43%; left: 56px; width: 108px; }
+  .decoration-envelope { left: -18px; width: 264px; }
+  .decoration-coins-loose { left: 164px; width: 164px; }
+  .decoration-folded-bill { right: -24px; width: 238px; }
+  .decoration-stack { top: 55%; left: 52px; width: 126px; }
 }
 
 @media (max-width: 1340px) and (min-width: 761px) {
   .decoration { opacity: 0.36; }
-  .decoration-envelope { left: -3px; width: 105px; }
-  .decoration-coins-loose { bottom: 0; left: 56px; width: 76px; }
-  .decoration-folded-bill { right: -3px; width: 96px; }
-  .decoration-stack { top: 42%; left: 7px; width: 68px; }
+  .decoration-envelope { bottom: -16px; left: -24px; width: 132px; }
+  .decoration-coins-loose { bottom: 0; left: 72px; width: 88px; }
+  .decoration-folded-bill { right: -28px; width: 126px; }
+  .decoration-stack { top: 54%; left: 5px; width: 72px; }
 }
 
 @media (max-width: 1000px) and (min-width: 681px) {
@@ -584,6 +595,7 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   .feedback, .answer-panel > p { font-size: 22px; }
   .answer-panel h2 { font-size: 29px; }
   .response-slot { padding-top: 7px; }
+  .response-slot { min-height: 0; }
   .answer-panel { grid-template-columns: 1fr; }
   .answer-success, .answer-panel h2, .answer-panel > #answer-explanation, .answer-closeup, .source-details { grid-column: 1; }
   .answer-success { grid-row: 1; }
@@ -605,6 +617,13 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   .collection-detail { padding-top: 8px; }
   .collection-item { grid-template-columns: 1fr; gap: 12px; padding-top: 4px; }
   .collection-image { max-width: 560px; }
+  .collection-image-group-detail[data-piece='fractional-5-cent-inverted-reverse'] {
+    flex-direction: column;
+  }
+  .collection-image-group-detail[data-piece='fractional-5-cent-inverted-reverse'] figure {
+    width: 100%;
+    max-width: 100%;
+  }
   .collection-copy h2 { font-size: 31px; }
   .collection-actions { padding-top: 0; }
 }
@@ -631,9 +650,9 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   .decoration-envelope,
   .decoration-coins-loose,
   .decoration-folded-bill { display: block; }
-  .decoration-envelope { top: auto; bottom: 13px; left: 5px; width: 92px; transform: rotate(-6deg); }
-  .decoration-coins-loose { top: auto; bottom: 2px; left: 64px; width: 70px; transform: rotate(9deg); }
-  .decoration-folded-bill { top: auto; right: 4px; bottom: 13px; left: auto; width: 88px; transform: rotate(6deg); }
+  .decoration-envelope { top: auto; bottom: -8px; left: -18px; width: 118px; transform: rotate(-8deg); }
+  .decoration-coins-loose { top: auto; bottom: 2px; left: 62px; width: 82px; transform: rotate(13deg); }
+  .decoration-folded-bill { top: auto; right: -20px; bottom: 18px; left: auto; width: 106px; transform: rotate(7deg); }
 }
 
 @media (max-height: 720px) {

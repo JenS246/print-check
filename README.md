@@ -14,8 +14,10 @@ The interface is intentionally small and rights-aware. Ten specimens are playabl
 - Keyboard answers with the 1 through 9 keys, without a permanent region panel
 - An accessible enlarged-image dialog with one Close control
 - Image-relative crops, markers, generous answer targets, and separate precise reveal outlines that stay aligned through resizing
+- Separate face and reverse crops from the original postage-currency scan, shown side by side on wide screens and stacked on narrow screens
 - A source-photo close-up of the doubled date on the 1955 doubled-die cent after the answer is shown
 - A stable image stage, tokenized image loading, and preloading of the next specimen
+- A visible Collection loading state with a retry path if the data module fails
 - Dynamic viewport fitting with reserved answer space, safe-area support, and natural scrolling on short or enlarged-text layouts
 - A fixed asymmetric margin composition: an open coin envelope with loose coins, a folded bill, and a separate coin stack
 - A two-color hand-drawn title with a decorative coin that flips once when Next is selected and stays still for reduced-motion users

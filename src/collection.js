@@ -1,4 +1,4 @@
-import { COLLECTION_PIECES } from '../data/notes.js?v=21';
+import { COLLECTION_PIECES } from '../data/notes.js?v=22';
 
 const gallery = document.querySelector('#collection-gallery');
 const detail = document.querySelector('#collection-detail');
@@ -74,6 +74,7 @@ function imageFigure(piece, side, mode) {
 function imageGroup(piece, mode) {
   const group = document.createElement('div');
   group.className = `collection-image-group collection-image-group-${mode}`;
+  group.dataset.piece = piece.id;
   if (piece.sides.length > 1) group.classList.add('collection-image-pair');
   group.append(...piece.sides.map((side) => imageFigure(piece, side, mode)));
   return group;

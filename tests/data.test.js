@@ -112,7 +112,7 @@ test('collection copy contains only documented coins and bills', async () => {
   assert.match(visible, /<details class="source-details collection-credit">/);
   assert.match(visible, /Loading collection\.\.\./);
   assert.match(visible, />Retry</);
-  assert.match(visible, /import\('\.\/src\/collection\.js\?v=23'\)/);
+  assert.match(visible, /import\('\.\/src\/collection\.js\?v=24'\)/);
   assert.equal(/Reference records|Candidates awaiting material|research lead|permission gap|maintenance/i.test(visible), false);
 });
 
@@ -125,6 +125,8 @@ test('collection album mounts preserve every entry and show the documented close
   assert.match(collection, /specimen-mount-\$\{piece\.pieceKind\}/);
   assert.match(styles, /\.specimen-mount-note\s*\{[^}]*aspect-ratio:\s*1\.62 \/ 1/s);
   assert.match(styles, /\.specimen-mount-coin\s*\{[^}]*aspect-ratio:\s*1 \/ 1/s);
+  assert.match(styles, /\.collection-image-group-gallery figure\s*\{[^}]*width:\s*100%/s);
+  assert.match(styles, /\.collection-image-group-gallery\.collection-image-pair figure\s*\{[^}]*width:\s*auto/s);
   assert.match(collection, /function detailCloseup/);
   assert.match(collection, /sourceCrop\.x \+ \(crop\.x \/ 100\)/);
   assert.match(styles, /\.collection-closeup-crop/);

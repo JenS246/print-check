@@ -521,6 +521,7 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   gap: 8px;
 }
 .collection-image-group-gallery figure {
+  width: 100%;
   min-width: 0;
   max-width: 100%;
   max-height: 100%;
@@ -529,7 +530,7 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   justify-content: center;
   margin: 0;
 }
-.collection-image-group-gallery.collection-image-pair figure { flex: 1 1 0; }
+.collection-image-group-gallery.collection-image-pair figure { width: auto; flex: 1 1 0; }
 .collection-image-group-gallery .collection-crop { max-width: 100%; max-height: 100%; border-color: rgb(48 40 32 / 0.45); }
 .gallery-entry-coin .collection-image-group-gallery .collection-crop { border: 0; background: transparent; }
 .collection-detail { padding-top: 12px; }

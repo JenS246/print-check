@@ -1,4 +1,4 @@
-import { COLLECTION_PIECES } from '../data/notes.js?v=27';
+import { COLLECTION_PIECES } from '../data/notes.js?v=28';
 
 const gallery = document.querySelector('#collection-gallery');
 const detail = document.querySelector('#collection-detail');
@@ -214,9 +214,19 @@ function pieceArticle(piece) {
 function renderGallery() {
   const notes = COLLECTION_PIECES.filter((piece) => piece.pieceKind === 'note');
   const coins = COLLECTION_PIECES.filter((piece) => piece.pieceKind === 'coin');
+  const divider = document.createElement('div');
+  divider.className = 'collection-art-break';
+  divider.setAttribute('aria-hidden', 'true');
+  divider.innerHTML = '<img src="assets/art/watercolor/uneven-coin-stack.png" alt="" loading="lazy" decoding="async">';
+  const tail = document.createElement('div');
+  tail.className = 'collection-art-tail';
+  tail.setAttribute('aria-hidden', 'true');
+  tail.innerHTML = '<img src="assets/art/watercolor/open-coin-envelope.png" alt="" loading="lazy" decoding="async">';
   gallery.replaceChildren(
     gallerySection('Paper money', notes, 'notes'),
+    divider,
     gallerySection('Coins', coins, 'coins'),
+    tail,
   );
 }
 

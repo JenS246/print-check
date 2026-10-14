@@ -24,7 +24,7 @@ The interface is intentionally small and rights-aware. Ten specimens are playabl
 - A loading state and an always-available Next fallback for image failures
 - Static HTML, CSS, and JavaScript with no accounts, tracking, backend, or dependencies
 
-No decorative currency drawings are currently rendered. Four original transparent watercolor-and-ink assets are available in `assets/art/watercolor/` for a future layout pass; keeping them separate avoids changing the live composition before their placement is reviewed.
+Four original transparent watercolor-and-ink assets in `assets/art/watercolor/` frame the game and Collection without entering the specimen mounts. The game uses an asymmetric desktop arrangement and one small mobile illustration; the Collection varies the artwork between album sections and near the end of the gallery.
 
 ## Corpus and rights review
 

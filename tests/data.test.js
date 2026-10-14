@@ -94,7 +94,7 @@ test('play screen is immediate and contains no fixed-session or scoring language
   assert.match(visible, /Enlarge image/);
   assert.match(visible, /You found it!/);
   assert.match(visible, /answer-title/);
-  assert.match(visible, /href="notes\.html\?rev=27">Collection/);
+  assert.match(visible, /href="notes\.html\?rev=28">Collection/);
 });
 
 test('the How to play dialog has exact guidance, real shortcuts, and modal focus safeguards', async () => {
@@ -120,7 +120,8 @@ test('the How to play dialog has exact guidance, real shortcuts, and modal focus
   assert.equal(/<details class="keyboard-controls"\s+open/.test(html), false);
   assert.match(html, /press 1 through 9/);
   assert.match(html, /Press Escape to close this panel/);
-  assert.equal(/help-dialog-art|assets\/art\/(?:folded-bill|overlapping-coins)\.svg/.test(html), false);
+  assert.match(html, /class="help-dialog-art" aria-hidden="true"/);
+  assert.match(html, /assets\/art\/watercolor\/uneven-coin-stack\.png/);
   assert.match(game, /keyboardControls\.open = false/);
   assert.match(game, /helpDialog\.addEventListener\('close', \(\) => helpButton\.focus/);
   assert.match(game, /event\.key !== 'Tab'/);
@@ -145,8 +146,8 @@ test('collection copy contains only documented coins and bills', async () => {
   assert.match(visible, /<details class="source-details collection-credit">/);
   assert.match(visible, /Loading collection\.\.\./);
   assert.match(visible, />Retry</);
-  assert.match(visible, /import\('\.\/src\/collection\.js\?v=27'\)/);
-  assert.match(visible, /href="notes\.html\?rev=27"/);
+  assert.match(visible, /import\('\.\/src\/collection\.js\?v=28'\)/);
+  assert.match(visible, /href="notes\.html\?rev=28"/);
   assert.match(visible, /id="help-button"[^>]*>How to play<\/button>/);
   assert.match(visible, /id="help-dialog"/);
   assert.match(visible, /keyboardControls\.open = false/);
@@ -189,10 +190,20 @@ test('the game fits the stage to each photograph and expands answers naturally',
   assert.equal(/overflow:\s*hidden[^;]*;\s*\/\* page/i.test(styles), false);
 });
 
-test('the public composition omits unsupported code-drawn currency decorations', async () => {
-  const { readFile } = await import('node:fs/promises');
+test('the public composition uses only the supplied transparent watercolor decorations', async () => {
+  const { access, readFile } = await import('node:fs/promises');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   const html = `${await readFile(new URL('../index.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../notes.html', import.meta.url), 'utf8')}`;
+  const files = ['open-coin-envelope.png', 'folded-banknote.png', 'overlapping-coins.png', 'uneven-coin-stack.png'];
+  for (const file of files) {
+    await access(new URL(`../assets/art/watercolor/${file}`, import.meta.url));
+    assert.match(`${html}\n${await readFile(new URL('../src/collection.js', import.meta.url), 'utf8')}`, new RegExp(file.replace('.', '\\.')));
+  }
+  assert.match(html, /class="decorative-art game-art" aria-hidden="true"/);
+  assert.match(html, /class="decorative-art collection-art" aria-hidden="true"/);
+  assert.match(styles, /\.decorative-art\s*\{[^}]*position:\s*absolute[^}]*overflow:\s*hidden[^}]*pointer-events:\s*none/s);
+  assert.match(styles, /\.art-piece\s*\{[^}]*opacity:\s*0\.68[^}]*pointer-events:\s*none/s);
+  assert.match(styles, /@media \(max-width: 760px\)[\s\S]*\.decorative-art \.art-piece \{ display:\s*none; \}[\s\S]*\.game-art-mobile/s);
   assert.equal(/page-decorations|class="decoration |coin-envelope\.svg|coin-stack\.svg|overlapping-coins\.svg|folded-bill\.svg/.test(html), false);
   assert.equal(/\.page-decorations|\.decoration-envelope|\.decoration-stack/.test(styles), false);
 });

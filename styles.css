@@ -52,12 +52,13 @@ body {
   opacity: 0.68;
   pointer-events: none;
 }
-.game-art-envelope { top: 430px; left: -118px; width: 300px; transform: rotate(-4deg); }
-.game-art-bill { top: 94px; right: -55px; width: 205px; transform: rotate(5deg); }
-.game-art-coins { top: 505px; right: -35px; width: 126px; transform: rotate(-8deg); }
+.game-art-envelope { top: 402px; left: -170px; width: 350px; transform: rotate(-4deg); }
+.game-art-bill { top: 88px; right: -92px; width: 252px; transform: rotate(5deg); }
+.game-art-coins { top: 506px; right: -62px; width: 176px; transform: rotate(-8deg); }
+.game-art-stack { top: 142px; left: -48px; width: 174px; transform: rotate(4deg); }
 .game-art-mobile { display: none; }
-.collection-art-bill { top: 112px; right: -88px; width: 210px; transform: rotate(5deg); }
-.collection-art-coins { top: 740px; left: -58px; width: 138px; transform: rotate(-10deg); }
+.collection-art-bill { top: 108px; right: -112px; width: 268px; transform: rotate(5deg); }
+.collection-art-coins { top: 742px; left: -82px; width: 184px; transform: rotate(-10deg); }
 .site-header,
 .game-screen,
 .collection-main { position: relative; z-index: 1; }
@@ -411,7 +412,7 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   user-select: none;
 }
 .help-dialog-art img {
-  width: 112px;
+  width: 130px;
   height: auto;
   opacity: 0.72;
   pointer-events: none;
@@ -528,8 +529,8 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   pointer-events: none;
   user-select: none;
 }
-.collection-art-break { height: 112px; margin: -8px 0 -12px; }
-.collection-art-tail { height: 150px; margin-top: -8px; }
+.collection-art-break { height: 142px; margin: -8px 0 -12px; }
+.collection-art-tail { height: 184px; margin-top: -8px; }
 .collection-art-break img,
 .collection-art-tail img {
   position: absolute;
@@ -538,8 +539,8 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   opacity: 0.68;
   pointer-events: none;
 }
-.collection-art-break img { top: -6px; right: 8%; width: 128px; transform: rotate(6deg); }
-.collection-art-tail img { top: 2px; left: 1%; width: 205px; transform: rotate(-5deg); }
+.collection-art-break img { top: -8px; right: 8%; width: 178px; transform: rotate(6deg); }
+.collection-art-tail img { top: 2px; left: -1%; width: 270px; transform: rotate(-5deg); }
 .album-grid {
   display: grid;
   gap: 26px 16px;
@@ -719,10 +720,10 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   .site-header nav a, .nav-button { font-size: 20px; }
   .decorative-art .art-piece { display: none; }
   .game-art-mobile {
-    top: 4px;
-    right: -26px;
+    top: 2px;
+    right: -32px;
     display: block !important;
-    width: 94px;
+    width: 110px;
     opacity: 0.48;
     transform: rotate(7deg);
   }
@@ -758,7 +759,7 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   .help-dialog .keyboard-controls { margin-top: 15px; }
   .help-dialog .keyboard-controls p { font-size: 18px; }
   .help-dialog-art { margin-top: 0; margin-right: 0; }
-  .help-dialog-art img { width: 88px; opacity: 0.68; }
+  .help-dialog-art img { width: 100px; opacity: 0.68; }
   .collection-main { width: calc(100% - 24px); margin-top: 12px; }
   .collection-intro h1 { font-size: 42px; }
   .collection-gallery { padding-top: 4px; }
@@ -766,8 +767,8 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   .album-section + .album-section { margin-top: 18px; }
   .album-section-title { font-size: 37px; }
   .collection-art-break { display: none; }
-  .collection-art-tail { height: 96px; margin-top: -4px; }
-  .collection-art-tail img { top: 2px; left: -26px; width: 126px; opacity: 0.58; }
+  .collection-art-tail { height: 110px; margin-top: -4px; }
+  .collection-art-tail img { top: 2px; left: -34px; width: 150px; opacity: 0.58; }
   .album-grid-notes,
   .album-grid-coins { grid-template-columns: 1fr; gap: 24px; }
   .gallery-entry { padding: 7px 5px 12px; }

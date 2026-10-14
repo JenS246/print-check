@@ -94,7 +94,7 @@ test('play screen is immediate and contains no fixed-session or scoring language
   assert.match(visible, /Enlarge image/);
   assert.match(visible, /You found it!/);
   assert.match(visible, /answer-title/);
-  assert.match(visible, /href="notes\.html\?rev=28">Collection/);
+  assert.match(visible, /href="notes\.html\?rev=29">Collection/);
 });
 
 test('the How to play dialog has exact guidance, real shortcuts, and modal focus safeguards', async () => {
@@ -146,8 +146,8 @@ test('collection copy contains only documented coins and bills', async () => {
   assert.match(visible, /<details class="source-details collection-credit">/);
   assert.match(visible, /Loading collection\.\.\./);
   assert.match(visible, />Retry</);
-  assert.match(visible, /import\('\.\/src\/collection\.js\?v=28'\)/);
-  assert.match(visible, /href="notes\.html\?rev=28"/);
+  assert.match(visible, /import\('\.\/src\/collection\.js\?v=29'\)/);
+  assert.match(visible, /href="notes\.html\?rev=29"/);
   assert.match(visible, /id="help-button"[^>]*>How to play<\/button>/);
   assert.match(visible, /id="help-dialog"/);
   assert.match(visible, /keyboardControls\.open = false/);
@@ -201,6 +201,7 @@ test('the public composition uses only the supplied transparent watercolor decor
   }
   assert.match(html, /class="decorative-art game-art" aria-hidden="true"/);
   assert.match(html, /class="decorative-art collection-art" aria-hidden="true"/);
+  assert.match(html, /class="art-piece game-art-stack"[^>]*uneven-coin-stack\.png/);
   assert.match(styles, /\.decorative-art\s*\{[^}]*position:\s*absolute[^}]*overflow:\s*hidden[^}]*pointer-events:\s*none/s);
   assert.match(styles, /\.art-piece\s*\{[^}]*opacity:\s*0\.68[^}]*pointer-events:\s*none/s);
   assert.match(styles, /@media \(max-width: 760px\)[\s\S]*\.decorative-art \.art-piece \{ display:\s*none; \}[\s\S]*\.game-art-mobile/s);

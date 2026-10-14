@@ -24,7 +24,7 @@ The interface is intentionally small and rights-aware. Ten specimens are playabl
 - A loading state and an always-available Next fallback for image failures
 - Static HTML, CSS, and JavaScript with no accounts, tracking, backend, or dependencies
 
-No decorative currency drawings are currently rendered. The repository did not contain suitable supplied or licensed scanned pen artwork, so the earlier code-drawn SVG decorations were removed instead of being represented as scanned art.
+No decorative currency drawings are currently rendered. Four original transparent watercolor-and-ink assets are available in `assets/art/watercolor/` for a future layout pass; keeping them separate avoids changing the live composition before their placement is reviewed.
 
 ## Corpus and rights review
 

@@ -7,7 +7,6 @@ const imageCanvas = $('#image-canvas');
 const sideImages = $('#game-side-images');
 const feedback = $('#feedback');
 const answerPanel = $('#answer-panel');
-const titleCoin = $('.title-coin');
 
 const state = {
   queue: [],
@@ -31,14 +30,6 @@ function refillQueue() {
     [state.queue[0], state.queue[1]] = [state.queue[1], state.queue[0]];
   }
 }
-
-function flipTitleCoin() {
-  if (!titleCoin || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  titleCoin.classList.remove('is-flipping');
-  requestAnimationFrame(() => titleCoin.classList.add('is-flipping'));
-}
-
-titleCoin?.addEventListener('animationend', () => titleCoin.classList.remove('is-flipping'));
 
 function setFeedback(message = '', tone = '') {
   feedback.textContent = message;
@@ -85,7 +76,8 @@ function prepareImageFrame() {
   const sourceWidthCap = stackSides
     ? Math.min(...sourceWidths)
     : sourceWidths.reduce((sum, width) => sum + width, 0);
-  const availableWidth = Math.max(180, $('#game-screen').clientWidth);
+  const mountSpace = window.matchMedia('(max-width: 760px)').matches ? 56 : 80;
+  const availableWidth = Math.max(180, Math.min(document.documentElement.clientWidth - mountSpace, 960));
   const contentWidthCap = state.current.pieceKind === 'note' ? 880 : availableWidth;
   const heightCap = state.current.pieceKind === 'coin' && !stackSides ? 460 : Infinity;
   const fitWidth = Math.min(availableWidth, contentWidthCap, sourceWidthCap, heightCap * combinedRatio);
@@ -371,7 +363,6 @@ $('#reveal-button').addEventListener('click', () => {
   showAnswer();
 });
 $('#next-button').addEventListener('click', () => {
-  flipTitleCoin();
   nextPiece();
 });
 $('#enlarge-link').addEventListener('click', openFullImage);

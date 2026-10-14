@@ -27,7 +27,7 @@ body {
   position: relative;
   margin: 0;
   min-height: 100dvh;
-  padding: 12px 0 0;
+  padding: 0 0 max(40px, env(safe-area-inset-bottom));
   background-color: var(--page);
   background-image: url('assets/art/paper-grain.svg');
   background-size: 420px 420px;
@@ -36,27 +36,6 @@ body {
   font-size: 22px;
   line-height: 1.45;
 }
-
-.page-decorations {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.decoration {
-  position: absolute;
-  height: auto;
-  opacity: 0.3;
-  user-select: none;
-}
-.decoration-envelope { bottom: -52px; left: -82px; width: 290px; transform: rotate(-8deg); }
-.decoration-folded-bill { top: 54px; right: -58px; width: 190px; transform: rotate(7deg); }
-.decoration-overlapping,
-.decoration-stack { display: none; }
-.collection-page .page-decorations { position: absolute; }
-.collection-page .decoration-overlapping { top: 42%; right: -38px; width: 155px; display: block; transform: rotate(12deg); }
-.collection-page .decoration-stack { top: 70%; left: -22px; width: 132px; display: block; transform: rotate(-9deg); }
 
 button, a { font: inherit; }
 button { color: inherit; }
@@ -70,33 +49,19 @@ button:focus-visible, a:focus-visible, [tabindex]:focus-visible, summary:focus-v
   outline-offset: 4px;
 }
 
-.page-shell {
-  position: relative;
-  z-index: 1;
-  width: min(1050px, calc(100% - 30px));
-  margin: 0 auto;
-  padding-right: max(30px, env(safe-area-inset-right));
-  padding-bottom: max(28px, env(safe-area-inset-bottom));
-  padding-left: max(30px, env(safe-area-inset-left));
-  border: 1.5px solid var(--ink);
-  border-radius: 6px 4px 7px 5px;
-  background-color: var(--paper);
-  background-image: url('assets/art/paper-grain.svg');
-  background-size: 360px 360px;
-  box-shadow: 0 8px 14px rgb(82 55 25 / 0.18);
-}
-
 .site-header {
-  min-height: 80px;
+  width: min(1100px, calc(100% - 32px));
+  min-height: 82px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 28px;
-  padding-top: 6px;
+  margin: 0 auto;
+  padding: max(10px, env(safe-area-inset-top)) 2px 6px;
 }
 
 .site-name {
-  min-height: 68px;
+  min-height: 64px;
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
@@ -121,15 +86,6 @@ button:focus-visible, a:focus-visible, [tabindex]:focus-visible, summary:focus-v
   pointer-events: none;
 }
 .title-check-front { position: relative; z-index: 1; }
-.title-coin {
-  width: 43px;
-  height: 43px;
-  flex: 0 0 auto;
-  transform-origin: 50% 50%;
-  pointer-events: none;
-  user-select: none;
-}
-.title-coin.is-flipping { animation: title-coin-flip 400ms ease-in-out; }
 .site-name .title-underline { width: 74%; height: 9px; margin-top: 4px; overflow: visible; }
 .site-name path {
   fill: none;
@@ -137,12 +93,6 @@ button:focus-visible, a:focus-visible, [tabindex]:focus-visible, summary:focus-v
   stroke-width: 1.6;
   stroke-linecap: round;
   vector-effect: non-scaling-stroke;
-}
-
-@keyframes title-coin-flip {
-  0% { transform: rotateY(0deg); }
-  48% { transform: rotateY(90deg) scale(0.94); }
-  100% { transform: rotateY(360deg); }
 }
 
 .site-header nav {
@@ -192,13 +142,18 @@ button:active { transform: translateY(1px); }
 button:disabled { opacity: 0.46; cursor: not-allowed; transform: none; }
 
 .game-screen {
-  max-width: 1050px;
+  width: fit-content;
+  max-width: calc(100% - 24px);
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
-  padding: 4px 0 0;
+  margin: 20px auto 0;
+  padding: 24px;
+  border: 1px solid rgb(48 40 32 / 0.74);
+  border-radius: 5px;
+  background: var(--paper);
+  box-shadow: 0 7px 14px rgb(82 55 25 / 0.2);
 }
-.prompt { margin: 0 0 6px; }
+.prompt { width: 100%; margin: 0 0 14px; }
 .prompt h1 {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -422,17 +377,6 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   font-size: 20px;
   line-height: 1.45;
 }
-.help-dialog-art {
-  position: relative;
-  width: 154px;
-  height: 76px;
-  margin: 12px 0 -5px auto;
-  pointer-events: none;
-  user-select: none;
-}
-.help-dialog-art img { position: absolute; height: auto; opacity: 0.56; }
-.help-art-bill { top: 1px; right: -5px; width: 112px; transform: rotate(5deg); }
-.help-art-coins { bottom: 0; left: 0; width: 73px; transform: rotate(-8deg); }
 .image-dialog { width: min(1050px, calc(100% - 32px)); }
 .dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding-bottom: 10px; }
 .dialog-head h2 { margin: 0; font-size: 34px; line-height: 1.1; }
@@ -468,14 +412,17 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
 .full-image-crop img { position: absolute; max-width: none; height: auto; }
 .full-image-gallery figcaption { margin-top: 6px; font-size: 18px; }
 
-.collection-main { padding: 12px 0 0; }
+.collection-main {
+  width: min(1120px, calc(100% - 24px));
+  margin: 18px auto 0;
+}
 .collection-intro {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  padding-bottom: 14px;
-  border-bottom: 1.5px solid var(--ink);
+  padding: 0 4px 14px;
+  border-bottom: 1.5px solid rgb(48 40 32 / 0.62);
 }
 .collection-intro h1 { margin: 0; font-size: 52px; line-height: 1; }
 .collection-detail-active .collection-intro { display: none; }
@@ -487,7 +434,7 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   font-size: 22px;
 }
 .collection-gallery {
-  padding: 10px 0 20px;
+  padding: 4px 0 20px;
 }
 .collection-status {
   min-height: 252px;
@@ -495,6 +442,11 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   place-content: center;
   justify-items: center;
   gap: 14px;
+  margin-top: 20px;
+  border: 1px solid rgb(48 40 32 / 0.55);
+  border-radius: 5px;
+  background: var(--paper);
+  box-shadow: 0 7px 14px rgb(82 55 25 / 0.18);
   text-align: center;
 }
 .collection-status p { margin: 0; font-size: 22px; }
@@ -515,14 +467,19 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   background: rgb(255 249 237 / 0.58);
 }
 .gallery-entry:focus-visible { outline-offset: 1px; }
-.album-section { padding-top: 22px; }
+.album-section {
+  margin-top: 22px;
+  padding: 24px;
+  border: 1px solid rgb(48 40 32 / 0.62);
+  border-radius: 5px;
+  background: var(--paper);
+  box-shadow: 0 7px 14px rgb(82 55 25 / 0.18);
+}
 .album-section + .album-section {
-  margin-top: 14px;
-  padding-top: 30px;
-  border-top: 1px solid rgb(48 40 32 / 0.34);
+  margin-top: 26px;
 }
 .album-section-title {
-  margin: 0 0 12px 10px;
+  margin: 0 0 18px;
   font-size: 40px;
   line-height: 1;
 }
@@ -572,7 +529,14 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
 .collection-image-group-gallery.collection-image-pair figure { width: auto; flex: 1 1 0; }
 .collection-image-group-gallery .collection-crop { max-width: 100%; max-height: 100%; border-color: rgb(48 40 32 / 0.45); }
 .gallery-entry-coin .collection-image-group-gallery .collection-crop { border: 0; background: transparent; }
-.collection-detail { padding-top: 12px; }
+.collection-detail {
+  margin-top: 22px;
+  padding: 22px 24px 24px;
+  border: 1px solid rgb(48 40 32 / 0.62);
+  border-radius: 5px;
+  background: var(--paper);
+  box-shadow: 0 7px 14px rgb(82 55 25 / 0.18);
+}
 .all-items-link {
   min-height: 44px;
   display: inline-flex;
@@ -659,21 +623,6 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   padding-top: 4px;
 }
 
-@media (min-width: 1500px) {
-  .decoration-envelope { left: -54px; width: 310px; }
-  .decoration-folded-bill { right: -30px; width: 205px; }
-  .collection-page .decoration-overlapping { right: -18px; width: 170px; }
-  .collection-page .decoration-stack { left: 14px; width: 142px; }
-}
-
-@media (max-width: 1340px) and (min-width: 761px) {
-  .decoration { opacity: 0.27; }
-  .decoration-envelope { bottom: -28px; left: -55px; width: 170px; }
-  .decoration-folded-bill { top: 34px; right: -38px; width: 122px; }
-  .collection-page .decoration-overlapping { right: -30px; width: 94px; }
-  .collection-page .decoration-stack { left: -14px; width: 84px; }
-}
-
 @media (max-width: 1000px) and (min-width: 681px) {
   .album-grid-notes,
   .album-grid-coins { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -693,22 +642,22 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
 [hidden] { display: none !important; }
 
 @media (max-width: 760px) {
-  body { padding: 6px 0 max(80px, env(safe-area-inset-bottom)); font-size: 20px; line-height: 1.45; }
-  .page-shell {
-    width: calc(100% - 12px);
-    padding-right: max(10px, env(safe-area-inset-right));
-    padding-bottom: 24px;
-    padding-left: max(10px, env(safe-area-inset-left));
+  body { padding: 0 0 max(32px, env(safe-area-inset-bottom)); font-size: 20px; line-height: 1.45; }
+  .site-header {
+    width: calc(100% - 24px);
+    min-height: 0;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+    padding: max(8px, env(safe-area-inset-top)) 0 4px;
   }
-  .site-header { min-height: 74px; align-items: center; gap: 12px; padding-top: max(4px, env(safe-area-inset-top)); }
   .site-name { min-height: 58px; font-size: 40px; }
   .title-line { gap: 6px; }
-  .title-coin { width: 34px; height: 34px; }
   .site-name .title-underline { width: 76%; margin-top: 3px; }
-  .site-header nav { gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+  .site-header nav { width: 100%; gap: 20px; flex-wrap: wrap; justify-content: flex-start; }
   .site-header nav a, .nav-button { font-size: 20px; }
-  .game-screen { padding-top: 2px; }
-  .prompt { margin-bottom: 4px; }
+  .game-screen { max-width: calc(100% - 24px); margin-top: 12px; padding: 16px; }
+  .prompt { margin-bottom: 10px; }
   .prompt h1 { font-size: 28px; }
   .feedback, .answer-panel > p { font-size: 20px; }
   .answer-panel h2 { font-size: 25px; }
@@ -738,15 +687,12 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   .help-instructions p { font-size: 20px; line-height: 1.4; }
   .help-dialog .keyboard-controls { margin-top: 15px; }
   .help-dialog .keyboard-controls p { font-size: 18px; }
-  .help-dialog-art { width: 132px; height: 65px; margin-top: 8px; }
-  .help-art-bill { width: 96px; }
-  .help-art-coins { width: 62px; }
-  .collection-main { padding-top: 18px; }
+  .collection-main { width: calc(100% - 24px); margin-top: 12px; }
   .collection-intro h1 { font-size: 42px; }
   .collection-gallery { padding-top: 4px; }
-  .album-section { padding-top: 20px; }
-  .album-section + .album-section { margin-top: 10px; padding-top: 26px; }
-  .album-section-title { margin-left: 5px; font-size: 37px; }
+  .album-section { margin-top: 16px; padding: 16px; }
+  .album-section + .album-section { margin-top: 18px; }
+  .album-section-title { font-size: 37px; }
   .album-grid-notes,
   .album-grid-coins { grid-template-columns: 1fr; gap: 24px; }
   .gallery-entry { padding: 7px 5px 12px; }
@@ -755,7 +701,7 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   .specimen-mount-coin { width: min(100%, 430px); justify-self: center; }
   .gallery-copy p { font-size: 20px; }
   .gallery-copy h3 { font-size: 24px; }
-  .collection-detail { padding-top: 8px; }
+  .collection-detail { margin-top: 16px; padding: 16px; }
   .collection-item { grid-template-columns: 1fr; gap: 12px; padding-top: 4px; }
   .collection-image { max-width: 560px; }
   .detail-mount { padding: 10px; }
@@ -772,12 +718,6 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
 }
 
 @media (max-width: 460px) {
-  .page-shell {
-    padding-right: max(10px, env(safe-area-inset-right));
-    padding-left: max(10px, env(safe-area-inset-left));
-  }
-  .site-header { align-items: flex-start; flex-direction: column; gap: 2px; padding-bottom: 8px; }
-  .site-header nav { width: 100%; justify-content: flex-start; gap: 20px; }
   .site-header nav a, .nav-button { font-size: 22px; }
   .play-actions { flex-direction: column; flex-wrap: nowrap; justify-content: center; gap: 12px; }
   #enlarge-link { flex: 0 0 auto; }
@@ -787,14 +727,7 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   .collection-actions .sketch-button { min-width: 0; padding-inline: 12px; }
 }
 
-@media (max-width: 760px) {
-  .page-decorations { position: absolute; z-index: 0; }
-  .decoration { display: none !important; opacity: 0.27; }
-  .decoration-envelope { top: auto; right: auto; bottom: -16px; left: -24px; width: 112px; display: block !important; transform: rotate(-8deg); }
-}
-
 @media (max-height: 720px) {
-  .game-screen { padding-top: 2px; }
   .prompt { margin-bottom: 4px; }
   .response-slot { padding-top: 5px; }
   .play-actions { margin-top: 0; }
@@ -802,11 +735,9 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.001ms !important; }
-  .title-coin.is-flipping { animation: none; }
 }
 
 @media print {
   .site-header nav, button, .play-actions { display: none !important; }
   body { background: #fff; color: #111; }
-  .page-decorations { display: none; }
 }

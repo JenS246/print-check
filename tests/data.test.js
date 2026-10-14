@@ -94,7 +94,7 @@ test('play screen is immediate and contains no fixed-session or scoring language
   assert.match(visible, /Enlarge image/);
   assert.match(visible, /You found it!/);
   assert.match(visible, /answer-title/);
-  assert.match(visible, /href="notes\.html\?rev=26">Collection/);
+  assert.match(visible, /href="notes\.html\?rev=27">Collection/);
 });
 
 test('the How to play dialog has exact guidance, real shortcuts, and modal focus safeguards', async () => {
@@ -120,9 +120,7 @@ test('the How to play dialog has exact guidance, real shortcuts, and modal focus
   assert.equal(/<details class="keyboard-controls"\s+open/.test(html), false);
   assert.match(html, /press 1 through 9/);
   assert.match(html, /Press Escape to close this panel/);
-  assert.match(html, /class="help-dialog-art" aria-hidden="true"/);
-  assert.match(html, /assets\/art\/folded-bill\.svg/);
-  assert.match(html, /assets\/art\/overlapping-coins\.svg/);
+  assert.equal(/help-dialog-art|assets\/art\/(?:folded-bill|overlapping-coins)\.svg/.test(html), false);
   assert.match(game, /keyboardControls\.open = false/);
   assert.match(game, /helpDialog\.addEventListener\('close', \(\) => helpButton\.focus/);
   assert.match(game, /event\.key !== 'Tab'/);
@@ -147,9 +145,11 @@ test('collection copy contains only documented coins and bills', async () => {
   assert.match(visible, /<details class="source-details collection-credit">/);
   assert.match(visible, /Loading collection\.\.\./);
   assert.match(visible, />Retry</);
-  assert.match(visible, /import\('\.\/src\/collection\.js\?v=26'\)/);
-  assert.match(visible, /href="notes\.html\?rev=26"/);
-  assert.match(visible, /index\.html\?rev=26#how-to-play/);
+  assert.match(visible, /import\('\.\/src\/collection\.js\?v=27'\)/);
+  assert.match(visible, /href="notes\.html\?rev=27"/);
+  assert.match(visible, /id="help-button"[^>]*>How to play<\/button>/);
+  assert.match(visible, /id="help-dialog"/);
+  assert.match(visible, /keyboardControls\.open = false/);
   assert.equal(/Reference records|Candidates awaiting material|research lead|permission gap|maintenance/i.test(visible), false);
 });
 
@@ -189,36 +189,16 @@ test('the game fits the stage to each photograph and expands answers naturally',
   assert.equal(/overflow:\s*hidden[^;]*;\s*\/\* page/i.test(styles), false);
 });
 
-test('the asymmetric money drawings use the requested ink and remain inert', async () => {
-  const { access, readFile } = await import('node:fs/promises');
-  const artFiles = [
-    'coin-stack.svg',
-    'overlapping-coins.svg',
-    'coin-envelope.svg',
-    'folded-bill.svg',
-  ];
-  for (const file of artFiles) {
-    await access(new URL(`../assets/art/${file}`, import.meta.url));
-    const artwork = await readFile(new URL(`../assets/art/${file}`, import.meta.url), 'utf8');
-    assert.match(artwork, /stroke="#76541E"/, file);
-    assert.equal(/<text|[0-9]\s*(?:cent|dollar)/i.test(artwork), false, file);
-  }
+test('the public composition omits unsupported code-drawn currency decorations', async () => {
+  const { readFile } = await import('node:fs/promises');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   const html = `${await readFile(new URL('../index.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../notes.html', import.meta.url), 'utf8')}`;
-  for (const file of artFiles) assert.match(html, new RegExp(file.replace('.', '\\.')));
-  assert.match(styles, /opacity:\s*0\.3/);
-  assert.match(styles, /pointer-events:\s*none/);
-  assert.match(html, /aria-hidden="true"/);
-  assert.equal((html.match(/class="decoration /g) ?? []).length, 8);
-  assert.match(styles, /\.decoration-envelope \{ bottom:\s*-52px; left:\s*-82px;/);
-  assert.match(styles, /\.decoration-folded-bill \{ top:\s*54px; right:\s*-58px;/);
-  assert.match(styles, /\.collection-page \.decoration-overlapping/);
-  assert.match(styles, /\.collection-page \.decoration-stack/);
+  assert.equal(/page-decorations|class="decoration |coin-envelope\.svg|coin-stack\.svg|overlapping-coins\.svg|folded-bill\.svg/.test(html), false);
+  assert.equal(/\.page-decorations|\.decoration-envelope|\.decoration-stack/.test(styles), false);
 });
 
-test('the title uses two ink colors and a reduced-motion-safe Next flip', async () => {
-  const { access, readFile } = await import('node:fs/promises');
-  await access(new URL('../assets/art/title-coin.svg', import.meta.url));
+test('the title uses two ink colors without decorative coin animation', async () => {
+  const { readFile } = await import('node:fs/promises');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   const html = `${await readFile(new URL('../index.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../notes.html', import.meta.url), 'utf8')}`;
   const scripts = `${await readFile(new URL('../src/game.js', import.meta.url), 'utf8')}\n${await readFile(new URL('../src/collection.js', import.meta.url), 'utf8')}`;
@@ -226,10 +206,7 @@ test('the title uses two ink colors and a reduced-motion-safe Next flip', async 
   assert.match(html, /class="title-check-front">Check</);
   assert.match(styles, /\.title-check[^}]*color:\s*#963b24/s);
   assert.match(styles, /translate\(2px, 2px\)/);
-  assert.match(styles, /animation:\s*title-coin-flip 400ms/);
-  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.title-coin\.is-flipping \{ animation:\s*none; \}/);
-  assert.match(scripts, /matchMedia\('\(prefers-reduced-motion: reduce\)'\)/);
-  assert.match(scripts, /classList\.add\('is-flipping'\)/);
+  assert.equal(/title-coin|title-coin-flip/.test(`${html}\n${styles}\n${scripts}`), false);
 });
 
 test('museum crops have honest archived source wording and remain playable', async () => {
@@ -258,14 +235,15 @@ test('the public palette uses the warm flat colors', async () => {
   assert.match(styles, /--accent:\s*#a83d24/);
   assert.match(styles, /--decor:\s*#76541e/);
   assert.equal(/gradient|drop-shadow/i.test(styles), false);
-  assert.match(styles, /box-shadow:\s*0 8px 14px rgb\(82 55 25 \/ 0\.18\)/);
+  assert.match(styles, /box-shadow:\s*0 7px 14px rgb\(82 55 25 \/ 0\.2\)/);
   assert.match(styles, /paper-grain\.svg/);
 });
 
-test('the drawing-paper surface and requested large type are explicit', async () => {
+test('the specimen sheet and requested large type are explicit', async () => {
   const { readFile } = await import('node:fs/promises');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
-  assert.match(styles, /\.page-shell\s*\{[^}]*background-color:\s*var\(--paper\)/s);
+  assert.match(styles, /\.game-screen\s*\{[^}]*width:\s*fit-content[^}]*background:\s*var\(--paper\)/s);
+  assert.equal(/class="page-shell"/.test(await readFile(new URL('../index.html', import.meta.url), 'utf8')), false);
   assert.match(styles, /\.site-name\s*\{[^}]*font-size:\s*52px/s);
   assert.match(styles, /\.prompt h1\s*\{[^}]*font-size:\s*32px/s);
   assert.match(styles, /\.primary-button\s*\{\s*background:\s*var\(--accent\);\s*color:\s*var\(--white\)/);

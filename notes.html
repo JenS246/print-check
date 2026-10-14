@@ -6,36 +6,28 @@
     <meta name="theme-color" content="#d6ab45" />
     <meta name="description" content="The coins and bills currently available in Print Check." />
     <title>Coins and bills | Print Check</title>
-    <link rel="stylesheet" href="styles.css?v=26" />
+    <link rel="stylesheet" href="styles.css?v=27" />
   </head>
   <body class="collection-page">
-    <div class="page-decorations" aria-hidden="true">
-      <img class="decoration decoration-envelope" src="assets/art/coin-envelope.svg" alt="" />
-      <img class="decoration decoration-overlapping" src="assets/art/overlapping-coins.svg" alt="" />
-      <img class="decoration decoration-folded-bill" src="assets/art/folded-bill.svg" alt="" />
-      <img class="decoration decoration-stack" src="assets/art/coin-stack.svg" alt="" />
-    </div>
-    <div class="page-shell">
-      <header class="site-header">
-        <a class="site-name" href="index.html?rev=26">
-          <span class="title-line">
-            <span class="title-words"><span class="title-print">Print</span> <span class="title-check"><span class="title-check-ghost" aria-hidden="true">Check</span><span class="title-check-front">Check</span></span></span>
-            <img class="title-coin" src="assets/art/title-coin.svg" alt="" aria-hidden="true" />
-          </span>
-          <svg class="title-underline" viewBox="0 0 150 9" aria-hidden="true" preserveAspectRatio="none">
-            <path d="M3 5.3 C27 3.6 51 6.1 75 4.7 C99 3.5 124 5.7 147 4.2" />
-          </svg>
-        </a>
-        <nav aria-label="Primary navigation">
-          <a href="notes.html?rev=26" aria-current="page">Collection</a>
-          <a href="index.html?rev=26#how-to-play">How to play</a>
-        </nav>
-      </header>
+    <header class="site-header">
+      <a class="site-name" href="index.html?rev=27">
+        <span class="title-line">
+          <span class="title-words"><span class="title-print">Print</span> <span class="title-check"><span class="title-check-ghost" aria-hidden="true">Check</span><span class="title-check-front">Check</span></span></span>
+        </span>
+        <svg class="title-underline" viewBox="0 0 150 9" aria-hidden="true" preserveAspectRatio="none">
+          <path d="M3 5.3 C27 3.6 51 6.1 75 4.7 C99 3.5 124 5.7 147 4.2" />
+        </svg>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="notes.html?rev=27" aria-current="page">Collection</a>
+        <button id="help-button" class="nav-button" type="button">How to play</button>
+      </nav>
+    </header>
 
-      <main class="collection-main">
+    <main class="collection-main">
         <header class="collection-intro">
           <h1>Coins and bills</h1>
-          <a class="collection-play-link" href="index.html?rev=26">Play</a>
+          <a class="collection-play-link" href="index.html?rev=27">Play</a>
         </header>
 
         <div id="collection-status" class="collection-status" role="status">
@@ -46,15 +38,34 @@
         <div id="collection-gallery" class="collection-gallery" hidden></div>
 
         <section id="collection-detail" class="collection-detail" hidden aria-live="polite">
-          <a class="all-items-link" href="notes.html?rev=26">All coins and bills</a>
+          <a class="all-items-link" href="notes.html?rev=27">All coins and bills</a>
           <div id="collection-list" class="collection-list"></div>
           <div class="collection-actions" aria-label="Collection controls">
             <button id="previous-item" class="secondary-button sketch-button" type="button">Previous</button>
             <button id="next-item" class="primary-button sketch-button" type="button">Next</button>
           </div>
         </section>
-      </main>
-    </div>
+    </main>
+
+    <dialog id="help-dialog" class="sheet-dialog help-dialog" aria-labelledby="help-title">
+      <div class="help-dialog-inner">
+        <div class="dialog-head">
+          <h2 id="help-title">How to play</h2>
+          <button class="close-button sketch-button" type="button" data-close-dialog="help-dialog">Close</button>
+        </div>
+        <div class="help-instructions">
+          <p>Spot the error in real US coins and bills.</p>
+          <p>Tap the part of the coin or bill that looks wrong.</p>
+          <p>Need help? Choose <strong>Show error</strong>.</p>
+          <p>Choose <strong>Next</strong> to try another.</p>
+          <p>Every photograph shows real US currency with a documented production error.</p>
+        </div>
+        <details class="keyboard-controls">
+          <summary>Keyboard controls</summary>
+          <p>In the game, Tab to the photograph, then press 1 through 9 to choose an area. Keys 1-3 choose the top row, 4-6 the middle row, and 7-9 the bottom row. Press Escape to close this panel.</p>
+        </details>
+      </div>
+    </dialog>
     <script type="module">
       const status = document.querySelector('#collection-status');
       const message = document.querySelector('#collection-status-message');
@@ -63,7 +74,7 @@
 
       retry.addEventListener('click', () => window.location.reload());
 
-      import('./src/collection.js?v=26')
+      import('./src/collection.js?v=27')
         .then(() => { status.hidden = true; })
         .catch(() => {
           gallery.hidden = true;

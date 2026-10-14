@@ -1,4 +1,4 @@
-import { COLLECTION_PIECES } from '../data/notes.js?v=22';
+import { COLLECTION_PIECES } from '../data/notes.js?v=27';
 
 const gallery = document.querySelector('#collection-gallery');
 const detail = document.querySelector('#collection-detail');
@@ -6,17 +6,36 @@ const list = document.querySelector('#collection-list');
 const previousButton = document.querySelector('#previous-item');
 const nextButton = document.querySelector('#next-item');
 const allItemsLink = document.querySelector('.all-items-link');
-const titleCoin = document.querySelector('.title-coin');
+const helpButton = document.querySelector('#help-button');
+const helpDialog = document.querySelector('#help-dialog');
+const keyboardControls = helpDialog.querySelector('.keyboard-controls');
 
 let currentIndex = -1;
 
-function flipTitleCoin() {
-  if (!titleCoin || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  titleCoin.classList.remove('is-flipping');
-  requestAnimationFrame(() => titleCoin.classList.add('is-flipping'));
+function openHelp() {
+  keyboardControls.open = false;
+  if (!helpDialog.open) helpDialog.showModal();
 }
 
-titleCoin?.addEventListener('animationend', () => titleCoin.classList.remove('is-flipping'));
+helpButton.addEventListener('click', openHelp);
+helpDialog.addEventListener('close', () => helpButton.focus({ preventScroll: true }));
+helpDialog.addEventListener('keydown', (event) => {
+  if (event.key !== 'Tab') return;
+  const focusable = [...helpDialog.querySelectorAll('button:not([disabled]), a[href], summary, [tabindex]:not([tabindex="-1"])')]
+    .filter((element) => element.getClientRects().length > 0);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable.at(-1);
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+});
+
+helpDialog.querySelector('[data-close-dialog]').addEventListener('click', () => helpDialog.close());
 
 function identification(piece) {
   const name = piece.pieceKind === 'coin' ? piece.noteType : `${piece.denomination} ${piece.noteType}`;
@@ -236,7 +255,6 @@ function showAdjacent(offset) {
 
 previousButton.addEventListener('click', () => showAdjacent(-1));
 nextButton.addEventListener('click', () => {
-  flipTitleCoin();
   showAdjacent(1);
 });
 allItemsLink.addEventListener('click', (event) => {

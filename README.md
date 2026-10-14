@@ -18,11 +18,13 @@ The interface is intentionally small and rights-aware. Ten specimens are playabl
 - A source-photo close-up of the doubled date on the 1955 doubled-die cent in the answer reveal and Collection detail
 - A stable image stage, tokenized image loading, and preloading of the next specimen
 - A visible Collection loading state with a retry path if the data module fails
-- Dynamic viewport fitting with reserved answer space, safe-area support, and natural scrolling on short or enlarged-text layouts
-- A fixed asymmetric margin composition: an open coin envelope with loose coins, a folded bill, and a separate coin stack
-- A two-color hand-drawn title with a decorative coin that flips once when Next is selected and stays still for reduced-motion users
+- Dynamic viewport fitting, safe-area support, and natural scrolling on short or enlarged-text layouts
+- A compact ivory specimen mount sized around the active photograph, with the site header directly on the mustard background
+- A two-color hand-drawn title; all navigation, controls, captions, and explanatory copy use Arial/Helvetica
 - A loading state and an always-available Next fallback for image failures
 - Static HTML, CSS, and JavaScript with no accounts, tracking, backend, or dependencies
+
+No decorative currency drawings are currently rendered. The repository did not contain suitable supplied or licensed scanned pen artwork, so the earlier code-drawn SVG decorations were removed instead of being represented as scanned art.
 
 ## Corpus and rights review
 

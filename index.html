@@ -8,33 +8,25 @@
     <meta property="og:title" content="Print Check" />
     <meta property="og:description" content="Spot the error in real U.S. coins and paper currency." />
     <title>Print Check - Spot the error</title>
-    <link rel="stylesheet" href="styles.css?v=26" />
+    <link rel="stylesheet" href="styles.css?v=27" />
   </head>
   <body>
-    <div class="page-decorations" aria-hidden="true">
-      <img class="decoration decoration-envelope" src="assets/art/coin-envelope.svg" alt="" />
-      <img class="decoration decoration-overlapping" src="assets/art/overlapping-coins.svg" alt="" />
-      <img class="decoration decoration-folded-bill" src="assets/art/folded-bill.svg" alt="" />
-      <img class="decoration decoration-stack" src="assets/art/coin-stack.svg" alt="" />
-    </div>
-    <div class="page-shell">
-      <header class="site-header">
-        <a class="site-name" href="index.html?rev=26">
-          <span class="title-line">
-            <span class="title-words"><span class="title-print">Print</span> <span class="title-check"><span class="title-check-ghost" aria-hidden="true">Check</span><span class="title-check-front">Check</span></span></span>
-            <img class="title-coin" src="assets/art/title-coin.svg" alt="" aria-hidden="true" />
-          </span>
-          <svg class="title-underline" viewBox="0 0 150 9" aria-hidden="true" preserveAspectRatio="none">
-            <path d="M3 5.3 C27 3.6 51 6.1 75 4.7 C99 3.5 124 5.7 147 4.2" />
-          </svg>
-        </a>
-        <nav aria-label="Primary navigation">
-          <a href="notes.html?rev=26">Collection</a>
-          <button id="help-button" class="nav-button" type="button">How to play</button>
-        </nav>
-      </header>
+    <header class="site-header">
+      <a class="site-name" href="index.html?rev=27">
+        <span class="title-line">
+          <span class="title-words"><span class="title-print">Print</span> <span class="title-check"><span class="title-check-ghost" aria-hidden="true">Check</span><span class="title-check-front">Check</span></span></span>
+        </span>
+        <svg class="title-underline" viewBox="0 0 150 9" aria-hidden="true" preserveAspectRatio="none">
+          <path d="M3 5.3 C27 3.6 51 6.1 75 4.7 C99 3.5 124 5.7 147 4.2" />
+        </svg>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="notes.html?rev=27">Collection</a>
+        <button id="help-button" class="nav-button" type="button">How to play</button>
+      </nav>
+    </header>
 
-      <main id="game-screen" class="game-screen" aria-labelledby="prompt-title">
+    <main id="game-screen" class="game-screen specimen-sheet" aria-labelledby="prompt-title">
         <header class="prompt">
           <h1 id="prompt-title">Tap the error.</h1>
         </header>
@@ -46,6 +38,14 @@
             <div id="game-side-images" class="game-side-images"></div>
           </div>
         </div>
+        <div class="play-actions">
+          <a id="enlarge-link" href="#full-image-dialog">Enlarge image</a>
+          <div class="action-row" aria-label="Game controls">
+            <button id="reveal-button" class="secondary-button sketch-button" type="button" disabled>Show error</button>
+            <button id="next-button" class="primary-button sketch-button" type="button">Next</button>
+          </div>
+        </div>
+
         <div id="response-slot" class="response-slot">
           <p id="feedback" class="feedback" role="status" aria-live="polite" hidden></p>
 
@@ -66,16 +66,7 @@
             </details>
           </section>
         </div>
-
-        <div class="play-actions">
-          <a id="enlarge-link" href="#full-image-dialog">Enlarge image</a>
-          <div class="action-row" aria-label="Game controls">
-            <button id="reveal-button" class="secondary-button sketch-button" type="button" disabled>Show error</button>
-            <button id="next-button" class="primary-button sketch-button" type="button">Next</button>
-          </div>
-        </div>
-      </main>
-    </div>
+    </main>
 
     <dialog id="help-dialog" class="sheet-dialog help-dialog" aria-labelledby="help-title">
       <div class="help-dialog-inner">
@@ -94,10 +85,6 @@
           <summary>Keyboard controls</summary>
           <p>Tab to the photograph, then press 1 through 9 to choose an area. Keys 1-3 choose the top row, 4-6 the middle row, and 7-9 the bottom row. Press Escape to close this panel.</p>
         </details>
-        <div class="help-dialog-art" aria-hidden="true">
-          <img class="help-art-bill" src="assets/art/folded-bill.svg" alt="" />
-          <img class="help-art-coins" src="assets/art/overlapping-coins.svg" alt="" />
-        </div>
       </div>
     </dialog>
 
@@ -109,6 +96,6 @@
       <div id="full-image-gallery" class="full-image-gallery"></div>
     </dialog>
 
-    <script type="module" src="src/game.js?v=26"></script>
+    <script type="module" src="src/game.js?v=27"></script>
   </body>
 </html>

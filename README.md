@@ -75,7 +75,7 @@ The tests cover the playable collection, local image availability, reuse metadat
 - Pointer answers and number-key keyboard answers
 - Text feedback in addition to color
 - No required animation
-- Self-hosted Patrick Hand display type with a readable sans-serif body face
+- Self-hosted Patrick Hand for the title and page headings; Arial/Helvetica for navigation, controls, captions, and body copy
 - Phone and desktop layouts that wrap instead of shrinking text
 
 ## Important URLs and services

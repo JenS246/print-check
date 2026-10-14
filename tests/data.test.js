@@ -94,7 +94,7 @@ test('play screen is immediate and contains no fixed-session or scoring language
   assert.match(visible, /Enlarge image/);
   assert.match(visible, /You found it!/);
   assert.match(visible, /answer-title/);
-  assert.match(visible, /href="notes\.html\?rev=25">Collection/);
+  assert.match(visible, /href="notes\.html\?rev=26">Collection/);
 });
 
 test('the How to play dialog has exact guidance, real shortcuts, and modal focus safeguards', async () => {
@@ -109,9 +109,10 @@ test('the How to play dialog has exact guidance, real shortcuts, and modal focus
     'Choose Next to try another.',
     'Every photograph shows real US currency with a documented production error.',
   ];
+  const visibleText = html.replace(/<[^>]+>/g, '');
   let position = -1;
   for (const sentence of expected) {
-    const nextPosition = html.indexOf(sentence);
+    const nextPosition = visibleText.indexOf(sentence);
     assert.ok(nextPosition > position, sentence);
     position = nextPosition;
   }
@@ -121,7 +122,7 @@ test('the How to play dialog has exact guidance, real shortcuts, and modal focus
   assert.match(html, /Press Escape to close this panel/);
   assert.match(html, /class="help-dialog-art" aria-hidden="true"/);
   assert.match(html, /assets\/art\/folded-bill\.svg/);
-  assert.match(html, /assets\/art\/loose-coins\.svg/);
+  assert.match(html, /assets\/art\/overlapping-coins\.svg/);
   assert.match(game, /keyboardControls\.open = false/);
   assert.match(game, /helpDialog\.addEventListener\('close', \(\) => helpButton\.focus/);
   assert.match(game, /event\.key !== 'Tab'/);
@@ -146,9 +147,9 @@ test('collection copy contains only documented coins and bills', async () => {
   assert.match(visible, /<details class="source-details collection-credit">/);
   assert.match(visible, /Loading collection\.\.\./);
   assert.match(visible, />Retry</);
-  assert.match(visible, /import\('\.\/src\/collection\.js\?v=25'\)/);
-  assert.match(visible, /href="notes\.html\?rev=25"/);
-  assert.match(visible, /index\.html\?rev=25#how-to-play/);
+  assert.match(visible, /import\('\.\/src\/collection\.js\?v=26'\)/);
+  assert.match(visible, /href="notes\.html\?rev=26"/);
+  assert.match(visible, /index\.html\?rev=26#how-to-play/);
   assert.equal(/Reference records|Candidates awaiting material|research lead|permission gap|maintenance/i.test(visible), false);
 });
 
@@ -169,16 +170,18 @@ test('collection album mounts preserve every entry and show the documented close
   assert.equal(/createElement\(['"]canvas|sharpen|filter\s*=/.test(collection), false);
 });
 
-test('the game reserves response space and uses measured viewport height', async () => {
+test('the game fits the stage to each photograph and expands answers naturally', async () => {
   const { readFile } = await import('node:fs/promises');
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   assert.match(html, /id="response-slot"/);
-  assert.match(game, /window\.visualViewport\?\.height/);
+  assert.match(game, /pieceKind === 'note' \? 880/);
+  assert.match(game, /pieceKind === 'coin'[^\n]*\? 460/);
   assert.match(styles, /min-height:\s*100dvh/);
   assert.equal(/\.page-shell\s*\{[^}]*min-height/s.test(styles), false);
-  assert.match(styles, /\.response-slot:has\(/);
+  assert.match(styles, /\.response-slot\s*\{[^}]*min-height:\s*0/s);
+  assert.match(styles, /\.image-frame\s*\{[^}]*border:\s*0/s);
   assert.match(game, /loadToken/);
   assert.match(game, /preloadNextPiece/);
   assert.match(game, /requestIdleCallback/);
@@ -190,7 +193,7 @@ test('the asymmetric money drawings use the requested ink and remain inert', asy
   const { access, readFile } = await import('node:fs/promises');
   const artFiles = [
     'coin-stack.svg',
-    'loose-coins.svg',
+    'overlapping-coins.svg',
     'coin-envelope.svg',
     'folded-bill.svg',
   ];
@@ -203,14 +206,14 @@ test('the asymmetric money drawings use the requested ink and remain inert', asy
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   const html = `${await readFile(new URL('../index.html', import.meta.url), 'utf8')}\n${await readFile(new URL('../notes.html', import.meta.url), 'utf8')}`;
   for (const file of artFiles) assert.match(html, new RegExp(file.replace('.', '\\.')));
-  assert.match(styles, /opacity:\s*0\.38/);
+  assert.match(styles, /opacity:\s*0\.3/);
   assert.match(styles, /pointer-events:\s*none/);
   assert.match(html, /aria-hidden="true"/);
   assert.equal((html.match(/class="decoration /g) ?? []).length, 8);
-  assert.match(styles, /\.decoration-envelope \{ bottom:\s*-30px; left:\s*-42px;/);
-  assert.match(styles, /\.decoration-coins-loose \{ bottom:\s*1%; left:\s*128px;/);
-  assert.match(styles, /\.decoration-folded-bill \{ top:\s*6%; right:\s*-52px;/);
-  assert.match(styles, /\.decoration-stack \{ top:\s*52%; left:\s*18px;/);
+  assert.match(styles, /\.decoration-envelope \{ bottom:\s*-52px; left:\s*-82px;/);
+  assert.match(styles, /\.decoration-folded-bill \{ top:\s*54px; right:\s*-58px;/);
+  assert.match(styles, /\.collection-page \.decoration-overlapping/);
+  assert.match(styles, /\.collection-page \.decoration-stack/);
 });
 
 test('the title uses two ink colors and a reduced-motion-safe Next flip', async () => {
@@ -250,9 +253,9 @@ test('the public palette uses the warm flat colors', async () => {
   const { readFile } = await import('node:fs/promises');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   assert.match(styles, /--page:\s*#d6ab45/);
-  assert.match(styles, /--paper:\s*#fff9ed/);
+  assert.match(styles, /--paper:\s*#fffcf4/);
   assert.match(styles, /--ink:\s*#302820/);
-  assert.match(styles, /--accent:\s*#b94726/);
+  assert.match(styles, /--accent:\s*#a83d24/);
   assert.match(styles, /--decor:\s*#76541e/);
   assert.equal(/gradient|drop-shadow/i.test(styles), false);
   assert.match(styles, /box-shadow:\s*0 8px 14px rgb\(82 55 25 \/ 0\.18\)/);
@@ -263,10 +266,10 @@ test('the drawing-paper surface and requested large type are explicit', async ()
   const { readFile } = await import('node:fs/promises');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   assert.match(styles, /\.page-shell\s*\{[^}]*background-color:\s*var\(--paper\)/s);
-  assert.match(styles, /\.site-name\s*\{[^}]*font-size:\s*58px/s);
+  assert.match(styles, /\.site-name\s*\{[^}]*font-size:\s*52px/s);
   assert.match(styles, /\.prompt h1\s*\{[^}]*font-size:\s*32px/s);
   assert.match(styles, /\.primary-button\s*\{\s*background:\s*var\(--accent\);\s*color:\s*var\(--white\)/);
-  assert.match(styles, /@media \(max-width: 760px\)[\s\S]*\.site-name\s*\{[^}]*font-size:\s*42px/s);
+  assert.match(styles, /@media \(max-width: 760px\)[\s\S]*\.site-name\s*\{[^}]*font-size:\s*40px/s);
   assert.match(styles, /@media \(max-width: 760px\)[\s\S]*\.prompt h1\s*\{[^}]*font-size:\s*28px/s);
 });
 

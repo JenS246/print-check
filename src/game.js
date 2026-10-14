@@ -7,7 +7,6 @@ const imageCanvas = $('#image-canvas');
 const sideImages = $('#game-side-images');
 const feedback = $('#feedback');
 const answerPanel = $('#answer-panel');
-const playActions = $('.play-actions');
 const titleCoin = $('.title-coin');
 
 const state = {
@@ -79,23 +78,21 @@ function prepareImageFrame() {
   const combinedRatio = stackSides
     ? 1 / ratios.reduce((sum, ratio) => sum + (1 / ratio), 0)
     : ratios.reduce((sum, ratio) => sum + ratio, 0);
-  const widthCap = sides.reduce((sum, side) => sum + (side.maxDisplayWidth ?? Infinity), 0);
-  const availableWidth = Math.min($('#game-screen').clientWidth, 1050);
-  const viewportHeight = window.visualViewport?.height ?? document.documentElement.clientHeight;
-  const frameTop = imageFrame.getBoundingClientRect().top;
-  const answerReserve = window.matchMedia('(max-width: 760px)').matches ? 132 : 122;
-  const reserveBelow = answerReserve + playActions.offsetHeight + 20;
-  const isNarrow = window.matchMedia('(max-width: 760px)').matches;
-  const minimumHeight = stackSides ? 430 : (isNarrow ? 230 : 290);
-  const maximumHeight = stackSides ? 520 : (isNarrow ? 360 : 460);
-  const stageHeight = Math.max(minimumHeight, Math.min(viewportHeight - frameTop - reserveBelow, maximumHeight));
-  const innerWidth = Math.max(140, availableWidth - 18);
-  const innerHeight = Math.max(140, stageHeight - 18);
-  const fitWidth = Math.min(innerWidth, widthCap, innerHeight * combinedRatio);
+  const sourceWidths = sides.map((side) => {
+    const crop = cropFor(side);
+    return Math.min(crop.width, side.maxDisplayWidth ?? crop.width);
+  });
+  const sourceWidthCap = stackSides
+    ? Math.min(...sourceWidths)
+    : sourceWidths.reduce((sum, width) => sum + width, 0);
+  const availableWidth = Math.max(180, $('#game-screen').clientWidth);
+  const contentWidthCap = state.current.pieceKind === 'note' ? 880 : availableWidth;
+  const heightCap = state.current.pieceKind === 'coin' && !stackSides ? 460 : Infinity;
+  const fitWidth = Math.min(availableWidth, contentWidthCap, sourceWidthCap, heightCap * combinedRatio);
   const fitHeight = fitWidth / combinedRatio;
 
-  imageFrame.style.width = `${availableWidth}px`;
-  imageFrame.style.height = `${stageHeight}px`;
+  imageFrame.style.width = `${fitWidth}px`;
+  imageFrame.style.height = `${fitHeight}px`;
   imageCanvas.style.width = `${fitWidth}px`;
   imageCanvas.style.height = `${fitHeight}px`;
   imageCanvas.style.aspectRatio = `${combinedRatio} / 1`;

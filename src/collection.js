@@ -40,6 +40,12 @@ function imageFigure(piece, side, mode) {
   const viewport = document.createElement(canOpenOriginal ? 'a' : 'span');
   viewport.className = 'collection-crop';
   viewport.style.aspectRatio = `${crop.width} / ${crop.height}`;
+  const xPosition = side.width === crop.width ? 0 : (crop.x / (side.width - crop.width)) * 100;
+  const yPosition = side.height === crop.height ? 0 : (crop.y / (side.height - crop.height)) * 100;
+  viewport.style.backgroundImage = `url('${side.image}')`;
+  viewport.style.backgroundRepeat = 'no-repeat';
+  viewport.style.backgroundSize = `${(side.width / crop.width) * 100}% ${(side.height / crop.height) * 100}%`;
+  viewport.style.backgroundPosition = `${xPosition}% ${yPosition}%`;
 
   if (mode === 'detail') {
     const viewportHeight = window.visualViewport?.height ?? document.documentElement.clientHeight;

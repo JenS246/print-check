@@ -49,16 +49,16 @@ body {
   position: absolute;
   display: block;
   height: auto;
-  opacity: 0.68;
+  opacity: 0.82;
   pointer-events: none;
 }
-.game-art-envelope { top: 402px; left: -170px; width: 350px; transform: rotate(-4deg); }
-.game-art-bill { top: 88px; right: -92px; width: 252px; transform: rotate(5deg); }
-.game-art-coins { top: 506px; right: -62px; width: 176px; transform: rotate(-8deg); }
-.game-art-stack { top: 142px; left: -48px; width: 174px; transform: rotate(4deg); }
+.game-art-envelope { top: 350px; left: -298px; width: 540px; transform: rotate(-4deg); }
+.game-art-bill { top: 104px; right: -218px; width: 430px; transform: rotate(5deg); }
+.game-art-coins { top: 478px; right: -146px; width: 328px; transform: rotate(-8deg); }
+.game-art-stack { top: 112px; left: -154px; width: 326px; transform: rotate(4deg); }
 .game-art-mobile { display: none; }
-.collection-art-bill { top: 108px; right: -112px; width: 268px; transform: rotate(5deg); }
-.collection-art-coins { top: 742px; left: -82px; width: 184px; transform: rotate(-10deg); }
+.collection-art-bill { top: 100px; right: -210px; width: 424px; transform: rotate(5deg); }
+.collection-art-coins { top: 720px; left: -146px; width: 326px; transform: rotate(-10deg); }
 .site-header,
 .game-screen,
 .collection-main { position: relative; z-index: 1; }
@@ -76,8 +76,8 @@ button:focus-visible, a:focus-visible, [tabindex]:focus-visible, summary:focus-v
 }
 
 .site-header {
-  width: min(1100px, calc(100% - 32px));
-  min-height: 82px;
+  width: min(1160px, calc(100% - 32px));
+  min-height: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -87,14 +87,14 @@ button:focus-visible, a:focus-visible, [tabindex]:focus-visible, summary:focus-v
 }
 
 .site-name {
-  min-height: 64px;
+  min-height: 80px;
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   color: var(--ink);
   font-family: 'Patrick Hand', 'Comic Sans MS', cursive;
-  font-size: 52px;
+  font-size: 68px;
   line-height: 0.88;
   text-decoration: none;
 }
@@ -529,8 +529,8 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   pointer-events: none;
   user-select: none;
 }
-.collection-art-break { height: 142px; margin: -8px 0 -12px; }
-.collection-art-tail { height: 184px; margin-top: -8px; }
+.collection-art-break { height: 208px; margin: -8px 0 -12px; }
+.collection-art-tail { height: 270px; margin-top: -8px; }
 .collection-art-break img,
 .collection-art-tail img {
   position: absolute;
@@ -539,8 +539,8 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   opacity: 0.68;
   pointer-events: none;
 }
-.collection-art-break img { top: -8px; right: 8%; width: 178px; transform: rotate(6deg); }
-.collection-art-tail img { top: 2px; left: -1%; width: 270px; transform: rotate(-5deg); }
+.collection-art-break img { top: -12px; right: 6%; width: 278px; transform: rotate(6deg); }
+.collection-art-tail img { top: 2px; left: -7%; width: 430px; transform: rotate(-5deg); }
 .album-grid {
   display: grid;
   gap: 26px 16px;
@@ -686,7 +686,7 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   .album-grid-coins { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-@media (max-width: 1239px) and (min-width: 761px) {
+@media (max-width: 1099px) and (min-width: 761px) {
   .decorative-art .art-piece { display: none; }
 }
 
@@ -713,19 +713,27 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
     gap: 2px;
     padding: max(8px, env(safe-area-inset-top)) 0 4px;
   }
-  .site-name { min-height: 58px; font-size: 40px; }
+  .site-name { min-height: 66px; font-size: 48px; }
   .title-line { gap: 6px; }
   .site-name .title-underline { width: 76%; margin-top: 3px; }
   .site-header nav { width: 100%; gap: 20px; flex-wrap: wrap; justify-content: flex-start; }
   .site-header nav a, .nav-button { font-size: 20px; }
   .decorative-art .art-piece { display: none; }
   .game-art-mobile {
-    top: 2px;
-    right: -32px;
+    top: -8px;
+    right: -54px;
     display: block !important;
-    width: 110px;
-    opacity: 0.48;
+    width: 164px;
+    opacity: 0.68;
     transform: rotate(7deg);
+  }
+  .game-art-envelope {
+    top: 535px;
+    left: -92px;
+    display: block !important;
+    width: 230px;
+    opacity: 0.62;
+    transform: rotate(-7deg);
   }
   .game-screen { max-width: calc(100% - 24px); margin-top: 12px; padding: 16px; }
   .prompt { margin-bottom: 10px; }
@@ -767,8 +775,8 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   .album-section + .album-section { margin-top: 18px; }
   .album-section-title { font-size: 37px; }
   .collection-art-break { display: none; }
-  .collection-art-tail { height: 110px; margin-top: -4px; }
-  .collection-art-tail img { top: 2px; left: -34px; width: 150px; opacity: 0.58; }
+  .collection-art-tail { height: 148px; margin-top: -4px; }
+  .collection-art-tail img { top: 2px; left: -58px; width: 220px; opacity: 0.66; }
   .album-grid-notes,
   .album-grid-coins { grid-template-columns: 1fr; gap: 24px; }
   .gallery-entry { padding: 7px 5px 12px; }

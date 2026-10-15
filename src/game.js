@@ -1,7 +1,8 @@
-import { PLAYABLE_PIECES } from '../data/notes.js?v=22';
-import { markerHitsRegions, shuffle } from './rounds.js?v=22';
+import { PLAYABLE_PIECES } from '../data/notes.js?v=33';
+import { markerHitsRegions, shuffle } from './rounds.js?v=33';
 
 const $ = (selector) => document.querySelector(selector);
+const gameScreen = $('#game-screen');
 const imageFrame = $('#image-frame');
 const imageCanvas = $('#image-canvas');
 const sideImages = $('#game-side-images');
@@ -82,7 +83,9 @@ function prepareImageFrame() {
   const heightCap = state.current.pieceKind === 'coin' && !stackSides ? 460 : Infinity;
   const fitWidth = Math.min(availableWidth, contentWidthCap, sourceWidthCap, heightCap * combinedRatio);
   const fitHeight = fitWidth / combinedRatio;
+  const panelChromeWidth = window.matchMedia('(max-width: 760px)').matches ? 34 : 50;
 
+  gameScreen.style.width = `${fitWidth + panelChromeWidth}px`;
   imageFrame.style.width = `${fitWidth}px`;
   imageFrame.style.height = `${fitHeight}px`;
   imageCanvas.style.width = `${fitWidth}px`;

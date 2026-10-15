@@ -39,6 +39,14 @@ test('museum crops are playable while the die cap remains held from play', () =>
   assert.ok(museumPieces.every((piece) => PLAYABLE_PIECES.includes(piece)));
 });
 
+test('off-center strike uses the concise production wording', () => {
+  const offCenter = COLLECTION_PIECES.find((piece) => piece.id === 'lincoln-cent-off-center');
+  assert.equal(
+    offCenter?.answerExplanation,
+    'The design sits near one edge, leaving much of the coin blank. The blank was off-center when the design was struck.',
+  );
+});
+
 test('playable crops and image-relative answer regions are valid', () => {
   for (const piece of PLAYABLE_PIECES) {
     assert.ok(piece.regions.length > 0, piece.id);
@@ -94,7 +102,7 @@ test('play screen is immediate and contains no fixed-session or scoring language
   assert.match(visible, /Enlarge image/);
   assert.match(visible, /You found it!/);
   assert.match(visible, /answer-title/);
-  assert.match(visible, /href="notes\.html\?rev=32">Collection/);
+  assert.match(visible, /href="notes\.html\?rev=33">Collection/);
 });
 
 test('the How to play dialog has exact guidance, real shortcuts, and modal focus safeguards', async () => {
@@ -146,8 +154,8 @@ test('collection copy contains only documented coins and bills', async () => {
   assert.match(visible, /<details class="source-details collection-credit">/);
   assert.match(visible, /Loading collection\.\.\./);
   assert.match(visible, />Retry</);
-  assert.match(visible, /import\('\.\/src\/collection\.js\?v=32'\)/);
-  assert.match(visible, /href="notes\.html\?rev=32"/);
+  assert.match(visible, /import\('\.\/src\/collection\.js\?v=33'\)/);
+  assert.match(visible, /href="notes\.html\?rev=33"/);
   assert.match(visible, /id="help-button"[^>]*>How to play<\/button>/);
   assert.match(visible, /id="help-dialog"/);
   assert.match(visible, /keyboardControls\.open = false/);
@@ -187,6 +195,7 @@ test('the game fits the stage to each photograph and expands answers naturally',
   assert.match(game, /preloadNextPiece/);
   assert.match(game, /requestIdleCallback/);
   assert.match(game, /game-side-images-stack/);
+  assert.match(game, /gameScreen\.style\.width = `\$\{fitWidth \+ panelChromeWidth\}px`/);
   assert.equal(/overflow:\s*hidden[^;]*;\s*\/\* page/i.test(styles), false);
 });
 
@@ -208,6 +217,8 @@ test('the public composition uses only the supplied transparent watercolor decor
   assert.match(styles, /\.game-art-envelope\s*\{[^}]*width:\s*680px/s);
   assert.match(styles, /\.game-art-bill\s*\{[^}]*width:\s*560px/s);
   assert.match(styles, /\.game-art-coins\s*\{[^}]*width:\s*390px/s);
+  assert.match(styles, /\.game-art-stack\s*\{[^}]*top:\s*126px[^}]*width:\s*380px/s);
+  assert.match(styles, /\.game-art-stack-low\s*\{[^}]*top:\s*582px[^}]*width:\s*280px/s);
   assert.match(styles, /@media \(max-width: 760px\)[\s\S]*\.game-art-mobile\s*\{[^}]*width:\s*330px[\s\S]*\.game-art-envelope\s*\{[^}]*width:\s*380px/s);
   assert.match(styles, /@media \(max-width: 760px\)[\s\S]*\.decorative-art \.art-piece \{ display:\s*none; \}[\s\S]*\.game-art-mobile/s);
   assert.equal(/page-decorations|class="decoration |coin-envelope\.svg|coin-stack\.svg|overlapping-coins\.svg|folded-bill\.svg/.test(html), false);

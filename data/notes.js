@@ -125,7 +125,7 @@ const COIN_RECORDS = [
     denomination: '1 cent',
     noteType: 'Lincoln cent',
     errorName: 'Off-center strike',
-    answerExplanation: 'The design sits near one edge, leaving much of the coin blank. The coin blank was not centered under the tool that stamps the design when it was struck.',
+    answerExplanation: 'The design sits near one edge, leaving much of the coin blank. The blank was off-center when the design was struck.',
     sides: [{ label: 'Obverse', image: 'assets/coins/lincoln-cent-off-center.jpg', width: 800, height: 600, crop: { x: 0, y: 0, width: 800, height: 600 }, maxDisplayWidth: 800 }],
     answerSide: 0,
     regions: [{ x: 17, y: 4, width: 68, height: 44 }],

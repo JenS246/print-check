@@ -1,4 +1,4 @@
-import { COLLECTION_PIECES } from '../data/notes.js?v=30';
+import { COLLECTION_PIECES } from '../data/notes.js?v=31';
 
 const gallery = document.querySelector('#collection-gallery');
 const detail = document.querySelector('#collection-detail');
@@ -217,11 +217,15 @@ function renderGallery() {
   const divider = document.createElement('div');
   divider.className = 'collection-art-break';
   divider.setAttribute('aria-hidden', 'true');
-  divider.innerHTML = '<img src="assets/art/watercolor/uneven-coin-stack.png" alt="" loading="lazy" decoding="async">';
+  divider.innerHTML = `
+    <img class="collection-break-stack" src="assets/art/watercolor/uneven-coin-stack.png" alt="" loading="lazy" decoding="async">
+    <img class="collection-break-coins" src="assets/art/watercolor/overlapping-coins.png" alt="" loading="lazy" decoding="async">`;
   const tail = document.createElement('div');
   tail.className = 'collection-art-tail';
   tail.setAttribute('aria-hidden', 'true');
-  tail.innerHTML = '<img src="assets/art/watercolor/open-coin-envelope.png" alt="" loading="lazy" decoding="async">';
+  tail.innerHTML = `
+    <img class="collection-tail-envelope" src="assets/art/watercolor/open-coin-envelope.png" alt="" loading="lazy" decoding="async">
+    <img class="collection-tail-bill" src="assets/art/watercolor/folded-banknote.png" alt="" loading="lazy" decoding="async">`;
   gallery.replaceChildren(
     gallerySection('Paper money', notes, 'notes'),
     divider,

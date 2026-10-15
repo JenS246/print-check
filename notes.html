@@ -6,11 +6,11 @@
     <meta name="theme-color" content="#d6ab45" />
     <meta name="description" content="The coins and bills currently available in Print Check." />
     <title>Coins and bills | Print Check</title>
-    <link rel="stylesheet" href="styles.css?v=30" />
+    <link rel="stylesheet" href="styles.css?v=31" />
   </head>
   <body class="collection-page">
     <header class="site-header">
-      <a class="site-name" href="index.html?rev=30">
+      <a class="site-name" href="index.html?rev=31">
         <span class="title-line">
           <span class="title-words"><span class="title-print">Print</span> <span class="title-check"><span class="title-check-ghost" aria-hidden="true">Check</span><span class="title-check-front">Check</span></span></span>
         </span>
@@ -19,7 +19,7 @@
         </svg>
       </a>
       <nav aria-label="Primary navigation">
-        <a href="notes.html?rev=30" aria-current="page">Collection</a>
+        <a href="notes.html?rev=31" aria-current="page">Collection</a>
         <button id="help-button" class="nav-button" type="button">How to play</button>
       </nav>
     </header>
@@ -27,12 +27,16 @@
     <div class="decorative-art collection-art" aria-hidden="true">
       <img class="art-piece collection-art-bill" src="assets/art/watercolor/folded-banknote.png" alt="" />
       <img class="art-piece collection-art-coins" src="assets/art/watercolor/overlapping-coins.png" alt="" />
+      <img class="art-piece collection-art-stack" src="assets/art/watercolor/uneven-coin-stack.png" alt="" />
+      <img class="art-piece collection-art-envelope" src="assets/art/watercolor/open-coin-envelope.png" alt="" />
+      <img class="art-piece collection-art-bill-low" src="assets/art/watercolor/folded-banknote.png" alt="" />
+      <img class="art-piece collection-art-coins-low" src="assets/art/watercolor/overlapping-coins.png" alt="" />
     </div>
 
     <main class="collection-main">
         <header class="collection-intro">
           <h1>Coins and bills</h1>
-          <a class="collection-play-link" href="index.html?rev=30">Play</a>
+          <a class="collection-play-link" href="index.html?rev=31">Play</a>
         </header>
 
         <div id="collection-status" class="collection-status" role="status">
@@ -43,7 +47,7 @@
         <div id="collection-gallery" class="collection-gallery" hidden></div>
 
         <section id="collection-detail" class="collection-detail" hidden aria-live="polite">
-          <a class="all-items-link" href="notes.html?rev=30">All coins and bills</a>
+          <a class="all-items-link" href="notes.html?rev=31">All coins and bills</a>
           <div id="collection-list" class="collection-list"></div>
           <div class="collection-actions" aria-label="Collection controls">
             <button id="previous-item" class="secondary-button sketch-button" type="button">Previous</button>
@@ -82,7 +86,7 @@
 
       retry.addEventListener('click', () => window.location.reload());
 
-      import('./src/collection.js?v=30')
+      import('./src/collection.js?v=31')
         .then(() => { status.hidden = true; })
         .catch(() => {
           gallery.hidden = true;

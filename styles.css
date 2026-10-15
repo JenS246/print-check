@@ -49,16 +49,23 @@ body {
   position: absolute;
   display: block;
   height: auto;
-  opacity: 0.82;
+  opacity: 0.7;
   pointer-events: none;
 }
-.game-art-envelope { top: 350px; left: -298px; width: 540px; transform: rotate(-4deg); }
-.game-art-bill { top: 104px; right: -218px; width: 430px; transform: rotate(5deg); }
-.game-art-coins { top: 478px; right: -146px; width: 328px; transform: rotate(-8deg); }
-.game-art-stack { top: 112px; left: -154px; width: 326px; transform: rotate(4deg); }
+.game-art-envelope { top: 344px; left: -76px; width: 320px; opacity: 0.76; transform: rotate(-5deg); }
+.game-art-bill { top: 112px; right: -48px; width: 300px; opacity: 0.72; transform: rotate(6deg); }
+.game-art-coins { top: 458px; right: 30px; width: 190px; opacity: 0.68; transform: rotate(-9deg); }
+.game-art-stack { top: 126px; left: 26px; width: 188px; opacity: 0.74; transform: rotate(3deg); }
+.game-art-bill-low { top: 602px; left: 34px; width: 172px; opacity: 0.64; transform: rotate(-7deg); }
+.game-art-coins-low { top: 632px; left: 204px; width: 104px; opacity: 0.73; transform: rotate(11deg); }
+.game-art-stack-low { top: 664px; right: 8%; width: 92px; opacity: 0.67; transform: rotate(-5deg); }
 .game-art-mobile { display: none; }
-.collection-art-bill { top: 100px; right: -210px; width: 424px; transform: rotate(5deg); }
-.collection-art-coins { top: 720px; left: -146px; width: 326px; transform: rotate(-10deg); }
+.collection-art-bill { top: 112px; right: -54px; width: 300px; opacity: 0.72; transform: rotate(6deg); }
+.collection-art-coins { top: 730px; left: -32px; width: 184px; opacity: 0.67; transform: rotate(-10deg); }
+.collection-art-stack { top: 1370px; right: -22px; width: 194px; opacity: 0.74; transform: rotate(4deg); }
+.collection-art-envelope { top: 2020px; left: -78px; width: 318px; opacity: 0.7; transform: rotate(-6deg); }
+.collection-art-bill-low { top: 2730px; right: 20px; width: 166px; opacity: 0.63; transform: rotate(-8deg); }
+.collection-art-coins-low { top: 3000px; left: 22px; width: 98px; opacity: 0.74; transform: rotate(12deg); }
 .site-header,
 .game-screen,
 .collection-main { position: relative; z-index: 1; }
@@ -529,18 +536,19 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   pointer-events: none;
   user-select: none;
 }
-.collection-art-break { height: 208px; margin: -8px 0 -12px; }
-.collection-art-tail { height: 270px; margin-top: -8px; }
+.collection-art-break { height: 220px; margin: -8px 0 -12px; }
+.collection-art-tail { height: 286px; margin-top: -8px; }
 .collection-art-break img,
 .collection-art-tail img {
   position: absolute;
   display: block;
   height: auto;
-  opacity: 0.68;
   pointer-events: none;
 }
-.collection-art-break img { top: -12px; right: 6%; width: 278px; transform: rotate(6deg); }
-.collection-art-tail img { top: 2px; left: -7%; width: 430px; transform: rotate(-5deg); }
+.collection-break-stack { top: -6px; right: 8%; width: 214px; opacity: 0.72; transform: rotate(6deg); }
+.collection-break-coins { top: 92px; right: 31%; width: 96px; opacity: 0.66; transform: rotate(-11deg); }
+.collection-tail-envelope { top: 2px; left: -2%; width: 316px; opacity: 0.7; transform: rotate(-5deg); }
+.collection-tail-bill { top: 74px; right: 7%; width: 166px; opacity: 0.63; transform: rotate(8deg); }
 .album-grid {
   display: grid;
   gap: 26px 16px;
@@ -735,6 +743,14 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
     opacity: 0.62;
     transform: rotate(-7deg);
   }
+  .game-art-coins-low {
+    top: 690px;
+    right: -22px;
+    display: block !important;
+    width: 92px;
+    opacity: 0.66;
+    transform: rotate(12deg);
+  }
   .game-screen { max-width: calc(100% - 24px); margin-top: 12px; padding: 16px; }
   .prompt { margin-bottom: 10px; }
   .prompt h1 { font-size: 28px; }
@@ -774,9 +790,12 @@ dialog::backdrop { background: rgba(48, 40, 32, 0.5); }
   .album-section { margin-top: 16px; padding: 16px; }
   .album-section + .album-section { margin-top: 18px; }
   .album-section-title { font-size: 37px; }
-  .collection-art-break { display: none; }
-  .collection-art-tail { height: 148px; margin-top: -4px; }
-  .collection-art-tail img { top: 2px; left: -58px; width: 220px; opacity: 0.66; }
+  .collection-art-break { display: block; height: 136px; margin: -2px 0 -6px; }
+  .collection-art-break .collection-break-stack { top: 0; right: -22px; width: 132px; opacity: 0.65; }
+  .collection-break-coins { display: none !important; }
+  .collection-art-tail { height: 158px; margin-top: -4px; }
+  .collection-art-tail .collection-tail-envelope { top: 2px; left: -52px; width: 218px; opacity: 0.66; }
+  .collection-tail-bill { display: none !important; }
   .album-grid-notes,
   .album-grid-coins { grid-template-columns: 1fr; gap: 24px; }
   .gallery-entry { padding: 7px 5px 12px; }

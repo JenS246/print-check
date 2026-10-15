@@ -24,7 +24,7 @@ The interface is intentionally small and rights-aware. Ten specimens are playabl
 - A loading state and an always-available Next fallback for image failures
 - Static HTML, CSS, and JavaScript with no accounts, tracking, backend, or dependencies
 
-Four original transparent watercolor-and-ink assets in `assets/art/watercolor/` frame the game and Collection without entering the specimen mounts. The game uses seven varied desktop placements and three mobile placements; the Collection continues the artwork through its margins and between album sections.
+Four tightly trimmed transparent watercolor-and-ink assets in `assets/art/watercolor/` form a large overlapping scene behind the opaque game mount. Desktop placements render at roughly 330–680px wide, while mobile keeps two partially cropped 330–380px illustrations; the Collection continues the same large-scale treatment through its margins and between album sections.
 
 ## Corpus and rights review
 
